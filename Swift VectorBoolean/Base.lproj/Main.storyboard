@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ryv-vW-sF4">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Swift VectorBoolean-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Swift_VectorBoolean" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,11 +16,156 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xGx-th-irE" customClass="CanvasView" customModule="Swift_VectorBoolean" customModuleProvider="target">
+                                <rect key="frame" x="16" y="131" width="568" height="368"/>
+                            </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Gyl-zC-Kpo">
+                                <rect key="frame" x="54" y="507" width="493" height="29"/>
+                                <segments>
+                                    <segment title="" image="Reset"/>
+                                    <segment title="" image="Union"/>
+                                    <segment title="" image="Intersect"/>
+                                    <segment title="" image="Subtract"/>
+                                    <segment title="" image="Join"/>
+                                </segments>
+                                <connections>
+                                    <action selector="modeSelect:" destination="BYZ-38-t0r" eventType="valueChanged" id="CWT-hg-f2c"/>
+                                </connections>
+                            </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Original" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ahg-I4-ikS">
+                                <rect key="frame" x="16" y="102" width="568" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Gyl-zC-Kpo" secondAttribute="bottom" constant="21" id="AwK-fO-elR"/>
+                            <constraint firstItem="Ahg-I4-ikS" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="KVJ-wS-cVC"/>
+                            <constraint firstItem="Gyl-zC-Kpo" firstAttribute="top" secondItem="xGx-th-irE" secondAttribute="bottom" constant="8" id="N1W-Aa-MJz"/>
+                            <constraint firstItem="Gyl-zC-Kpo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="38" id="OCf-Yx-7I8">
+                                <variation key="widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstItem="xGx-th-irE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="cKa-al-naD">
+                                <variation key="widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="Gyl-zC-Kpo" secondAttribute="trailing" constant="37" id="eNK-ij-KY1">
+                                <variation key="widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="xGx-th-irE" secondAttribute="trailing" id="kf5-SM-c5m">
+                                <variation key="widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstItem="Ahg-I4-ikS" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="n9b-tm-RK9"/>
+                            <constraint firstItem="Ahg-I4-ikS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="nQf-dN-br8"/>
+                            <constraint firstItem="xGx-th-irE" firstAttribute="top" secondItem="Ahg-I4-ikS" secondAttribute="bottom" constant="8" id="tAn-bC-UR0"/>
+                        </constraints>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem title="Shapes" style="plain" id="9fy-0u-EZv">
+                            <connections>
+                                <segue destination="77T-Bl-H1I" kind="popoverPresentation" identifier="showShapeSelector" popoverAnchorBarButtonItem="9fy-0u-EZv" id="7s9-38-l84">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="zAX-Ba-pUr"/>
+                        <barButtonItem title="Options" id="0vW-pP-of0">
+                            <connections>
+                                <action selector="doOptions:" destination="BYZ-38-t0r" id="4PD-hw-8ep"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Swift VectorBoolean" id="AqF-aO-bjp"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="canvasView" destination="xGx-th-irE" id="j0o-yB-4Fo"/>
+                        <outlet property="operationLabel" destination="Ahg-I4-ikS" id="r52-ZK-hkx"/>
+                        <outlet property="optionsButton" destination="0vW-pP-of0" id="1Dr-v3-n7a"/>
+                        <outlet property="segmentedControl" destination="Gyl-zC-Kpo" id="mWl-W0-mVp"/>
+                        <outlet property="shapesButton" destination="9fy-0u-EZv" id="3SV-oh-eJE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1116" y="429"/>
+        </scene>
+        <!--Test Shapes-->
+        <scene sceneID="lmd-4Q-OAe">
+            <objects>
+                <tableViewController id="IQT-e6-Ae6" customClass="ShapesTableViewController" customModule="Swift_VectorBoolean" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="m6z-kO-Qbh">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="testShapeCell" id="34q-of-7z7">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="34q-of-7z7" id="cFk-1s-eqk">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="IQT-e6-Ae6" id="lIv-PQ-lUj"/>
+                            <outlet property="delegate" destination="IQT-e6-Ae6" id="VHF-qh-RuP"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Test Shapes" id="29A-3x-OSe"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kta-EA-NNi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2472" y="351"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="tek-KU-H4U">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="ryv-vW-sF4" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="B9C-uc-Xh6">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="JPJ-Ql-YQi">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="T3N-6n-uLd"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IVW-mR-Vfj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="291" y="1090"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="RGM-xD-Hnh">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="77T-Bl-H1I" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="120-b2-78t">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="IQT-e6-Ae6" kind="relationship" relationship="rootViewController" id="8qd-um-WlS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Yxv-iw-6X9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1807" y="351"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Intersect" width="22" height="22"/>
+        <image name="Join" width="22" height="22"/>
+        <image name="Reset" width="22" height="22"/>
+        <image name="Subtract" width="22" height="22"/>
+        <image name="Union" width="22" height="22"/>
+    </resources>
 </document>
