@@ -119,54 +119,39 @@ class CanvasView: UIView {
           UIColor.orangeColor().setStroke()
           showMe?.stroke()
         }
+      }
+    }
 
-        // If we have exactly two objects, show where they intersect
-        if showIntersections && paths.count == 2 {
 
-          let path1 = paths[0].path
-          let path2 = paths[1].path
-          // get both [FBBezierCurve] sets
-          var curves1 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
-          var curves2 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
+    // If we have exactly two objects, show where they intersect
+    if showIntersections && paths.count == 2 {
 
-          for curve1 in curves1 {
-            for curve2 in curves2 {
+      let path1 = paths[0].path
+      let path2 = paths[1].path
+      // get both [FBBezierCurve] sets
+      var curves1 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
+      var curves2 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
 
-              var unused: FBBezierIntersectRange?
+      for curve1 in curves1 {
+        for curve2 in curves2 {
 
-              curve1.intersectionsWithBezierCurve(curve2, overlapRange: &unused) {
+          var unused: FBBezierIntersectRange?
 
-                (intersection: FBBezierIntersection) -> (setStop: Bool, stopValue:Bool) in
+          curve1.intersectionsWithBezierCurve(curve2, overlapRange: &unused) {
 
-                if intersection.isTangent {
-                  UIColor.purpleColor().setStroke()
-                } else {
-                  UIColor.greenColor().setStroke()
-                }
+            (intersection: FBBezierIntersection) -> (setStop: Bool, stopValue:Bool) in
 
-                UIBezierPath(ovalInRect: self.BoxFrame(intersection.location)).stroke()
-
-                return (false, false)
-              }
+            if intersection.isTangent {
+              UIColor.purpleColor().setStroke()
+            } else {
+              UIColor.greenColor().setStroke()
             }
+
+            UIBezierPath(ovalInRect: self.BoxFrame(intersection.location)).stroke()
+
+            return (false, false)
           }
-
         }
-
-
-
-//          for (NSDictionary *object in _paths) {
-//
-//        for (NSInteger i = 0; i < [path elementCount]; i++) {
-//          NSBezierElement element = [path fb_elementAtIndex:i];
-//          [[NSColor orangeColor] set];
-//          [NSBezierPath strokeRect:BoxFrame(element.point)];
-//          if ( element.kind == NSCurveToBezierPathElement ) {
-//            [[NSColor blackColor] set];
-//            [NSBezierPath strokeRect:BoxFrame(element.controlPoints[0])];
-//            [NSBezierPath strokeRect:BoxFrame(element.controlPoints[1])];
-//          }
-
       }
     }
 

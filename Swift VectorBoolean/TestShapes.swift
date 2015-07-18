@@ -70,6 +70,8 @@ class TestShapeData {
     return shapes.count
   }
   let shapes : [TestShape] = [
+    TestShape_Rectangle_Overlapping_Rectangle(),
+    TestShape_Circle_Overlapping_Rectangle(),
     TestShape_Debug(),
     TestShape_Debug001(),
     TestShape_Debug002(),
@@ -189,6 +191,21 @@ class TestShape_Circle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
     var circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 355, y: 240), withRadius: 125.0, toPath: circle)
     return circle
+  }
+}
+
+class TestShape_Rectangle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Rectangle Overlapping Rectangle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 50, y: 50, width: 300, height: 200))
+  }
+
+  func topShape() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 230, y: 115, width: 250, height: 250))
   }
 }
 
