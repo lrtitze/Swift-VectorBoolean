@@ -120,41 +120,6 @@ class CanvasView: UIView {
           showMe?.stroke()
         }
 
-        // If we have exactly two objects, show where they intersect
-        if showIntersections && paths.count == 2 {
-
-          let path1 = paths[0].path
-          let path2 = paths[1].path
-          // get both [FBBezierCurve] sets
-          var curves1 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
-          var curves2 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
-
-          for curve1 in curves1 {
-            for curve2 in curves2 {
-
-              var unused: FBBezierIntersectRange?
-
-              curve1.intersectionsWithBezierCurve(curve2, overlapRange: &unused) {
-
-                (intersection: FBBezierIntersection) -> (setStop: Bool, stopValue:Bool) in
-
-                if intersection.isTangent {
-                  UIColor.purpleColor().setStroke()
-                } else {
-                  UIColor.greenColor().setStroke()
-                }
-
-                UIBezierPath(ovalInRect: self.BoxFrame(intersection.location)).stroke()
-
-                return (false, false)
-              }
-            }
-          }
-
-        }
-
-
-
 //          for (NSDictionary *object in _paths) {
 //
 //        for (NSInteger i = 0; i < [path elementCount]; i++) {
