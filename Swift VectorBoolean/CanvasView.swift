@@ -119,19 +119,6 @@ class CanvasView: UIView {
           UIColor.orangeColor().setStroke()
           showMe?.stroke()
         }
-
-//          for (NSDictionary *object in _paths) {
-//
-//        for (NSInteger i = 0; i < [path elementCount]; i++) {
-//          NSBezierElement element = [path fb_elementAtIndex:i];
-//          [[NSColor orangeColor] set];
-//          [NSBezierPath strokeRect:BoxFrame(element.point)];
-//          if ( element.kind == NSCurveToBezierPathElement ) {
-//            [[NSColor blackColor] set];
-//            [NSBezierPath strokeRect:BoxFrame(element.controlPoints[0])];
-//            [NSBezierPath strokeRect:BoxFrame(element.controlPoints[1])];
-//          }
-
       }
     }
 
