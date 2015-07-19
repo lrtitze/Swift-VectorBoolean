@@ -2057,6 +2057,8 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
     // Helper method to easily convert a bezier path into an array of FBBezierCurves.
     // Very straight-forward, only lines are a special case.
 
+    var startPoint : CGPoint?
+
     let bezier = LRTBezierPathWrapper(path)
     var bezierCurves : [FBBezierCurve] = []
 
@@ -2068,6 +2070,7 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
 
       case let .Move(v):
         previousPoint = v
+        startPoint = v
 
       case let .Line(v):
         // Convert lines to bezier curves as well.
@@ -2087,6 +2090,13 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
         previousPoint = to
 
       case let .Close:
+        // Create a line back to the start if required
+        if let startPoint = startPoint {
+          if !CGPointEqualToPoint(previousPoint, startPoint) {
+            bezierCurves.append(FBBezierCurve(startPoint: previousPoint, endPoint: startPoint))
+          }
+        }
+        startPoint = nil
         previousPoint = CGPointZero
       }
     }
