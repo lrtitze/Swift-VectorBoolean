@@ -2073,6 +2073,7 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
         // Convert lines to bezier curves as well.
         // Just set control point to be in the line formed by the end points
         bezierCurves.append(FBBezierCurve(startPoint: previousPoint, endPoint: v))
+        previousPoint = v
 
       case .QuadCurve(let to, let via):
         // Not yet prepared to handle QuadCurves
