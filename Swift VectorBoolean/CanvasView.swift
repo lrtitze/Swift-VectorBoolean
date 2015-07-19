@@ -130,7 +130,7 @@ class CanvasView: UIView {
       let path2 = paths[1].path
       // get both [FBBezierCurve] sets
       var curves1 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
-      var curves2 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
+      var curves2 = FBBezierCurve.bezierCurvesFromBezierPath(path2)
 
       for curve1 in curves1 {
         for curve2 in curves2 {
