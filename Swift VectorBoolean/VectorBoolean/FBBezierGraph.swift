@@ -134,7 +134,7 @@ class FBBezierGraph {
     }
     // to mimic the peculiar behavior of the Objective-C version
     // so that I can debug these in parallel
-    addContour(FBBezierContour())
+    //addContour(FBBezierContour())
 
     return self
   }
