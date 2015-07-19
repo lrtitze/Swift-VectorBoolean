@@ -16,7 +16,7 @@ private func demunge(@noescape fn: CGPath.Element -> Void)(ptr: UnsafePointer<CG
     case kCGPathElementAddQuadCurveToPoint:
         fn(.QuadCurve(to: points[1], via: points[0]))
     case kCGPathElementAddCurveToPoint:
-        fn(.CubicCurve(to: points[2], via: points[0], via: points[1]))
+        fn(.CubicCurve(to: points[2], v1: points[0], v2: points[1]))
     case kCGPathElementCloseSubpath:
         fn(.Close)
     default: break
@@ -33,7 +33,7 @@ public extension CGPath {
         case Move(to: CGPoint)
         case Line(to: CGPoint)
         case QuadCurve(to: CGPoint, via: CGPoint)
-        case CubicCurve(to: CGPoint, via: CGPoint, via: CGPoint)
+        case CubicCurve(to: CGPoint, v1: CGPoint, v2: CGPoint)
         case Close
     }
     
