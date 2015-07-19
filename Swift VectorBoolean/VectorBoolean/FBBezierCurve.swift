@@ -1561,7 +1561,7 @@ private func intersectionsWithStraightLines(
 // MARK: ---- MAIN SPLIT FUNCTION ----
 // ========================================================
 
-
+// 1086
 //static void FBBezierCurveDataIntersectionsWithBezierCurve(FBBezierCurveData me, FBBezierCurveData curve, FBRange *usRange, FBRange *themRange, FBBezierCurve *originalUs, FBBezierCurve *originalThem, FBBezierIntersectRange **intersectRange, NSUInteger depth, FBCurveIntersectionBlock outputBlock, BOOL *stop)
 private func pfIntersectionsWithBezierCurve(
   me: FBBezierCurveData,
