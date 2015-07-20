@@ -760,7 +760,7 @@ class FBBezierCurveData {
     // We need to adjust the maximum parameter to fit on the new curve before we split again
     let adjustedMaximum = (range.maximum - range.minimum) / (1.0 - range.minimum)
 
-    let lowerCurve = pointAtParameter(adjustedMaximum).leftCurve!
+    let lowerCurve = upperCurve.pointAtParameter(adjustedMaximum).leftCurve!
 
     return lowerCurve
   }
