@@ -751,7 +751,7 @@ class FBBezierCurveData {
     // Return a bezier curve representing the parameter range specified. We do this by splitting
     //  twice: once on the minimum, the splitting the result of that on the maximum.
 
-    let upperCurve = pointAtParameter(range.minimum).rightCurve!
+    let upperCurve = self.pointAtParameter(range.minimum).rightCurve!
 
     if range.minimum == 1.0 {
       return upperCurve           // avoid the divide by zero below
