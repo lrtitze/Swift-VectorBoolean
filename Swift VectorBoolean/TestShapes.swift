@@ -24,7 +24,6 @@ class TestShape {
 
   init(label:String) {
     self.label = label
-    println("Init with label \(label)")
   }
 
   func top() -> UIBezierPath {
@@ -51,16 +50,6 @@ class TestShape {
       }
       return _other!
     }
-  }
-
-  private func xtopShape() -> UIBezierPath {
-    println("Be sure to override topShape")
-    return UIBezierPath()
-  }
-
-  private func xotherShapes() -> UIBezierPath {
-    println("Be sure to override otherShapes")
-    return UIBezierPath()
   }
 }
 
@@ -304,11 +293,9 @@ class TestShape_ : TestShape, SampleShapeMaker {
   }
 
   func otherShapes() -> UIBezierPath {
-    println("TestShape - Debug002 - other")
   }
 
   func topShape() -> UIBezierPath {
-    println("TestShape - Debug002 - top")
   }
 }
 */

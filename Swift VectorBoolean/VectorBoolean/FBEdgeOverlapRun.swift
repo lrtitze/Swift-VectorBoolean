@@ -80,15 +80,6 @@ class FBEdgeOverlapRun {
     // Find the FBEdgeOverlap that contains the crossing (if it exists)
     var containingOverlap : FBEdgeOverlap?
     for overlap in overlaps {
-
-      // TODO: Is this actually working? Check equality operator here!
-      let equalityTest1 = overlap.edge1 == edge
-      let equalityTest2 = overlap.edge1 === edge
-      println("EqualityA 1: \(equalityTest1) vs Equality 2: \(equalityTest2)")
-      let equalityTest3 = overlap.edge2 == edge
-      let equalityTest4 = overlap.edge2 === edge
-      println("EqualityB 3: \(equalityTest3) vs Equality 4: \(equalityTest4)")
-
       if overlap.edge1 == edge || overlap.edge2 == edge {
         containingOverlap = overlap
         break

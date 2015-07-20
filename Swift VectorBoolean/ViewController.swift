@@ -159,29 +159,15 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
           vc.shapeData = self.shapeData
           vc.primeVC = self
           vc.currentSelection = currentShapesetIndex
-          println("Prepare got here!")
         }
       }
     }
   }
 
   func adaptivePresentationStyleForPresentationController(controller: UIPresentationController!, traitCollection: UITraitCollection!) -> UIModalPresentationStyle {
-    println("Giving it PresentationStyle.None for iPhone!")
+    // Give the popover a PresentationStyle.None for iPhone
     return UIModalPresentationStyle.None //UIModalPresentationNone
   }
-  /*
-  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-  // Assuming you've hooked this all up in a Storyboard with a popover presentation style
-  if ([segue.identifier isEqualToString:@"showShapeSelector"]) {
-  UINavigationController *destNav = segue.destinationViewController;
-  PopoverContentsViewController *vc = destNav.viewControllers.firstObject;
-
-  // This is the important part
-  UIPopoverPresentationController *popPC = destNav.popoverPresentationController;
-  popPC.delegate = self;
-  }
-  }
-  */
 
 }
 

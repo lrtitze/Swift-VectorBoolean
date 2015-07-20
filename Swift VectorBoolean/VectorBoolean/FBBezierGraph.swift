@@ -888,8 +888,6 @@ class FBBezierGraph {
     let lineEndPoint = CGPoint(x: beyondX, y: testPoint.y)
     let testCurve = FBBezierCurve(startPoint: testPoint, endPoint: lineEndPoint)
 
-    println("Self has \(contours.count) contours")
-
     var intersectCount = 0
     for contour in contours {
 
@@ -903,9 +901,6 @@ class FBBezierGraph {
       }
 
       intersectCount += contour.numberOfIntersectionsWithRay(testCurve)
-    }
-    if intersectCount > 0 {
-      println("Got some intersections")
     }
 
     // return (intersectCount & 1) == 1 ? .Hole : .Filled
@@ -1427,7 +1422,7 @@ class FBBezierGraph {
     // Remove contours that cross the ray an even number of times.
     // By the even/odd rule this means they can't contain the test contour.
     var containersToRemove : [FBBezierContour] = []
-println("removeContoursThatDontContain has only \(crossings.count) elements in crossings")
+
     for crossingToTest in crossings {
       // For this contour, count how many times it appears in the crossings array
       if let containerToTest = crossingToTest.edge?.contour {
@@ -1465,11 +1460,7 @@ println("removeContoursThatDontContain has only \(crossings.count) elements in c
         }
       }
     }
-    if crossingsToRemove.count > 0 {
-      println("Got \(crossingsToRemove.count) to remove from \(crossings.count)")
-    } else {
-      println("Have no crossings to remove from \(crossings.count) crossings")
-    }
+
     // Now walk through and remove the crossings
     for crossing in crossingsToRemove {
       //[crossings removeObject:crossing];
@@ -1482,7 +1473,6 @@ println("removeContoursThatDontContain has only \(crossings.count) elements in c
         }
       }
     }
-    println("Crossings count is now: \(crossings.count)")
   }
 
 
