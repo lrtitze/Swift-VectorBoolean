@@ -169,11 +169,6 @@ class FBEdgeCrossing {
       return nil
     }
 
-    // TODO: Is this actually working? Check equality operator here!
-    let equalityTest1 = edge == _intersection.curve1
-    let equalityTest2 = edge === _intersection.curve1
-    println("Equality 1: \(equalityTest1) vs Equality 2: \(equalityTest2)")
-
     if edge == _intersection.curve1 {
       return _intersection.curve1RightBezier
     } else {
@@ -183,12 +178,6 @@ class FBEdgeCrossing {
 
   //- (BOOL) isAtStart
   var isAtStart : Bool {
-
-    // TODO: Is this actually working? Check equality operator here!
-    let equalityTest1 = edge == _intersection.curve1
-    let equalityTest2 = edge === _intersection.curve1
-    println("Equality 1: \(equalityTest1) vs Equality 2: \(equalityTest2)")
-
     if edge == _intersection.curve1 {
       return _intersection.isAtStartOfCurve1
     } else {
@@ -198,11 +187,6 @@ class FBEdgeCrossing {
 
   //- (BOOL) isAtEnd
   var isAtEnd : Bool {
-    // TODO: Is this actually working? Check equality operator here!
-    let equalityTest1 = edge == _intersection.curve1
-    let equalityTest2 = edge === _intersection.curve1
-    println("Equality 1: \(equalityTest1) vs Equality 2: \(equalityTest2)")
-
     if edge == _intersection.curve1 {
       return _intersection.isAtStopOfCurve1
     } else {

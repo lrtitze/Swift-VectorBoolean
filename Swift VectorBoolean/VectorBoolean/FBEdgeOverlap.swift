@@ -34,18 +34,8 @@ class FBEdgeOverlap {
       // nextOverlap should start at 0 of the next edge
       let nextEdge = edge1.next
 
-      // TODO: Is this actually working? Check equality operator here!
-      let equalityTest1 = nextOverlap.edge1 == nextEdge
-      let equalityTest2 = nextOverlap.edge1 === nextEdge
-      println("Equality 1: \(equalityTest1) vs Equality 2: \(equalityTest2)")
-
       return nextOverlap.edge1 == nextEdge && FBAreValuesCloseWithOptions(nextOverlap.range.parameterRange1.minimum, 0.0, FBOverlapThreshold)
     }
-
-    // TODO: Is this actually working? Check equality operator here!
-    let equalityTest1 = nextOverlap.edge1 == edge1
-    let equalityTest2 = nextOverlap.edge1 === edge1
-    println("Equality 1: \(equalityTest1) vs Equality 2: \(equalityTest2)")
 
     // nextOverlap should start at about maximum on the same edge
     return nextOverlap.edge1 == edge1 && FBAreValuesCloseWithOptions(nextOverlap.range.parameterRange1.minimum, range.parameterRange1.maximum, FBOverlapThreshold)
@@ -57,18 +47,8 @@ class FBEdgeOverlap {
       // previousOverlap should end at 1 of the previous edge
       let previousEdge = edge1.previous
 
-      // TODO: Is this actually working? Check equality operator here!
-      let equalityTest1 = previousOverlap.edge1 == previousEdge
-      let equalityTest2 = previousOverlap.edge1 === previousEdge
-      println("Equality 1: \(equalityTest1) vs Equality 2: \(equalityTest2)")
-
       return previousOverlap.edge1 == previousEdge && FBAreValuesCloseWithOptions(previousOverlap.range.parameterRange1.maximum, 1.0, FBOverlapThreshold)
     }
-
-    // TODO: Is this actually working? Check equality operator here!
-    let equalityTest1 = previousOverlap.edge1 == edge1
-    let equalityTest2 = previousOverlap.edge1 === edge1
-    println("Equality 1: \(equalityTest1) vs Equality 2: \(equalityTest2)")
 
     // previousOverlap should end at about the minimum on the same edge
     return previousOverlap.edge1 == edge1 && FBAreValuesCloseWithOptions(previousOverlap.range.parameterRange1.maximum, range.parameterRange1.minimum, FBOverlapThreshold)
