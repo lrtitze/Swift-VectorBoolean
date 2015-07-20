@@ -176,8 +176,8 @@ func BezierWithPoints(degree: Int, bezierPoints: [CGPoint], parameter: CGFloat, 
     points.append(bezierPoints[i])
   }
 
-  var leftArray : [CGPoint] = [CGPointZero,CGPointZero,CGPointZero,CGPointZero]
-  var rightArray : [CGPoint] = [CGPointZero,CGPointZero,CGPointZero,CGPointZero]
+  var leftArray = [CGPoint](count: degree+1, repeatedValue: CGPointZero)
+  var rightArray = [CGPoint](count: degree+1, repeatedValue: CGPointZero)
 
   // If the caller is asking for the resulting bezier curves, start filling those in
   if withCurves {
