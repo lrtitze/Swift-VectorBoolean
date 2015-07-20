@@ -952,7 +952,7 @@ class FBBezierCurveData {
 // Becomes:
 // let (new_curve, success) = curve_data.bezierClipWithBezierCurve(curve, &originalCurve, &originalRange)
 //
-private func bezierClipWithBezierCurve(me: FBBezierCurveData, curve: FBBezierCurveData, inout originalCurve: FBBezierCurveData, inout originalRange: FBRange) -> (clipped: FBBezierCurveData, intersects: Bool)
+func bezierClipWithBezierCurve(me: FBBezierCurveData, curve: FBBezierCurveData, inout originalCurve: FBBezierCurveData, inout originalRange: FBRange) -> (clipped: FBBezierCurveData, intersects: Bool)
 {
   // This method does the clipping of self. It removes the parts of self that we can determine don't intersect
   //  with curve. It'll return the clipped version of self, update originalRange which corresponds to the range
