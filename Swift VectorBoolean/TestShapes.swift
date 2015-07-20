@@ -70,6 +70,7 @@ class TestShapeData {
     return shapes.count
   }
   let shapes : [TestShape] = [
+    TestShape_Debug003(),
     TestShape_Rectangle_Overlapping_Rectangle(),
     TestShape_Circle_Overlapping_Rectangle(),
     TestShape_Debug(),
@@ -174,6 +175,41 @@ class TestShape_Debug002 : TestShape, SampleShapeMaker {
     addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
     //        var circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
     return circle
+  }
+}
+
+class TestShape_Debug003 : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Debug 003")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    var arc2 = UIBezierPath()
+    arc2.moveToPoint(CGPoint(x: 0, y: 250))
+    arc2.addCurveToPoint(
+      CGPoint(x: 250, y: 0),
+      controlPoint1: CGPoint(x: 138.071198, y: 250),
+      controlPoint2: CGPoint(x: 250, y: 138.071198)
+    )
+    arc2.closePath()
+
+    //let checkMe = LRTBezierPathWrapper(circle)
+
+    return arc2
+  }
+
+  func topShape() -> UIBezierPath {
+    var arc1 = UIBezierPath()
+    arc1.moveToPoint(CGPoint(x: 250, y: 250))
+    arc1.addCurveToPoint(
+      CGPoint(x: 0, y: 0),
+      controlPoint1: CGPoint(x: 250, y: 111.928802),
+      controlPoint2: CGPoint(x: 138.071198, y: 0)
+    )
+    arc1.closePath()
+
+    return arc1
   }
 }
 
