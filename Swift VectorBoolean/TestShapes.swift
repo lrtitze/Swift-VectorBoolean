@@ -68,7 +68,11 @@ class TestShapeData {
     TestShape_Circle_Overlapping_Rectangle(),
     TestShape_Circle_in_Rectangle(),
     TestShape_Rectangle_in_Circle(),
-    TestShape_Circle_on_Rectangle()
+    TestShape_Circle_on_Rectangle(),
+    TestShape_Rect_Over_Rect_w_Hole(),
+    TestShape_Circle_Over_Two_Rects(),
+    TestShape_Circle_Over_Circle(),
+    TestShape_Complex_Shapes()
   ]
 }
 
@@ -285,160 +289,105 @@ class TestShape_Circle_on_Rectangle : TestShape, SampleShapeMaker {
   }
 }
 
-/*
-class TestShape_ : TestShape, SampleShapeMaker {
+class TestShape_Rect_Over_Rect_w_Hole : TestShape, SampleShapeMaker {
 
   init() {
-    super.init(label: "AAAAAAAAAAAAAAAAAAA")
+    super.init(label: "Rect Over Rect with Hole")
   }
 
   func otherShapes() -> UIBezierPath {
+    var holeyRectangle = UIBezierPath()
+    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
+    return holeyRectangle
   }
 
   func topShape() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
   }
+}
+
+class TestShape_Circle_Over_Two_Rects : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Circle Overlapping Two Rects")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    var rectangles = UIBezierPath()
+    rectangles.appendPath(UIBezierPath(rect: CGRect(x:  50, y: 5, width: 100, height: 400)))
+    rectangles.appendPath(UIBezierPath(rect: CGRect(x: 350, y: 5, width: 100, height: 400)))
+    return rectangles
+  }
+
+  func topShape() -> UIBezierPath {
+    var circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 200, y: 200), withRadius: 185, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Circle_Over_Circle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Circle Overlapping Circle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    var circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 355, y: 240), withRadius: 125, toPath: circle)
+    return circle
+  }
+
+  func topShape() -> UIBezierPath {
+    var circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 100, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Complex_Shapes : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Complex Shapes")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    var holeyRectangle = UIBezierPath()
+    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
+
+    let rectangle = UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
+    //let allParts = holeyRectangle.fb_intersect(rectangle)
+    let allParts = holeyRectangle.fb_union(rectangle)
+
+    return allParts
+  }
+
+  func topShape() -> UIBezierPath {
+    var circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
+    return circle
+  }
+}
+
+
+/*
+class TestShape_ : TestShape, SampleShapeMaker {
+
+init() {
+super.init(label: "AAAAAAAAAAAAAAAAAAA")
+}
+
+func otherShapes() -> UIBezierPath {
+}
+
+func topShape() -> UIBezierPath {
+}
 }
 */
 
 /*
-
-    TestShape(
-      label: "Rect Over Rect with Hole",
-      // addHoleyRectangleWithRectangle
-      //NSBezierPath *holeyRectangle = [NSBezierPath bezierPath];
-      //[self addRectangle:NSMakeRect(50, 50, 350, 300) toPath:holeyRectangle];
-      //[self addCircleAtPoint:NSMakePoint(210, 200) withRadius:125 toPath:holeyRectangle];
-      //[_view.canvas addPath:holeyRectangle withColor:[NSColor blueColor]];
-
-      //NSBezierPath *rectangle = [NSBezierPath bezierPath];
-      //[self addRectangle:NSMakeRect(180, 5, 100, 400) toPath:rectangle];
-      //[_view.canvas addPath:rectangle withColor:[NSColor redColor]];
-
-      other: {
-        var holeyRectangle = UIBezierPath()
-        holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
-        addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
-        return holeyRectangle
-      },
-      top: {
-        return UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
-      }
-    ),
-
-    TestShape(
-      label: "Circle Overlapping Two Rects",
-      // addCircleOnTwoRectangles
-      //NSBezierPath *rectangles = [NSBezierPath bezierPath];
-      //[self addRectangle:NSMakeRect(50, 5, 100, 400) toPath:rectangles];
-      //[self addRectangle:NSMakeRect(350, 5, 100, 400) toPath:rectangles];
-      //[_view.canvas addPath:rectangles withColor:[NSColor blueColor]];
-      //
-      //[self addCircleAtPoint:NSMakePoint(200, 200) withRadius:185];
-
-      other: {
-        var rectangles = UIBezierPath()
-        rectangles.appendPath(UIBezierPath(rect: CGRect(x:  50, y: 5, width: 100, height: 400)))
-        rectangles.appendPath(UIBezierPath(rect: CGRect(x: 350, y: 5, width: 100, height: 400)))
-        return rectangles
-      },
-      top: {
-        var circle = UIBezierPath()
-        addCircleAtPoint(CGPoint(x: 200, y: 200), withRadius: 185, toPath: circle)
-        return circle
-      }
-    ),
-
-    TestShape(
-      label: "Circle Overlapping Circle",
-      // addCircleOverlappingCircle
-      //NSBezierPath *circle = [NSBezierPath bezierPath];
-      //[self addCircleAtPoint:NSMakePoint(355, 240) withRadius:125 toPath:circle];
-      //[_view.canvas addPath:circle withColor:[NSColor blueColor]];
-      //
-      //[self addCircleAtPoint:NSMakePoint(210, 110) withRadius:100];
-
-      other: {
-        var circle = UIBezierPath()
-        addCircleAtPoint(CGPoint(x: 355, y: 240), withRadius: 125, toPath: circle)
-        return circle
-      },
-      top: {
-        var circle = UIBezierPath()
-        addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 100, toPath: circle)
-        return circle
-      }
-    ),
-
-    TestShape(
-      label: "Complex Shapes",
-      // addComplexShapes
-      //NSBezierPath *holeyRectangle = [NSBezierPath bezierPath];
-      //[self addRectangle:NSMakeRect(50, 50, 350, 300) toPath:holeyRectangle];
-      //[self addCircleAtPoint:NSMakePoint(210, 200) withRadius:125 toPath:holeyRectangle];
-      //
-      //NSBezierPath *rectangle = [NSBezierPath bezierPath];
-      //[self addRectangle:NSMakeRect(180, 5, 100, 400) toPath:rectangle];
-      //
-      //NSBezierPath *allParts = [holeyRectangle fb_union:rectangle];
-      //NSBezierPath *intersectingParts = [holeyRectangle fb_intersect:rectangle];
-      //
-      //[_view.canvas addPath:allParts withColor:[NSColor blueColor]];
-      //[_view.canvas addPath:intersectingParts withColor:[NSColor redColor]];
-
-      other: {
-        var holeyRectangle = UIBezierPath()
-        holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
-        addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
-        //var circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
-        //holeyRectangle.appendPath(circle)
-
-
-        var rectangle = UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
-        //var allParts = holeyRectangle.fb_union(rectangle)
-        var allParts = holeyRectangle.fb_difference(rectangle)
-        return allParts
-      },
-      top: {
-        var circle = UIBezierPath()
-        addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
-//        var circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
-        return circle
-      }
-    ),
-
-
-    TestShape(
-      label: "Test Complex",
-      // addComplexShapes
-      //NSBezierPath *holeyRectangle = [NSBezierPath bezierPath];
-      //[self addRectangle:NSMakeRect(50, 50, 350, 300) toPath:holeyRectangle];
-      //[self addCircleAtPoint:NSMakePoint(210, 200) withRadius:125 toPath:holeyRectangle];
-      //
-      //NSBezierPath *rectangle = [NSBezierPath bezierPath];
-      //[self addRectangle:NSMakeRect(180, 5, 100, 400) toPath:rectangle];
-      //
-      //NSBezierPath *allParts = [holeyRectangle fb_union:rectangle];
-      //NSBezierPath *intersectingParts = [holeyRectangle fb_intersect:rectangle];
-      //
-      //[_view.canvas addPath:allParts withColor:[NSColor blueColor]];
-      //[_view.canvas addPath:intersectingParts withColor:[NSColor redColor]];
-
-      other: {
-        var holeyRectangle = UIBezierPath()
-        holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
-        addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
-
-        var rectangle = UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
-        //var allParts = holeyRectangle.fb_union(rectangle)
-        var allParts = holeyRectangle // holeyRectangle.fb_difference(rectangle)
-        return allParts
-      },
-      top: {
-        var rectangle = UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
-        return rectangle
-      }
-    ),
-
     TestShape(label: "More Complex Shapes"),
     TestShape(label: "Triangle Inside Rectangle"),
     TestShape(label: "Diamond Overlapping Rectangle"),
@@ -450,10 +399,6 @@ class TestShape_ : TestShape, SampleShapeMaker {
     TestShape(label: "Circle Overlapping Hole"),
     TestShape(label: "Rect w/Hole Overlapping Rect w/Hole"),
     TestShape(label: "Curve Overlapping Rectangle")
-  ]
-  //  }
-    //return _shapes!
-  //}
 */
 
 func addCircleAtPoint(center: CGPoint, withRadius radius: CGFloat, toPath circle: UIBezierPath)
