@@ -106,6 +106,17 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
           vc.currentSelection = currentShapesetIndex
         }
       }
+    } else if segue.identifier == "showOptions" {
+      //self.contentSizeForViewInPopover = currentSetSizeForPopover
+      if let destNav = segue.destinationViewController as? UINavigationController {
+        destNav.preferredContentSize = CGSize(width: 0, height: 400)
+        if let popPC = destNav.popoverPresentationController {
+          popPC.delegate = self
+        }
+        if let vc = destNav.topViewController as? OptionsViewController {
+          vc.primeVC = self
+        }
+      }
     }
   }
 
