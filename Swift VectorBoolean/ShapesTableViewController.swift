@@ -17,9 +17,8 @@ class ShapesTableViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    let wantCancelButtonOnPhone = false
-    // NOTE: The calcel button is useful if the presentation style is not forced to be
-    // non-modal in the adaptivePresentationStyleForPresentationController code above.
+    let wantCancelButtonOnPhone = true
+    // NOTE: The cancel button makes it easier to dismiss the list.
 
     if wantCancelButtonOnPhone && UI_USER_INTERFACE_IDIOM() != .Pad {
       navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel",
