@@ -59,20 +59,20 @@ class TestShapeData {
     return shapes.count
   }
   let shapes : [TestShape] = [
-    TestShape_Debug003(),
     TestShape_Rectangle_Overlapping_Rectangle(),
     TestShape_Circle_Overlapping_Rectangle(),
     TestShape_Debug(),
     TestShape_Debug001(),
     TestShape_Debug002(),
-    TestShape_Circle_Overlapping_Rectangle(),
-    TestShape_Circle_in_Rectangle(),
-    TestShape_Rectangle_in_Circle(),
-    TestShape_Circle_on_Rectangle(),
-    TestShape_Rect_Over_Rect_w_Hole(),
-    TestShape_Circle_Over_Two_Rects(),
-    TestShape_Circle_Over_Circle(),
-    TestShape_Complex_Shapes()
+    TestShape_Debug003(),
+    TestShape_Circle_Overlapping_Rectangle(),     // 1
+    TestShape_Circle_in_Rectangle(),              // 2
+    TestShape_Rectangle_in_Circle(),              // 3
+    TestShape_Circle_on_Rectangle(),              // 4
+    TestShape_Rect_Over_Rect_w_Hole(),            // 5
+    TestShape_Circle_Over_Two_Rects(),            // 6
+    TestShape_Circle_Over_Circle(),               // 7
+    TestShape_Complex_Shapes()                    // 8
   ]
 }
 
