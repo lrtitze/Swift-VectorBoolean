@@ -61,6 +61,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     canvasView.setNeedsDisplay()
   }
 
+  func popClosed() {
+    shapesButton.enabled = true
+    optionsButton.enabled = true
+  }
 
   @IBAction func modeSelect(sender: UISegmentedControl) {
     switch segmentedControl.selectedSegmentIndex {
@@ -109,11 +113,22 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     canvasView.boundsOfPaths = current.boundsOfPaths
   }
 
+  override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
+    if identifier == "showShapeSelector" {
+      return true
+    } else if identifier == "showOptions" {
+      return true
+    }
+    return true
+  }
+
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "showShapeSelector" {
       if let destNav = segue.destinationViewController as? UINavigationController {
         if let popPC = destNav.popoverPresentationController {
+          popPC.passthroughViews = nil
           popPC.delegate = self
+          optionsButton.enabled = false
         }
         if let vc = destNav.topViewController as? ShapesTableViewController {
           vc.shapeData = self.shapeData
@@ -124,7 +139,9 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     } else if segue.identifier == "showOptions" {
       if let destNav = segue.destinationViewController as? UINavigationController {
         if let popPC = destNav.popoverPresentationController {
+          popPC.passthroughViews = nil
           popPC.delegate = self
+          shapesButton.enabled = false
         }
         if let vc = destNav.topViewController as? OptionsViewController {
           vc.primeVC = self
@@ -141,6 +158,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
 }
 
 extension ViewController: UIPopoverPresentationControllerDelegate {
+
+  func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
+    popClosed()
+  }
 
   func presentationController(controller: UIPresentationController, viewControllerForAdaptivePresentationStyle style: UIModalPresentationStyle) -> UIViewController? {
 
