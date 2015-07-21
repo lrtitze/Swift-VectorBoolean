@@ -31,7 +31,13 @@ class CanvasView: UIView {
   private var paths: [PathItem] = []
   var boundsOfPaths: CGRect = CGRect.zeroRect
 
-  var displayMode: DisplayMode = .Original
+  var displayMode: DisplayMode = .Original {
+    didSet(previousMode) {
+      if displayMode != previousMode {
+        setNeedsDisplay()
+      }
+    }
+  }
 
   var showPoints: Bool = false
   var showIntersections: Bool = true

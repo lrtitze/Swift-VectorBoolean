@@ -51,14 +51,19 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     switch segmentedControl.selectedSegmentIndex {
     case 0:
       self.operationLabel.text = "Original"
+      canvasView.displayMode = .Original
     case 1:
       self.operationLabel.text = "Union"
+      canvasView.displayMode = .Union
     case 2:
       self.operationLabel.text = "Intersect"
+      canvasView.displayMode = .Intersect
     case 3:
       self.operationLabel.text = "Subtract"
+      canvasView.displayMode = .Subtract
     case 4:
       self.operationLabel.text = "Join"
+      canvasView.displayMode = .Join
     default:
       self.operationLabel.text = "Unknown"
     }
