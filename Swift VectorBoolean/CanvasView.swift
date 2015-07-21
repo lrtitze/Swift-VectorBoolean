@@ -31,6 +31,12 @@ class CanvasView: UIView {
   private var paths: [PathItem] = []
   var boundsOfPaths: CGRect = CGRect.zeroRect
 
+
+  private var _unionPath: UIBezierPath?
+  private var _intersectPath: UIBezierPath?
+  private var _differencePath: UIBezierPath?
+  private var _xorPath: UIBezierPath?
+
   var displayMode: DisplayMode = .Original {
     didSet(previousMode) {
       if displayMode != previousMode {
@@ -42,12 +48,24 @@ class CanvasView: UIView {
   var showPoints: Bool = false
   var showIntersections: Bool = true
 
+  let vectorFillColor = UIColor(red: 0.4314, green:0.6784, blue:1.0000, alpha:1.0)
+  let vectorStrokeColor = UIColor(red: 0.0392, green:0.3725, blue:1.0000, alpha:1.0)
+
   func clear() {
     paths = []
+    _unionPath = nil
+    _intersectPath = nil
+    _differencePath = nil
+    _xorPath = nil
   }
 
   func addPath(path: UIBezierPath, withColor color: UIColor) {
     paths.append(PathItem(path: path, color: color))
+    // we clear these because they're no longer valid
+    _unionPath = nil
+    _intersectPath = nil
+    _differencePath = nil
+    _xorPath = nil
   }
 
   func BoxFrame(point: CGPoint) -> CGRect
@@ -198,14 +216,58 @@ class CanvasView: UIView {
   }
 
   private func drawUnion() {
+    if _unionPath == nil {
+      if paths.count == 2 {
+        _unionPath = paths[0].path.fb_union(paths[1].path)
+      }
+    }
+    if let path = _unionPath {
+      vectorFillColor.setFill()
+      vectorStrokeColor.setStroke()
+      path.fill()
+      path.stroke()
+    }
   }
 
   private func drawIntersect() {
+    if _intersectPath == nil {
+      if paths.count == 2 {
+        _intersectPath = paths[0].path.fb_intersect(paths[1].path)
+      }
+    }
+    if let path = _intersectPath {
+      vectorFillColor.setFill()
+      vectorStrokeColor.setStroke()
+      path.fill()
+      path.stroke()
+    }
   }
 
   private func drawSubtract() {
+    if _differencePath == nil {
+      if paths.count == 2 {
+        _differencePath = paths[0].path.fb_difference(paths[1].path)
+      }
+    }
+    if let path = _differencePath {
+      vectorFillColor.setFill()
+      vectorStrokeColor.setStroke()
+      path.fill()
+      path.stroke()
+    }
   }
 
   private func drawJoin() {
+    if _xorPath == nil {
+      if paths.count == 2 {
+        _xorPath = paths[0].path.fb_xor(paths[1].path)
+      }
+    }
+    if let path = _xorPath {
+      vectorFillColor.setFill()
+      vectorStrokeColor.setStroke()
+      path.fill()
+      path.stroke()
+    }
   }
 }
