@@ -57,6 +57,9 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
 
   func updateCanvas() {
     canvasView.clear()
+    operationLabel.text = "Original"
+    canvasView.displayMode = .Original
+    segmentedControl.selectedSegmentIndex = 0
     loadCanvas()
     canvasView.setNeedsDisplay()
   }
