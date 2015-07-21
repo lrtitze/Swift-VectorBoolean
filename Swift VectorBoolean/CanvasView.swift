@@ -93,16 +93,16 @@ class CanvasView: UIView {
       drawOriginal()
 
     case .Union:
-      drawOriginal()
+      drawUnion()
 
     case .Intersect:
-      drawOriginal()
+      drawIntersect()
 
     case .Subtract:
-      drawOriginal()
+      drawSubtract()
 
     case .Join:
-      drawOriginal()
+      drawJoin()
     }
 
     // All done
@@ -189,5 +189,17 @@ class CanvasView: UIView {
         }
       }
     }
+  }
+
+  private func drawUnion() {
+  }
+
+  private func drawIntersect() {
+  }
+
+  private func drawSubtract() {
+  }
+
+  private func drawJoin() {
   }
 }
