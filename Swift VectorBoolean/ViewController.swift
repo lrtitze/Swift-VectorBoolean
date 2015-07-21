@@ -69,66 +69,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     }
   }
 
-  @IBAction func doShapes(sender: AnyObject) {
-
-//    if UI_USER_INTERFACE_IDIOM() == .Pad, let sender = sender as? UIBarButtonItem {
-//      actionSheet.showFromBarButtonItem(sender, animated: true)
-//    } else {
-//      actionSheet.showInView(self.view)
-//    }
-//    actionSheet.tag = 200
-
-
-  }
-
-  @IBAction func doOptions(sender: AnyObject) {
-    let endpointText : String
-    if showEndpoints {
-      endpointText = "Hide end/control points"
-    } else {
-      endpointText = "Show end/control points"
-    }
-
-    let intersectionText : String
-    if showIntersections {
-      intersectionText = "Hide intersections"
-    } else {
-      intersectionText = "Show intersections"
-    }
-
-    let alertController = UIAlertController(
-      title: "Display Options",
-      message: "Choose whether or not to view details related to the structure of the shapes and their intersections.",
-      preferredStyle: .ActionSheet
-    )
-
-    let endpoints = UIAlertAction(
-      title: endpointText,
-      style: .Default,
-      handler: { (action) -> Void in
-        self.showEndpoints = !self.showEndpoints
-        self.updateCanvas()
-      }
-    )
-
-    let intersections = UIAlertAction(
-      title: intersectionText,
-      style: .Default,
-      handler: { (action) -> Void in
-        self.showIntersections = !self.showIntersections
-        self.updateCanvas()
-      }
-    )
-
-    alertController.addAction(endpoints)
-    alertController.addAction(intersections)
-
-    if let popoverController = alertController.popoverPresentationController, sender = sender as? UIBarButtonItem {
-      popoverController.barButtonItem = sender
-    }
-
-    presentViewController(alertController, animated: true, completion: nil)
-  }
 
   func loadCanvas() {
     canvasView.clear()
