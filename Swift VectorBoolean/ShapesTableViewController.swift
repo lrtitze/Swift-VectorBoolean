@@ -46,7 +46,6 @@ class ShapesTableViewController: UITableViewController {
 
   func dismiss() {
     dismissViewControllerAnimated(true) {
-      println("Gone")
     }
   }
 
