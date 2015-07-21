@@ -8,6 +8,14 @@
 
 import UIKit
 
+enum DisplayMode {
+  case Original
+  case Union
+  case Intersect
+  case Subtract
+  case Join
+}
+
 class PathItem {
   private var path: UIBezierPath
   private var color: UIColor
@@ -22,6 +30,8 @@ class CanvasView: UIView {
 
   private var paths: [PathItem] = []
   var boundsOfPaths: CGRect = CGRect.zeroRect
+
+  var displayMode: DisplayMode = .Original
 
   var showPoints: Bool = false
   var showIntersections: Bool = true
@@ -76,6 +86,25 @@ class CanvasView: UIView {
     }
 
     // Draw shapes now
+
+    switch displayMode {
+
+    case .Original:
+      drawOriginal()
+
+    case .Union:
+      drawOriginal()
+
+    case .Intersect:
+      drawOriginal()
+
+    case .Subtract:
+      drawOriginal()
+
+    case .Join:
+      drawOriginal()
+    }
+
     // All done
     CGContextRestoreGState(ctx)
   }
