@@ -70,17 +70,6 @@ class OptionsViewController: UIViewController {
     }
   }
 
-  // MARK: Handlers
-
-  func sampleCallPrimeVC() {
-
-    if let primeVC = primeVC {
-      primeVC.currentShapesetIndex = 0
-      primeVC.updateCanvas()
-    }
-  }
-
-
   // MARK: - Navigation
   /*
   // In a storyboard-based application, you will often want to do a little preparation before navigation
