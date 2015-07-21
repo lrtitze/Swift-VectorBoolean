@@ -17,10 +17,16 @@ class ShapesTableViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel",
-      style: .Plain,
-      target: self,
-      action:"dismiss")
+    let wantCancelButtonOnPhone = false
+    // NOTE: The calcel button is useful if the presentation style is not forced to be
+    // non-modal in the adaptivePresentationStyleForPresentationController code above.
+
+    if wantCancelButtonOnPhone && UI_USER_INTERFACE_IDIOM() != .Pad {
+      navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel",
+        style: .Plain,
+        target: self,
+        action:"dismiss")
+    }
 
     // Uncomment the following line to preserve selection between presentations
     self.clearsSelectionOnViewWillAppear = false
