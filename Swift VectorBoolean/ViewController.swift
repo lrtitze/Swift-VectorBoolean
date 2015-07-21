@@ -18,8 +18,23 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
 
   @IBOutlet var segmentedControl: UISegmentedControl!
 
-  var showEndpoints = false
-  var showIntersections = true
+  var showEndpoints = false {
+    didSet(previousEndpoints) {
+      if showEndpoints != previousEndpoints {
+        canvasView.showPoints = showEndpoints
+        canvasView.setNeedsDisplay()
+      }
+    }
+  }
+
+  var showIntersections = true {
+    didSet(previousIntersections) {
+      if showIntersections != previousIntersections {
+        canvasView.showIntersections = showIntersections
+        canvasView.setNeedsDisplay()
+      }
+    }
+  }
   private var shapeData = TestShapeData()
   var currentShapesetIndex : Int = 0
 
