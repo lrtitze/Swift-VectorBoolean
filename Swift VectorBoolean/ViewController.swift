@@ -171,7 +171,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
 
   func adaptivePresentationStyleForPresentationController(controller: UIPresentationController!, traitCollection: UITraitCollection!) -> UIModalPresentationStyle {
     // Give the popover a PresentationStyle.None for iPhone
-    return UIModalPresentationStyle.None //UIModalPresentationNone
+    return UIModalPresentationStyle.None
   }
 
 }
@@ -179,9 +179,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
 extension ViewController: UIPopoverPresentationControllerDelegate {
 
   func presentationController(controller: UIPresentationController, viewControllerForAdaptivePresentationStyle style: UIModalPresentationStyle) -> UIViewController? {
-    let btnDone = UIBarButtonItem(title: "Done", style: .Done, target: self, action: "dismiss")
+
     let nav = UINavigationController(rootViewController: controller.presentedViewController)
-    nav.topViewController.navigationItem.leftBarButtonItem = btnDone
     return nav
   }
 
