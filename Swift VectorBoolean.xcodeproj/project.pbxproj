@@ -52,6 +52,7 @@
 		63C6D8CD1B55AC8D00CDCF07 /* FBEdgeOverlapRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63409FCC1B549E2C00C15013 /* FBEdgeOverlapRun.swift */; };
 		63C6D8CE1B55AC9000CDCF07 /* FBGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63409FCD1B549E2C00C15013 /* FBGeometry.swift */; };
 		63C6D8D01B55B12600CDCF07 /* FBGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C6D8CF1B55B12600CDCF07 /* FBGeometryTests.swift */; };
+		63E5E4DE1B5E0E8E006F82AB /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E4DD1B5E0E8E006F82AB /* OptionsViewController.swift */; };
 		63FB07F21B531B25005EEF58 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FB07F11B531B25005EEF58 /* CanvasView.swift */; };
 /* End PBXBuildFile section */
 
@@ -97,6 +98,7 @@
 		6356E1931B4CD83A00420351 /* Swift_VectorBooleanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swift_VectorBooleanTests.swift; sourceTree = "<group>"; };
 		6387368B1B5990D70071A410 /* Int_Extn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int_Extn.swift; sourceTree = "<group>"; };
 		63C6D8CF1B55B12600CDCF07 /* FBGeometryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBGeometryTests.swift; sourceTree = "<group>"; };
+		63E5E4DD1B5E0E8E006F82AB /* OptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		63FB07F11B531B25005EEF58 /* CanvasView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -183,6 +185,7 @@
 				6356E17D1B4CD83A00420351 /* AppDelegate.swift */,
 				6356E17F1B4CD83A00420351 /* ViewController.swift */,
 				631107981B52B5DF00737C00 /* ShapesTableViewController.swift */,
+				63E5E4DD1B5E0E8E006F82AB /* OptionsViewController.swift */,
 				6311079A1B52D8E700737C00 /* TestShapes.swift */,
 				63FB07F11B531B25005EEF58 /* CanvasView.swift */,
 				6356E1811B4CD83A00420351 /* Main.storyboard */,
@@ -329,6 +332,7 @@
 				6356E1801B4CD83A00420351 /* ViewController.swift in Sources */,
 				63409FD51B549E2C00C15013 /* FBBezierCurve_Edge.swift in Sources */,
 				63409FCF1B549E2C00C15013 /* UIBezierPath_Utilities.swift in Sources */,
+				63E5E4DE1B5E0E8E006F82AB /* OptionsViewController.swift in Sources */,
 				63409FD21B549E2C00C15013 /* LRTBezierPathWrapper.swift in Sources */,
 				63409FD41B549E2C00C15013 /* FBBezierCurve.swift in Sources */,
 				631107991B52B5DF00737C00 /* ShapesTableViewController.swift in Sources */,
