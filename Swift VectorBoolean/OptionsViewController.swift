@@ -70,10 +70,6 @@ class OptionsViewController: UIViewController {
     }
   }
 
-  func dismissAndUpdate() {
-    dismissViewControllerAnimated(true) {}
-  }
-
   // MARK: Handlers
 
   func sampleCallPrimeVC() {
