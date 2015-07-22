@@ -79,6 +79,13 @@ class CanvasView: UIView {
     UIColor.whiteColor().setFill()
     background.fill()
 
+    // When running my Xcode tests for geometry I want to
+    // prevent the app shell from any geometry so I can
+    // use breakpoints during test development.
+    if paths.count == 0 {
+      return
+    }
+
     // calculate a useful scale and offset for drawing these paths
     // as large as possible in the middle of the display
     // expand size by 20 to provide a margin

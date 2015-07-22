@@ -18,6 +18,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
 
   @IBOutlet var segmentedControl: UISegmentedControl!
 
+  var blankDisplay = false
+
   var showEndpoints = false {
     didSet(previousEndpoints) {
       if showEndpoints != previousEndpoints {
@@ -41,6 +43,13 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    // CREDIT: This concept comes from Matt Neuburg's
+    // Stack Overflow answer: http://stackoverflow.com/a/24344459
+    let envDict = NSProcessInfo.processInfo().environment
+    if envDict["TESTING"] != nil {
+      self.blankDisplay = true
+    }
 
     loadCanvas()
   }
@@ -97,7 +106,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     canvasView.showPoints = self.showEndpoints
     canvasView.showIntersections = self.showIntersections
     // TODO: This will be only when currentMode == .Original
-    loadCanvasWithOriginals()
+
+    if !blankDisplay {
+      loadCanvasWithOriginals()
+    }
   }
 
   func loadCanvasWithOriginals() {
