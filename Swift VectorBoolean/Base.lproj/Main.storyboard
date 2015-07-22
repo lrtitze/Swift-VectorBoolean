@@ -135,33 +135,33 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show End/Control Points" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u26-sX-9Bd">
-                                <rect key="frame" x="16" y="227" width="194" height="21"/>
+                                <rect key="frame" x="16" y="173" width="194" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cgx-n9-eTd">
-                                <rect key="frame" x="235" y="222" width="51" height="31"/>
+                                <rect key="frame" x="235" y="168" width="51" height="31"/>
                                 <connections>
                                     <action selector="endpointsSwitchChanged:" destination="Cts-Az-QeL" eventType="valueChanged" id="q0F-In-h8i"/>
                                 </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Intersections" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pjy-XM-ull">
-                                <rect key="frame" x="16" y="283" width="147" height="21"/>
+                                <rect key="frame" x="16" y="229" width="147" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BGc-Vx-uU3">
-                                <rect key="frame" x="235" y="278" width="51" height="31"/>
+                                <rect key="frame" x="235" y="224" width="51" height="31"/>
                                 <connections>
                                     <action selector="intersectionsSwitchChanged:" destination="Cts-Az-QeL" eventType="valueChanged" id="gfh-1j-03Q"/>
                                 </connections>
                             </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hr-C9-L56">
-                                <rect key="frame" x="16" y="72" width="268" height="124"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="8hr-C9-L56">
+                                <rect key="frame" x="16" y="72" width="268" height="74"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="124" id="bwu-di-2KW"/>
+                                    <constraint firstAttribute="height" constant="74" id="bwu-di-2KW"/>
                                 </constraints>
                                 <string key="text">These options determine whether or not the details related to the structure of the shapes and their intersections are displayed.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -175,7 +175,7 @@
                             <constraint firstItem="u26-sX-9Bd" firstAttribute="centerY" secondItem="Cgx-n9-eTd" secondAttribute="centerY" id="HRK-BA-geM"/>
                             <constraint firstItem="Cgx-n9-eTd" firstAttribute="trailing" secondItem="a25-UR-7Cn" secondAttribute="trailingMargin" id="Swp-Mo-RRN"/>
                             <constraint firstItem="pjy-XM-ull" firstAttribute="leading" secondItem="a25-UR-7Cn" secondAttribute="leadingMargin" id="TyU-4Q-DLw"/>
-                            <constraint firstItem="Cgx-n9-eTd" firstAttribute="top" secondItem="8hr-C9-L56" secondAttribute="bottom" constant="26" id="Wyr-82-AMx"/>
+                            <constraint firstItem="Cgx-n9-eTd" firstAttribute="top" secondItem="8hr-C9-L56" secondAttribute="bottom" constant="22" id="Wyr-82-AMx"/>
                             <constraint firstItem="8hr-C9-L56" firstAttribute="trailing" secondItem="Cgx-n9-eTd" secondAttribute="trailing" id="YxI-fo-2Rd"/>
                             <constraint firstItem="u26-sX-9Bd" firstAttribute="leading" secondItem="a25-UR-7Cn" secondAttribute="leadingMargin" id="puC-6E-Wt3"/>
                             <constraint firstItem="8hr-C9-L56" firstAttribute="leading" secondItem="u26-sX-9Bd" secondAttribute="leading" id="sBA-97-AFu"/>
