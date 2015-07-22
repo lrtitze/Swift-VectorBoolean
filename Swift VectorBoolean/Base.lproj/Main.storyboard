@@ -161,7 +161,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="8hr-C9-L56">
                                 <rect key="frame" x="16" y="72" width="268" height="74"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="74" id="bwu-di-2KW"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="74" id="bwu-di-2KW"/>
                                 </constraints>
                                 <string key="text">These options determine whether or not the details related to the structure of the shapes and their intersections are displayed.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
