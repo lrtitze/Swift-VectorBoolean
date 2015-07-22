@@ -215,6 +215,42 @@ class CanvasView: UIView {
     }
   }
 
+  func drawEndPointsForPath(path: UIBezierPath) {
+    let bezier = LRTBezierPathWrapper(path)
+
+    var previousPoint = CGPointZero
+
+    for item in bezier.elements {
+
+      var showMe : UIBezierPath?
+
+      switch item {
+
+      case let .Move(v):
+        showMe = UIBezierPath(rect: BoxFrame(v))
+
+      case let .Line(v):
+        // Convert lines to bezier curves as well.
+        // Just set control point to be in the line formed by the end points
+        showMe = UIBezierPath(rect: BoxFrame(v))
+
+      case .QuadCurve(let to, let via):
+        previousPoint = to
+
+      case .CubicCurve(let to, let v1, let v2):
+        showMe = UIBezierPath(rect: BoxFrame(to))
+        UIColor.blackColor().setStroke()
+        UIBezierPath(ovalInRect: BoxFrame(v1)).stroke()
+        UIBezierPath(ovalInRect: BoxFrame(v2)).stroke()
+        
+      case let .Close:
+        previousPoint = CGPointZero
+      }
+      UIColor.orangeColor().setStroke()
+      showMe?.stroke()
+    }
+  }
+
   private func drawUnion() {
     if _unionPath == nil {
       if paths.count == 2 {
@@ -226,6 +262,9 @@ class CanvasView: UIView {
       vectorStrokeColor.setStroke()
       path.fill()
       path.stroke()
+      if showPoints {
+        drawEndPointsForPath(path)
+      }
     }
   }
 
@@ -240,6 +279,9 @@ class CanvasView: UIView {
       vectorStrokeColor.setStroke()
       path.fill()
       path.stroke()
+      if showPoints {
+        drawEndPointsForPath(path)
+      }
     }
   }
 
@@ -254,6 +296,9 @@ class CanvasView: UIView {
       vectorStrokeColor.setStroke()
       path.fill()
       path.stroke()
+      if showPoints {
+        drawEndPointsForPath(path)
+      }
     }
   }
 
@@ -268,6 +313,9 @@ class CanvasView: UIView {
       vectorStrokeColor.setStroke()
       path.fill()
       path.stroke()
+      if showPoints {
+        drawEndPointsForPath(path)
+      }
     }
   }
 }
