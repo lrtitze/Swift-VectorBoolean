@@ -170,7 +170,7 @@ class FBBezierIntersectRange {
   {
     if needToComputeCurve2 {
 
-      let swr = _curve1.splitSubcurvesWithRange(_parameterRange1, left: true, middle: true, right: true)
+      let swr = _curve2.splitSubcurvesWithRange(_parameterRange2, left: true, middle: true, right: true)
       _curve2LeftBezier = swr.left
       _curve2MiddleBezier = swr.mid
       _curve2RightBezier = swr.right
