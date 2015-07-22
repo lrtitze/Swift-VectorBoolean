@@ -241,7 +241,6 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Fj4-QK-lNY" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <value key="contentSizeForViewInPopover" type="size" width="600" height="400"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ohw-Us-qk2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
