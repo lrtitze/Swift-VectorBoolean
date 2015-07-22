@@ -168,7 +168,7 @@ class CanvasView: UIView {
 
           case .CubicCurve(let to, let v1, let v2):
             showMe = UIBezierPath(rect: BoxFrame(to))
-            UIColor.greenColor().setStroke()
+            UIColor.blackColor().setStroke()
             UIBezierPath(ovalInRect: BoxFrame(v1)).stroke()
             UIBezierPath(ovalInRect: BoxFrame(v2)).stroke()
 
