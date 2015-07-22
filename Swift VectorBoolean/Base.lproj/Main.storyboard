@@ -131,7 +131,7 @@
                         <viewControllerLayoutGuide type="bottom" id="WhE-kz-lIe"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="a25-UR-7Cn">
-                        <rect key="frame" x="0.0" y="0.0" width="300" height="400"/>
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="290"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show End/Control Points" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u26-sX-9Bd">
@@ -186,7 +186,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Display Options" id="hk4-Ir-QBX"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="300" height="400"/>
+                    <size key="freeformSize" width="300" height="290"/>
                     <connections>
                         <outlet property="controlPointsSwitch" destination="Cgx-n9-eTd" id="EBc-Vi-bHx"/>
                         <outlet property="intersectionsSwitch" destination="BGc-Vx-uU3" id="MHf-cK-6N7"/>
