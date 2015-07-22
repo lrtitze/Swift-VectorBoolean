@@ -104,10 +104,15 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
 
     let current = shapeData.shapes[currentShapesetIndex]
 
+    // a pair of colors that works well with the UI
+    let lowShade = UIColor(red:0.0, green:0.48, blue:1.0000, alpha:1.0)
+    let topShade = UIColor(red:1.0000, green:0.2235, blue:0.0980, alpha:1.0)
+    //let topShade = UIColor(red:1, green:0.3373, blue:0.2314, alpha:1)
+
     // We use a freshly generated version of the test shapes so
     // that there's no worry about them being modified beyond repair.
-    canvasView.addPath(current.other(), withColor: UIColor.blueColor())
-    canvasView.addPath(current.top(), withColor: UIColor.redColor())
+    canvasView.addPath(current.other(), withColor: lowShade)
+    canvasView.addPath(current.top(), withColor: topShade)
 
     // Tell the canvas what the bounds are for use with
     // the "Original" form of these paths, rather than having
