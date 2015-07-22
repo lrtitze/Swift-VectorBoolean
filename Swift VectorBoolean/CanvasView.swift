@@ -139,7 +139,7 @@ class CanvasView: UIView {
     for pathItem in paths {
       pathItem.color.setFill()
       pathItem.path.fill()
-      pathItem.path.stroke()  // was not in original
+      //pathItem.path.stroke()  // was not in original
     }
 
     // Draw on the end and control points

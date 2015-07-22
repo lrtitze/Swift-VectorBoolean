@@ -105,7 +105,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     let current = shapeData.shapes[currentShapesetIndex]
 
     // a pair of colors that works well with the UI
-    let lowShade = UIColor(hue:0.5869, saturation:1, brightness:1, alpha:1)
+    //let lowShade = UIColor(hue:0.5869, saturation:1, brightness:1, alpha:1)
+    let lowShade = UIColor(hue:0.5869, saturation:0.9, brightness:1, alpha:1)
     //let topShade = UIColor(hue:0.0232, saturation:0.902, brightness:1, alpha:1)
     let topShade = UIColor(hue:0.0232, saturation:0.62, brightness:1, alpha:1)
 
