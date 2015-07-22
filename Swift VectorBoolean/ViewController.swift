@@ -107,7 +107,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     // a pair of colors that works well with the UI
     let lowShade = UIColor(hue:0.5869, saturation:1, brightness:1, alpha:1)
     let topShade = UIColor(hue:0.0232, saturation:0.902, brightness:1, alpha:1)
-    //let topShade = UIColor(red:1, green:0.3373, blue:0.2314, alpha:1)
+    //let topShade = UIColor(hue:0.0232, saturation:0.82, brightness:1, alpha:1)
 
     // We use a freshly generated version of the test shapes so
     // that there's no worry about them being modified beyond repair.
