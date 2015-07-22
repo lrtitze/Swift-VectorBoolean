@@ -21,6 +21,11 @@ class FBGeometryTests: XCTestCase {
     super.tearDown()
   }
 
+
+  /// Check Difference of two rects
+  func testTwoRectDifference() {
+  }
+
   func testFBDistanceBetweenPoints() {
     var point1 = CGPoint(x: 12, y: 15)
     var point2 = CGPoint(x: 13, y: 16)
