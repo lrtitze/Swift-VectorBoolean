@@ -24,6 +24,47 @@ class FBGeometryTests: XCTestCase {
 
   /// Check Difference of two rects
   func testTwoRectDifference() {
+    let lowRect = UIBezierPath(rect: CGRect(x: 50, y: 50, width: 300, height: 200))
+
+    let topRect = UIBezierPath(rect: CGRect(x: 230, y: 115, width: 250, height: 250))
+
+    var thisGraph = FBBezierGraph(path: lowRect)
+    var otherGraph = FBBezierGraph(path: topRect)
+    //var result = thisGraph.differenceWithBezierGraph(otherGraph).bezierPath
+    thisGraph.insertCrossingsWithBezierGraph(otherGraph)
+    XCTAssert(thisGraph.contours.count == 1, "Found \(thisGraph.contours.count) contours - should only have 1 contour")
+    XCTAssert(thisGraph.contours[0].edges.count == 4, "Found \(thisGraph.contours[0].edges.count) edges - should have 4 edges")
+    XCTAssert(thisGraph.contours[0].edges[0].crossings.count == 0, "The first edge should not have any crossings")
+    XCTAssert(thisGraph.contours[0].edges[1].crossings.count == 1, "The second edge should have a single crossing")
+
+    let crossing = thisGraph.contours[0].edges[1].crossings[0]
+    XCTAssert(crossing.location.x == 350 && crossing.location.y == 115, "The second edge crossing is at the wrong location \(crossing.location)")
+    let edge = crossing.edge
+    let starts = crossing.isAtStart
+    let ends = crossing.isAtEnd
+    let g1C1 = thisGraph.contours[0].edges[1].crossings[0]
+    let g1C2 = thisGraph.contours[0].edges[2].crossings[0]
+    let g2C1 = otherGraph.contours[0].edges[0].crossings[0]
+    let g2C2 = otherGraph.contours[0].edges[3].crossings[0]
+    let counterpartAMatch = g2C1.counterpart === g1C1
+    let counterpartBMatch = g2C2.counterpart === g1C2
+    thisGraph.insertSelfCrossings() // none for rects
+    otherGraph.insertSelfCrossings() // none for rects
+    thisGraph.cleanupCrossingsWithBezierGraph(otherGraph)
+
+    thisGraph.markCrossingsAsEntryOrExitWithBezierGraph(otherGraph, markInside: false)
+    otherGraph.markCrossingsAsEntryOrExitWithBezierGraph(thisGraph, markInside: true)
+
+    //_location	CGPoint?	(x = 350, y = 115)	Some
+    println("")
+/*
+    thisGraph.insertSelfCrossings];
+    [graph insertSelfCrossings];
+    thisGraph.cleanupCrossingsWithBezierGraph:graph];
+
+    let thisGraph = FBBezierGraph( bezierGraphWithBezierPath:self];
+    FBBezierGraph *otherGraph = [FBBezierGraph bezierGraphWithBezierPath:path];
+*/
   }
 
   func testFBDistanceBetweenPoints() {
