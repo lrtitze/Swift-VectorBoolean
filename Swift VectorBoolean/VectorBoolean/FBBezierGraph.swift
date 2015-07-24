@@ -543,7 +543,7 @@ class FBBezierGraph {
 
     // Handle the parts of the graphs that intersect first. Mark the parts
     //  of the graphs that are outside the other for the final result.
-    markCrossingsAsEntryOrExitWithBezierGraph(graph, markInside: false)
+    self.markCrossingsAsEntryOrExitWithBezierGraph(graph, markInside: false)
     graph.markCrossingsAsEntryOrExitWithBezierGraph(self, markInside: false)
 
     // Walk the crossings and actually compute the final result for the intersecting parts
