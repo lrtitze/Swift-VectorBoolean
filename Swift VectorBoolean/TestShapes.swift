@@ -60,6 +60,7 @@ class TestShapeData {
   }
   let shapes : [TestShape] = [
     TestShape_Rectangle_Overlapping_Rectangle(),
+    TestShape_Tiny_Rectangle_Overlapping_Rectangle(),
     TestShape_Circle_Overlapping_Rectangle(),
     TestShape_Debug(),
     TestShape_Debug001(),
@@ -235,6 +236,21 @@ class TestShape_Rectangle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
 
   func topShape() -> UIBezierPath {
     return UIBezierPath(rect: CGRect(x: 230, y: 115, width: 250, height: 250))
+  }
+}
+
+class TestShape_Tiny_Rectangle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Tiny Rect Over Rect")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 50, y: 50, width: 30, height: 20))
+  }
+
+  func topShape() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 70, y: 62, width: 25, height: 25))
   }
 }
 
