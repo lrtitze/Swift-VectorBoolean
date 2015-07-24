@@ -500,7 +500,7 @@ class FBBezierGraph {
 
   // 480
   //- (void) markCrossingsAsEntryOrExitWithBezierGraph:(FBBezierGraph *)otherGraph markInside:(BOOL)markInside
-  private func markCrossingsAsEntryOrExitWithBezierGraph(otherGraph: FBBezierGraph, markInside: Bool) {
+  internal func markCrossingsAsEntryOrExitWithBezierGraph(otherGraph: FBBezierGraph, markInside: Bool) {
     // Walk each contour in ourself and mark the crossings with each intersecting contour as entering
     //  or exiting the final contour.
     for contour in contours {
@@ -604,7 +604,7 @@ class FBBezierGraph {
 
   // 575
   //- (void) insertCrossingsWithBezierGraph:(FBBezierGraph *)other
-  private func insertCrossingsWithBezierGraph(other: FBBezierGraph) {
+  internal func insertCrossingsWithBezierGraph(other: FBBezierGraph) {
 
     // Find all intersections and, if they cross the other graph,
     // create crossings for them, and insert them into each graph's edges.
@@ -762,7 +762,7 @@ class FBBezierGraph {
 
   // 690
   //- (void) insertSelfCrossings
-  private func insertSelfCrossings() {
+  internal func insertSelfCrossings() {
     // Find all intersections and, if they cross other contours in this graph,
     // create crossings for them, and insert them into each contour's edges.
     var remainingContours = self.contours
