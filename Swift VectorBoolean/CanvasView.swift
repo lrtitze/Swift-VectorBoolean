@@ -182,7 +182,7 @@ class CanvasView: UIView {
           case let .Close:
             previousPoint = CGPointZero
           }
-          UIColor.orangeColor().setStroke()
+          UIColor.redColor().setStroke()
           showMe?.stroke()
         }
       }
@@ -253,7 +253,7 @@ class CanvasView: UIView {
       case let .Close:
         previousPoint = CGPointZero
       }
-      UIColor.orangeColor().setStroke()
+      UIColor.redColor().setStroke()
       showMe?.stroke()
     }
   }
