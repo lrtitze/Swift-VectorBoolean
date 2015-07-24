@@ -31,7 +31,6 @@ class CanvasView: UIView {
   private var paths: [PathItem] = []
   var boundsOfPaths: CGRect = CGRect.zeroRect
 
-
   private var _unionPath: UIBezierPath?
   private var _intersectPath: UIBezierPath?
   private var _differencePath: UIBezierPath?
@@ -68,9 +67,21 @@ class CanvasView: UIView {
     _xorPath = nil
   }
 
+  private var viewScale = 1.0
+
+  private var decorationLineWidth: CGFloat {
+    return CGFloat(1.5 / viewScale)
+  }
+
   func BoxFrame(point: CGPoint) -> CGRect
   {
-    return CGRect(x: floor(point.x - 2) - 0.5, y: floor(point.y - 2) - 0.5, width: 5, height: 5)
+    let visualWidth = CGFloat(9 / viewScale)
+    let offset = visualWidth / 2
+    let left = point.x - offset
+    let right = point.x + offset
+    let top = point.y + offset
+    let bottom = point.y - offset
+    return CGRect(x: left, y: bottom, width: visualWidth, height: visualWidth)
   }
 
   override func drawRect(rect: CGRect) {
@@ -98,6 +109,7 @@ class CanvasView: UIView {
     let scaleY = vSz.height / pSz.height
 
     let scale = min(scaleX, scaleY)
+    viewScale = Double(scale)
 
     // obtain context
     let ctx = UIGraphicsGetCurrentContext()
@@ -146,6 +158,7 @@ class CanvasView: UIView {
     for pathItem in paths {
       pathItem.color.setFill()
       pathItem.path.fill()
+      pathItem.path.lineWidth = decorationLineWidth
       //pathItem.path.stroke()  // was not in original
     }
 
@@ -176,13 +189,18 @@ class CanvasView: UIView {
           case .CubicCurve(let to, let v1, let v2):
             showMe = UIBezierPath(rect: BoxFrame(to))
             UIColor.blackColor().setStroke()
-            UIBezierPath(ovalInRect: BoxFrame(v1)).stroke()
-            UIBezierPath(ovalInRect: BoxFrame(v2)).stroke()
+            let cp1 = UIBezierPath(ovalInRect: BoxFrame(v1))
+            cp1.lineWidth = decorationLineWidth / 2
+            cp1.stroke()
+            let cp2 = UIBezierPath(ovalInRect: BoxFrame(v2))
+            cp2.lineWidth = decorationLineWidth / 2
+            cp2.stroke()
 
           case let .Close:
             previousPoint = CGPointZero
           }
           UIColor.redColor().setStroke()
+          showMe?.lineWidth = decorationLineWidth
           showMe?.stroke()
         }
       }
@@ -213,7 +231,9 @@ class CanvasView: UIView {
               UIColor.greenColor().setStroke()
             }
             
-            UIBezierPath(ovalInRect: self.BoxFrame(intersection.location)).stroke()
+            let inter = UIBezierPath(ovalInRect: self.BoxFrame(intersection.location))
+            inter.lineWidth = self.decorationLineWidth
+            inter.stroke()
             
             return (false, false)
           }
@@ -247,13 +267,18 @@ class CanvasView: UIView {
       case .CubicCurve(let to, let v1, let v2):
         showMe = UIBezierPath(rect: BoxFrame(to))
         UIColor.blackColor().setStroke()
-        UIBezierPath(ovalInRect: BoxFrame(v1)).stroke()
-        UIBezierPath(ovalInRect: BoxFrame(v2)).stroke()
-        
+        let cp1 = UIBezierPath(ovalInRect: BoxFrame(v1))
+        cp1.lineWidth = decorationLineWidth / 2
+        cp1.stroke()
+        let cp2 = UIBezierPath(ovalInRect: BoxFrame(v2))
+        cp2.lineWidth = decorationLineWidth / 2
+        cp2.stroke()
+
       case let .Close:
         previousPoint = CGPointZero
       }
       UIColor.redColor().setStroke()
+      showMe?.lineWidth = decorationLineWidth
       showMe?.stroke()
     }
   }
@@ -268,6 +293,7 @@ class CanvasView: UIView {
       vectorFillColor.setFill()
       vectorStrokeColor.setStroke()
       path.fill()
+      path.lineWidth = decorationLineWidth
       path.stroke()
       if showPoints {
         drawEndPointsForPath(path)
@@ -285,6 +311,7 @@ class CanvasView: UIView {
       vectorFillColor.setFill()
       vectorStrokeColor.setStroke()
       path.fill()
+      path.lineWidth = decorationLineWidth
       path.stroke()
       if showPoints {
         drawEndPointsForPath(path)
@@ -302,6 +329,7 @@ class CanvasView: UIView {
       vectorFillColor.setFill()
       vectorStrokeColor.setStroke()
       path.fill()
+      path.lineWidth = decorationLineWidth
       path.stroke()
       if showPoints {
         drawEndPointsForPath(path)
@@ -319,6 +347,7 @@ class CanvasView: UIView {
       vectorFillColor.setFill()
       vectorStrokeColor.setStroke()
       path.fill()
+      path.lineWidth = decorationLineWidth
       path.stroke()
       if showPoints {
         drawEndPointsForPath(path)
