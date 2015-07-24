@@ -446,7 +446,7 @@ class FBBezierContour {
       //   ![arrayOfObjs containsObject:obj]
       let other = crossing.counterpart?.edge?.contour
       var notContained = otherContours.filter({ el in el === other }).count == 0
-      if !crossing.isSelfCrossing || notContained {
+      if crossing.isSelfCrossing || notContained {
         return (false, false) // skip
       }
 
