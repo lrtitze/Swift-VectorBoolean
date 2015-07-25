@@ -22,6 +22,27 @@ class FBGeometryTests: XCTestCase {
   }
 
 
+  /// Check Join of two rects (XOR)
+  func testCommonSegment() {
+    let lowRect = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 10, height: 12))
+    let topRect = UIBezierPath(rect: CGRect(x: 5, y: 0, width: 7, height: 8))
+    // will have a common segment from 5,0 to 10,0
+    // will have a crossing at 10,8
+
+    var thisGraph = FBBezierGraph(path: lowRect)
+    var otherGraph = FBBezierGraph(path: topRect)
+    thisGraph.insertCrossingsWithBezierGraph(otherGraph)
+
+    XCTAssert(thisGraph.contours.count == 1, "Found \(thisGraph.contours.count) contours - should only have 1 contour")
+    XCTAssert(thisGraph.contours[0].edges.count == 4, "Found \(thisGraph.contours[0].edges.count) edges - should have 4 edges")
+
+    let aSetOfOverlaps = thisGraph.contours[0].edges[0].contour?.overlaps
+    let numOverlaps = aSetOfOverlaps?.count
+
+    XCTAssert(numOverlaps == 1, "The first edge should have one overlap")
+  }
+
+
   /// Check Difference of two rects
   func testTwoRectDifference() {
     let lowRect = UIBezierPath(rect: CGRect(x: 50, y: 50, width: 300, height: 200))
