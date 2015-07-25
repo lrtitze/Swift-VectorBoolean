@@ -47,6 +47,12 @@ class FBBezierContour {
     }
   }
 
+  // LRT - 2015.07.24 08:59:48 PM
+  // want access from XCTest functions
+  internal var overlaps : [FBContourOverlap] {
+    return _overlaps
+  }
+
   var edges : [FBBezierCurve] {
     return _edges
   }
