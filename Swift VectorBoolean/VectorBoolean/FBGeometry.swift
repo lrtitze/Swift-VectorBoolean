@@ -202,9 +202,9 @@ func FBAreValuesCloseWithOptions(value1: CGFloat, value2: CGFloat, threshold: CG
 //////////////////////////////////////////////////////////////////////////
 // Helper methods for angles
 //
-let FB2PI = CGFloat(2.0 * M_PI)
-let π = CGFloat(M_PI)
 let Two_π = CGFloat(2.0 * M_PI)
+let π = CGFloat(M_PI)
+let Half_π = CGFloat(M_PI_2)
 
 
 // Normalize the angle between 0 and 2 π
@@ -232,10 +232,10 @@ func PolarAngle(point: CGPoint) -> CGFloat {
     }
   } else {
     if point.y > 0.0 {
-      value =  Two_π
+      value =  Half_π
     }
     else if point.y < 0.0 {
-      value =  -Two_π
+      value =  -Half_π
     }
     else {
       value = 0.0
