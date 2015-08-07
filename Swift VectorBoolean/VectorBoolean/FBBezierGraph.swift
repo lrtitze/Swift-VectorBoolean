@@ -821,7 +821,10 @@ class FBBezierGraph {
                 firstEdge.addCrossing(firstCrossing)
                 secondEdge.addCrossing(secondCrossing)
 
-                return (setStop:true, stopValue:true) // Only need the one
+                // LRT - 2015.07.27 12:29:32 PM
+                // WTF?
+                //return (setStop:true, stopValue:true) // Only need the one
+                return (false, false)
               }
             }
           }
