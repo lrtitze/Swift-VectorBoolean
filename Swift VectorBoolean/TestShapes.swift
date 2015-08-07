@@ -59,6 +59,7 @@ class TestShapeData {
     return shapes.count
   }
   let shapes : [TestShape] = [
+    TestShape_Rectangle_Sharing_Edge_With_Rectangle(),
     TestShape_Rectangle_Overlapping_Rectangle(),
     TestShape_Tiny_Rectangle_Overlapping_Rectangle(),
     TestShape_Circle_Overlapping_Rectangle(),
@@ -236,6 +237,21 @@ class TestShape_Rectangle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
 
   func topShape() -> UIBezierPath {
     return UIBezierPath(rect: CGRect(x: 230, y: 115, width: 250, height: 250))
+  }
+}
+
+class TestShape_Rectangle_Sharing_Edge_With_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Shared Edge")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 0, y: 0, width: 10, height: 13))
+  }
+
+  func topShape() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 5, y: 0, width: 11, height: 8))
   }
 }
 
