@@ -246,11 +246,11 @@ class TestShape_Tiny_Rectangle_Overlapping_Rectangle : TestShape, SampleShapeMak
   }
 
   func otherShapes() -> UIBezierPath {
-    return UIBezierPath(rect: CGRect(x: 50, y: 50, width: 30, height: 20))
+    return UIBezierPath(rect: CGRect(x: 50, y: 50, width: 30, height: 30))
   }
 
   func topShape() -> UIBezierPath {
-    return UIBezierPath(rect: CGRect(x: 70, y: 62, width: 25, height: 25))
+    return UIBezierPath(rect: CGRect(x: 48, y: 48, width: 25, height: 25))
   }
 }
 
