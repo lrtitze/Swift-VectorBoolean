@@ -1317,6 +1317,9 @@ private func reversed(me: FBBezierCurveData) -> FBBezierCurveData
 private func checkForOverlapRange(me: FBBezierCurveData, inout intersectRange: FBBezierIntersectRange?, inout usRange: FBRange, inout themRange: FBRange, originalUs: FBBezierCurve, originalThem: FBBezierCurve, us: FBBezierCurveData, them: FBBezierCurveData) -> Bool
 {
   if curvesAreEqual(us, them) {
+    // TODO: Is this range not being sent back up to the inout parameter ?
+    // LRT - 2015.08.07 07:00:33 PM
+    // Verified that it definitely is setting the original inout var
     intersectRange = FBBezierIntersectRange(curve1: originalUs, parameterRange1: usRange, curve2:originalThem, parameterRange2: themRange, reversed: false)
     return true
   } else if curvesAreEqual(us, them.reversed()) {
