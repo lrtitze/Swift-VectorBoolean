@@ -55,15 +55,15 @@ class FBGeometryTests: XCTestCase {
       endPoint2: CGPoint(x: 12, y: 0),
       isStraightLine: true)
 
-    var usRange = FBRangeMake(0, 1)
-    var themRange = FBRangeMake(0, 1)
+    var usRange = FBRangeMake(0, maximum: 1)
+    var themRange = FBRangeMake(0, maximum: 1)
     var stop = false
     var overlapRange : FBBezierIntersectRange?
 
     pfIntersectionsWithBezierCurve(usCurve.data, otherCurve.data, &usRange, &themRange, usCurve, otherCurve, &overlapRange, 0, &stop) {
       (intersection: FBBezierIntersection) -> (setStop: Bool, stopValue:Bool) in
       // Make sure this is a proper crossing
-      println("Intersection: \(intersection.location)")
+      print("Intersection: \(intersection.location)")
       return (false, false)
     }
 
@@ -75,13 +75,13 @@ class FBGeometryTests: XCTestCase {
       let c2rb_ep1 = ir.curve2RightBezier.data.endPoint1
       let c2rb_ep2 = ir.curve2RightBezier.data.endPoint2
       var checkPoint = CGPoint(x: 0, y: 0)
-      XCTAssert(FBArePointsClose(checkPoint, c1lb_ep1), "Startpoint 1 is unexpected")
+      XCTAssert(FBArePointsClose(checkPoint, point2: c1lb_ep1), "Startpoint 1 is unexpected")
       checkPoint = CGPoint(x: 5, y: 0)
-      XCTAssert(FBArePointsClose(checkPoint, c1lb_ep2), "Endpoint 1 is unexpected")
+      XCTAssert(FBArePointsClose(checkPoint, point2: c1lb_ep2), "Endpoint 1 is unexpected")
       checkPoint = CGPoint(x: 10, y: 0)
-      XCTAssert(FBArePointsClose(checkPoint, c2rb_ep1), "Startpoint 2 is unexpected")
+      XCTAssert(FBArePointsClose(checkPoint, point2: c2rb_ep1), "Startpoint 2 is unexpected")
       checkPoint = CGPoint(x: 12, y: 0)
-      XCTAssert(FBArePointsClose(checkPoint, c2rb_ep2), "Endpoint 2 is unexpected")
+      XCTAssert(FBArePointsClose(checkPoint, point2: c2rb_ep2), "Endpoint 2 is unexpected")
 
       overlap.addOverlap(ir, forEdge1: usCurve, edge2: otherCurve)
 
@@ -100,7 +100,7 @@ class FBGeometryTests: XCTestCase {
         XCTAssert(false, "There was no run created though there was an overlap")
       }
 
-      println("")
+      print("")
     } else {
       XCTAssert(false, "There was no overlap range created when it must overlap")
     }
@@ -150,7 +150,7 @@ class FBGeometryTests: XCTestCase {
     otherGraph.markCrossingsAsEntryOrExitWithBezierGraph(thisGraph, markInside: true)
 */
     //_location CGPoint?    (x = 350, y = 115)  Some
-    println("")
+    print("")
 /*
     thisGraph.insertSelfCrossings];
     [graph insertSelfCrossings];
@@ -168,8 +168,8 @@ class FBGeometryTests: XCTestCase {
 
     let topRect = UIBezierPath(rect: CGRect(x: 230, y: 115, width: 250, height: 250))
 
-    var thisGraph = FBBezierGraph(path: lowRect)
-    var otherGraph = FBBezierGraph(path: topRect)
+    let thisGraph = FBBezierGraph(path: lowRect)
+    let otherGraph = FBBezierGraph(path: topRect)
     //var result = thisGraph.differenceWithBezierGraph(otherGraph).bezierPath
     thisGraph.insertCrossingsWithBezierGraph(otherGraph)
     XCTAssert(thisGraph.contours.count == 1, "Found \(thisGraph.contours.count) contours - should only have 1 contour")
@@ -196,7 +196,7 @@ class FBGeometryTests: XCTestCase {
     otherGraph.markCrossingsAsEntryOrExitWithBezierGraph(thisGraph, markInside: true)
 
     //_location	CGPoint?	(x = 350, y = 115)	Some
-    println("")
+    print("")
 /*
     thisGraph.insertSelfCrossings];
     [graph insertSelfCrossings];
@@ -210,7 +210,7 @@ class FBGeometryTests: XCTestCase {
   func testFBDistanceBetweenPoints() {
     var point1 = CGPoint(x: 12, y: 15)
     var point2 = CGPoint(x: 13, y: 16)
-    var result = FBDistanceBetweenPoints(point1, point2)
+    var result = FBDistanceBetweenPoints(point1, point2: point2)
     var check = CGFloat(1.4142135623730951)
 
     XCTAssert(result == check, "Distance between points is being calculated as \(result)")
@@ -227,7 +227,7 @@ class FBGeometryTests: XCTestCase {
     var point1 = CGPoint(x: 0, y: 15) // any y value is okay
     var point2 = CGPoint(x: 10, y: 0)
     var point3 = CGPoint(x: 10, y: 20)
-    var result = FBDistancePointToLine(point1, point2, point3)
+    var result = FBDistancePointToLine(point1, lineStartPoint: point2, lineEndPoint: point3)
     let check = CGFloat(10.0)
     XCTAssert(result == check, "Distance between points is being calculated as \(result)")
 

@@ -128,29 +128,29 @@ class FBEdgeOverlapRun {
     let firstOverlap = overlaps[0]
     if let lastOverlap = overlaps.last {
 
-      var edge1Tangents = FBTangentPair(left: CGPoint.zeroPoint, right: CGPoint.zeroPoint)
-      var edge2Tangents = FBTangentPair(left: CGPoint.zeroPoint, right: CGPoint.zeroPoint)
+      var edge1Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
+      var edge2Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
 
       var offset = CGFloat(0.0)
       var maxOffset = CGFloat(0.0)
 
-      do {
-        let length1 = FBComputeEdge1Tangents(firstOverlap, lastOverlap, offset, &edge1Tangents)
-        let length2 = FBComputeEdge2Tangents(firstOverlap, lastOverlap, offset, &edge2Tangents)
+      repeat {
+        let length1 = FBComputeEdge1Tangents(firstOverlap, lastOverlap: lastOverlap, offset: offset, edge1Tangents: &edge1Tangents)
+        let length2 = FBComputeEdge2Tangents(firstOverlap, lastOverlap: lastOverlap, offset: offset, edge2Tangents: &edge2Tangents)
         maxOffset = min(length1, length2);
 
         offset += 1.0
-      } while ( FBAreTangentsAmbigious(edge1Tangents, edge2Tangents) && offset < maxOffset);
+      } while ( FBAreTangentsAmbigious(edge1Tangents, edge2Tangents: edge2Tangents) && offset < maxOffset);
 
-      if FBTangentsCross(edge1Tangents, edge2Tangents) {
+      if FBTangentsCross(edge1Tangents, edge2Tangents: edge2Tangents) {
         return true
       }
 
       // Tangents work, mostly, for overlaps. If we get a yes, it's solid.
       // If we get a no, it might still be a crossing.
       // Only way to tell now is to perform an actual point test
-      var testPoints = FBTangentPair(left: CGPoint.zeroPoint, right: CGPoint.zeroPoint)
-      FBComputeEdge1TestPoints(firstOverlap, lastOverlap, 1.0, &testPoints)
+      var testPoints = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
+      FBComputeEdge1TestPoints(firstOverlap, lastOverlap: lastOverlap, offset: 1.0, testPoints: &testPoints)
       let testPoint1Inside = false
       if let contour2 = firstOverlap.edge2.contour {
         let testPoint1Inside = contour2.containsPoint(testPoints.left)

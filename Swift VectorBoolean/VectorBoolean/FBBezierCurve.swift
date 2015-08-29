@@ -87,12 +87,12 @@ func FBParameterOfPointOnLine(lineStart: CGPoint, lineEnd: CGPoint, point: CGPoi
 
   // Note: its asumed you have already checked that point is colinear with the line (lineStart, lineEnd)
 
-  let lineLength = FBDistanceBetweenPoints(lineStart, lineEnd)
-  let lengthFromStart = FBDistanceBetweenPoints(point, lineStart)
+  let lineLength = FBDistanceBetweenPoints(lineStart, point2: lineEnd)
+  let lengthFromStart = FBDistanceBetweenPoints(point, point2: lineStart)
   var parameter = lengthFromStart / lineLength
 
   // The only tricky thing here is the sign. Is the point _before_ lineStart, or after lineStart?
-  let lengthFromEnd = FBDistanceBetweenPoints(point, lineEnd)
+  let lengthFromEnd = FBDistanceBetweenPoints(point, point2: lineEnd)
   if FBAreValuesClose(lineLength + lengthFromStart, lengthFromEnd) {
     parameter = -parameter
   }
@@ -106,8 +106,8 @@ func FBParameterOfPointOnLine(lineStart: CGPoint, lineEnd: CGPoint, point: CGPoi
 
 func FBLinesIntersect(line1Start: CGPoint, line1End: CGPoint, line2Start: CGPoint, line2End: CGPoint, inout outIntersect: CGPoint) -> Bool
 {
-  let line1 = FBNormalizedLineMake(line1Start, line1End)
-  let line2 = FBNormalizedLineMake(line2Start, line2End)
+  let line1 = FBNormalizedLineMake(line1Start, point2: line1End)
+  let line2 = FBNormalizedLineMake(line2Start, point2: line2End)
   outIntersect = FBNormalizedLineIntersection(line1, line2);
   if outIntersect.x.isNaN || outIntersect.y.isNaN {
     return false
@@ -139,7 +139,7 @@ func LineIntersectsHorizontalLine(startPoint: CGPoint, endPoint: CGPoint, y: CGF
   // Do a quick test to see if y even falls on the startPoint,endPoint line
   let minY = min(startPoint.y, endPoint.y)
   let maxY = max(startPoint.y, endPoint.y)
-  if (y < minY && !FBAreValuesClose(y, minY)) || (y > maxY && !FBAreValuesClose(y, maxY)) {
+  if (y < minY && !FBAreValuesClose(y, value2: minY)) || (y > maxY && !FBAreValuesClose(y, value2: maxY)) {
     return false
   }
 
@@ -208,7 +208,7 @@ func FBComputeCubicFirstDerivativeRoots(a: CGFloat, b: CGFloat, c: CGFloat, d: C
   let denominator = -a + 3.0 * b - 3.0 * c + d
 
   // If denominator == 0, fall back to
-  if FBAreValuesClose(denominator, 0.0) {
+  if FBAreValuesClose(denominator, value2: 0.0) {
     let t = (a - b) / (2.0 * (a - 2.0 * b + c))
     return [t];
   }
@@ -293,8 +293,8 @@ func FBGaussQuadratureBaseForCubic(t: CGFloat, p1: CGFloat, p2: CGFloat, p3: CGF
 
 func FBGaussQuadratureFOfTForCubic(t: CGFloat, p1: CGPoint, p2: CGPoint, p3: CGPoint, p4: CGPoint) -> CGFloat
 {
-  let baseX = FBGaussQuadratureBaseForCubic(t, p1.x, p2.x, p3.x, p4.x)
-  let baseY = FBGaussQuadratureBaseForCubic(t, p1.y, p2.y, p3.y, p4.y)
+  let baseX = FBGaussQuadratureBaseForCubic(t, p1: p1.x, p2: p2.x, p3: p3.x, p4: p4.x)
+  let baseY = FBGaussQuadratureBaseForCubic(t, p1: p1.y, p2: p2.y, p3: p3.y, p4: p4.y)
 
   return CGFloat(sqrtf(Float(baseX * baseX + baseY * baseY)))
 }
@@ -305,7 +305,7 @@ func FBGaussQuadratureComputeCurveLengthForCubic(z: CGFloat, steps: Int, p1: CGP
   var sum : CGFloat = 0.0
   for var i = 0; i < steps; i++ {
     let correctedT = z2 * FBLegendreGaussAbscissaeValues[steps][i] + z2
-    sum += FBLegendreGaussWeightValues[steps][i] * FBGaussQuadratureFOfTForCubic(correctedT, p1, p2, p3, p4)
+    sum += FBLegendreGaussWeightValues[steps][i] * FBGaussQuadratureFOfTForCubic(correctedT, p1: p1, p2: p2, p3: p3, p4: p4)
   }
   return z2 * sum
 }
@@ -344,7 +344,7 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
 
   let FBFindBezierRootsErrorThreshold = CGFloat(ldexpf(Float(1.0), Int32(-1 * (FBFindBezierRootsMaximumDepth - 1))))
 
-  let line = FBNormalizedLineMake(bezierPoints[0], bezierPoints[degree])
+  let line = FBNormalizedLineMake(bezierPoints[0], point2: bezierPoints[degree])
 
   // Find the bounds around the line
   var belowDistance = CGFloat(0)
@@ -360,7 +360,7 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
     }
   }
 
-  let zeroLine = FBNormalizedLineMakeWithCoefficients(0, 1, 0)
+  let zeroLine = FBNormalizedLineMakeWithCoefficients(0, b: 1, c: 0)
   let aboveLine = FBNormalizedLineOffset(line, -aboveDistance)
   let intersect1 = FBNormalizedLineIntersection(zeroLine, aboveLine)
 
@@ -379,7 +379,7 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
 // 330
 func FBFindBezierRootsWithDepth(bezierPoints: [CGPoint], degree: Int, depth: Int, perform: (root: CGFloat) -> Void) {
 
-  let crossingCount = FBCountBezierCrossings(bezierPoints, degree)
+  let crossingCount = FBCountBezierCrossings(bezierPoints, degree: degree)
   if crossingCount == 0 {
     return
   }
@@ -390,14 +390,14 @@ func FBFindBezierRootsWithDepth(bezierPoints: [CGPoint], degree: Int, depth: Int
       return
     }
     var intersectionPoint = CGPointZero
-    if FBIsControlPolygonFlatEnough(bezierPoints, degree, &intersectionPoint) {
+    if FBIsControlPolygonFlatEnough(bezierPoints, degree: degree, intersectionPoint: &intersectionPoint) {
       perform(root: intersectionPoint.x)
       return
     }
   }
 
   // Subdivide and try again
-  let bwp = BezierWithPoints(degree, bezierPoints, 0.5, true)
+  let bwp = BezierWithPoints(degree, bezierPoints: bezierPoints, parameter: 0.5, withCurves: true)
   FBFindBezierRootsWithDepth(bwp.leftCurve!, degree, depth + 1, perform)
   FBFindBezierRootsWithDepth(bwp.rightCurve!, degree, depth + 1, perform)
 }
@@ -405,7 +405,7 @@ func FBFindBezierRootsWithDepth(bezierPoints: [CGPoint], degree: Int, depth: Int
 // 356
 func FBFindBezierRoots(bezierPoints: [CGPoint], degree: Int, perform: (root: CGFloat) -> Void) {
 
-  FBFindBezierRootsWithDepth(bezierPoints, degree, 0, perform)
+  FBFindBezierRootsWithDepth(bezierPoints, degree: degree, depth: 0, perform: perform)
 }
 
 
@@ -416,7 +416,7 @@ func FBFindBezierRoots(bezierPoints: [CGPoint], degree: Int, perform: (root: CGF
 // 366
 func FBConvexHullDoPointsTurnWrongDirection(point1: CGPoint, point2: CGPoint, point3: CGPoint) -> Bool {
 
-  let area = CounterClockwiseTurn(point1, point2, point3)
+  let area = CounterClockwiseTurn(point1, point2: point2, point3: point3)
   return FBAreValuesClose(area, 0.0) || area < 0.0
 }
 
@@ -438,10 +438,10 @@ func FBConvexHullBuildFromPoints(inPoints: [CGPoint]) -> (hull: [CGPoint], hullL
   //  Bubble sort, which should be ok with a max of 4 elements, and the fact that our one current use case
   //  already has them in ascending X order (i.e. should be just comparisons to verify)
   var sortLength = numberOfPoints
-  do {
+  repeat {
     var newSortLength = 0
     for var i = 1; i < sortLength; i++ {
-      if ( points[i - 1].x > points[i].x || (FBAreValuesClose(points[i - 1].x, points[i].x) && points[i - 1].y > points[i].y) ) {
+      if ( points[i - 1].x > points[i].x || (FBAreValuesClose(points[i - 1].x, value2: points[i].x) && points[i - 1].y > points[i].y) ) {
         let tempPoint = points[i]
         points[i] = points[i - 1]
         points[i - 1] = tempPoint
@@ -457,7 +457,7 @@ func FBConvexHullBuildFromPoints(inPoints: [CGPoint]) -> (hull: [CGPoint], hullL
 
   // Build lower hull
   for var i = 0; i < numberOfPoints; i++ {
-    while filledInIx >= 2 && FBConvexHullDoPointsTurnWrongDirection(results[filledInIx - 2], results[filledInIx - 1], points[i]) {
+    while filledInIx >= 2 && FBConvexHullDoPointsTurnWrongDirection(results[filledInIx - 2], point2: results[filledInIx - 1], point3: points[i]) {
       --filledInIx
     }
     results[filledInIx] = points[i];
@@ -467,7 +467,7 @@ func FBConvexHullBuildFromPoints(inPoints: [CGPoint]) -> (hull: [CGPoint], hullL
   // Build upper hull
   var thresholdIndex = filledInIx + 1
   for var i = numberOfPoints - 2; i >= 0; i-- {
-    while filledInIx >= thresholdIndex && FBConvexHullDoPointsTurnWrongDirection(results[filledInIx - 2], results[filledInIx - 1], points[i]) {
+    while filledInIx >= thresholdIndex && FBConvexHullDoPointsTurnWrongDirection(results[filledInIx - 2], point2: results[filledInIx - 1], point3: points[i]) {
       --filledInIx
     }
 
@@ -490,7 +490,7 @@ func ILLUSTRATE_CALL_TO_FBConvexHullBuildFromPoints() {
   let (convexHull, convexHullLength) = FBConvexHullBuildFromPoints(distanceBezierPoints)
 
   if convexHullLength < 0 {
-    println("YIKES")
+    print("YIKES")
   }
 }
 
@@ -584,7 +584,7 @@ class FBBezierCurveData {
       return _isPoint!
     }
 
-    _isPoint = FBArePointsCloseWithOptions(endPoint1, endPoint2, FBClosenessThreshold) && FBArePointsCloseWithOptions(endPoint1, controlPoint1, FBClosenessThreshold) && FBArePointsCloseWithOptions(endPoint1, controlPoint2, FBClosenessThreshold)
+    _isPoint = FBArePointsCloseWithOptions(endPoint1, point2: endPoint2, threshold: FBClosenessThreshold) && FBArePointsCloseWithOptions(endPoint1, point2: controlPoint1, threshold: FBClosenessThreshold) && FBArePointsCloseWithOptions(endPoint1, point2: controlPoint2, threshold: FBClosenessThreshold)
 
     return _isPoint!;
   }
@@ -625,12 +625,12 @@ class FBBezierCurveData {
       return _bounds!
     }
 
-    var bounds = CGRect.zeroRect
+    var bounds = CGRect.zero
 
     if isStraightLine {
       var topLeft = endPoint1
       var bottomRight = topLeft
-      FBExpandBoundsByPoint(&topLeft, &bottomRight, endPoint2)
+      FBExpandBoundsByPoint(&topLeft, bottomRight: &bottomRight, point: endPoint2)
 
       bounds = CGRect(x: topLeft.x, y: topLeft.y, width: bottomRight.x - topLeft.x, height: bottomRight.y - topLeft.y)
     } else {
@@ -639,10 +639,10 @@ class FBBezierCurveData {
       var bottomRight = topLeft
       let (lastPoint, _, _) = pointAtParameter(1)
 
-      FBExpandBoundsByPoint(&topLeft, &bottomRight, lastPoint);
+      FBExpandBoundsByPoint(&topLeft, bottomRight: &bottomRight, point: lastPoint);
 
       // Find the roots, which should be the extremities
-      let xRoots : [CGFloat] = FBComputeCubicFirstDerivativeRoots(endPoint1.x, controlPoint1.x, controlPoint2.x, endPoint2.x)
+      let xRoots : [CGFloat] = FBComputeCubicFirstDerivativeRoots(endPoint1.x, b: controlPoint1.x, c: controlPoint2.x, d: endPoint2.x)
 
       for var i = 0; i < xRoots.count; i++ {
         let t = xRoots[i]
@@ -650,17 +650,17 @@ class FBBezierCurveData {
           continue
         }
         let (location, _, _) = pointAtParameter(t)
-        FBExpandBoundsByPoint(&topLeft, &bottomRight, location)
+        FBExpandBoundsByPoint(&topLeft, bottomRight: &bottomRight, point: location)
       }
 
-      let yRoots : [CGFloat] = FBComputeCubicFirstDerivativeRoots(endPoint1.y, controlPoint1.y, controlPoint2.y, endPoint2.y)
+      let yRoots : [CGFloat] = FBComputeCubicFirstDerivativeRoots(endPoint1.y, b: controlPoint1.y, c: controlPoint2.y, d: endPoint2.y)
       for var i = 0; i < yRoots.count; i++ {
         let t = yRoots[i]
         if t < 0 || t > 1 {
           continue
         }
         let (location, _, _) = pointAtParameter(t)
-        FBExpandBoundsByPoint(&topLeft, &bottomRight, location)
+        FBExpandBoundsByPoint(&topLeft, bottomRight: &bottomRight, point: location)
       }
 
       bounds = CGRect(x: topLeft.x, y: topLeft.y, width: bottomRight.x - topLeft.x, height: bottomRight.y - topLeft.y)
@@ -687,9 +687,9 @@ class FBBezierCurveData {
     // If it's a line, use that equation instead
     var calculatedLength = FBBezierCurveDataInvalidLength;
     if isStraightLine {
-      calculatedLength = FBDistanceBetweenPoints(endPoint1, endPoint2) * parameter
+      calculatedLength = FBDistanceBetweenPoints(endPoint1, point2: endPoint2) * parameter
     } else {
-      calculatedLength = FBGaussQuadratureComputeCurveLengthForCubic(parameter, 12, endPoint1, controlPoint1, controlPoint2, endPoint2)
+      calculatedLength = FBGaussQuadratureComputeCurveLengthForCubic(parameter, steps: 12, p1: endPoint1, p2: controlPoint1, p3: controlPoint2, p4: endPoint2)
     }
 
     // If possible, update our cache
@@ -725,7 +725,7 @@ class FBBezierCurveData {
 
     let points = [endPoint1, controlPoint1, controlPoint2, endPoint2]
 
-    let bwp = BezierWithPoints(3, points, parameter, true);
+    let bwp = BezierWithPoints(3, bezierPoints: points, parameter: parameter, withCurves: true);
 
     var leftBCData : FBBezierCurveData? = nil
     if let leftA = bwp.leftCurve {
@@ -772,7 +772,7 @@ class FBBezierCurveData {
   func regularFatLineBounds(inout range: FBRange) -> FBNormalizedLine
   {
     // Create the fat line based on the end points
-    let line = FBNormalizedLineMake(endPoint1, endPoint2)
+    let line = FBNormalizedLineMake(endPoint1, point2: endPoint2)
 
     // Compute the bounds of the fat line. The fat line bounds should entirely encompass the
     //  bezier curve. Since we know the convex hull entirely compasses the curve, just take
@@ -800,8 +800,8 @@ class FBBezierCurveData {
   func perpendicularFatLineBounds(inout range: FBRange) -> FBNormalizedLine
   {
     // Create a fat line that's perpendicular to the line created by the two end points.
-    let normal = FBLineNormal(endPoint1, endPoint2)
-    let startPoint = FBLineMidpoint(endPoint1, endPoint2)
+    let normal = FBLineNormal(endPoint1, lineEnd: endPoint2)
+    let startPoint = FBLineMidpoint(endPoint1, lineEnd: endPoint2)
     let endPoint = FBAddPoint(startPoint, normal)
     let line = FBNormalizedLineMake(startPoint, endPoint)
 
@@ -849,16 +849,16 @@ class FBBezierCurveData {
 
     // First calculate bezier curve points distance from the fat line that's clipping us
     let distanceBezierPoints : [CGPoint] = [
-      CGPointMake(0.0, FBNormalizedLineDistanceFromPoint(fatLine, endPoint1)),
-      CGPointMake(1.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, controlPoint1)),
-      CGPointMake(2.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, controlPoint2)),
-      CGPointMake(1.0, FBNormalizedLineDistanceFromPoint(fatLine, endPoint2))
+      CGPointMake(0.0, FBNormalizedLineDistanceFromPoint(fatLine, point: endPoint1)),
+      CGPointMake(1.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, point: controlPoint1)),
+      CGPointMake(2.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, point: controlPoint2)),
+      CGPointMake(1.0, FBNormalizedLineDistanceFromPoint(fatLine, point: endPoint2))
     ]
 
     let (convexHull, convexHullLength) = FBConvexHullBuildFromPoints(distanceBezierPoints)
 
     // Find intersections of convex hull with the fat line bounds
-    var range = FBRangeMake(1.0, 0.0)
+    var range = FBRangeMake(1.0, maximum: 0.0)
 
     for var i = 0; i < convexHullLength; i++ {
       // Pull out the current line on the convex hull
@@ -869,7 +869,7 @@ class FBBezierCurveData {
       var intersectionPoint = CGPointZero
 
       // See if the segment of the convex hull intersects with the minimum fat line bounds
-      if LineIntersectsHorizontalLine(startPoint, endPoint, bounds.minimum, &intersectionPoint) {
+      if LineIntersectsHorizontalLine(startPoint, endPoint: endPoint, y: bounds.minimum, intersectPoint: &intersectionPoint) {
         if intersectionPoint.x < range.minimum {
           range.minimum = intersectionPoint.x
         }
@@ -879,7 +879,7 @@ class FBBezierCurveData {
       }
 
       // See if this segment of the convex hull intersects with the maximum fat line bounds
-      if LineIntersectsHorizontalLine(startPoint, endPoint, bounds.maximum, &intersectionPoint) {
+      if LineIntersectsHorizontalLine(startPoint, endPoint: endPoint, y: bounds.maximum, intersectPoint: &intersectionPoint) {
         if intersectionPoint.x < range.minimum {
           range.minimum = intersectionPoint.x
         }
@@ -913,9 +913,9 @@ class FBBezierCurveData {
   //static FBBezierCurveLocation FBBezierCurveDataClosestLocationToPoint(FBBezierCurveData me, NSPoint point)
   func closestLocationToPoint(point: CGPoint) -> FBBezierCurveLocation
   {
-    var bezierPoints = convertSelfAndPoint(self, point)
+    var bezierPoints = convertSelfAndPoint(self, point: point)
 
-    var distance = FBDistanceBetweenPoints(endPoint1, point)
+    var distance = FBDistanceBetweenPoints(endPoint1, point2: point)
     var parameter = CGFloat(0.0)
 
     FBFindBezierRoots(bezierPoints, 5) { (root) -> Void in
@@ -928,7 +928,7 @@ class FBBezierCurveData {
       }
     }
 
-    var lastDistance = FBDistanceBetweenPoints(endPoint2, point)
+    var lastDistance = FBDistanceBetweenPoints(endPoint2, point2: point)
     if ( lastDistance < distance ) {
       distance = lastDistance;
       parameter = 1.0;
@@ -971,7 +971,7 @@ func bezierClipWithBezierCurve(me: FBBezierCurveData, curve: FBBezierCurveData, 
 
   // Compute the regular fat line using the end points, then compute the range that could still possibly intersect
   //  with the other curve
-  var fatLineBounds = FBRangeMake(0, 0)
+  var fatLineBounds = FBRangeMake(0, maximum: 0)
   let fatLine = curve.regularFatLineBounds(&fatLineBounds)
   let regularClippedRange = me.clipWithFatLine(fatLine, bounds: fatLineBounds)
 
@@ -982,7 +982,7 @@ func bezierClipWithBezierCurve(me: FBBezierCurveData, curve: FBBezierCurveData, 
   }
 
   // Just in case the regular fat line isn't good enough, try the perpendicular one
-  var perpendicularLineBounds = FBRangeMake(0, 0)
+  var perpendicularLineBounds = FBRangeMake(0, maximum: 0)
   let perpendicularLine = curve.perpendicularFatLineBounds(&perpendicularLineBounds)
   let perpendicularClippedRange = me.clipWithFatLine(perpendicularLine, bounds: perpendicularLineBounds)
 
@@ -1044,14 +1044,14 @@ private func refineIntersectionsOverIterations(iterations: Int,
   for var i = 0; i < iterations; i++ {
     var intersects = false
 
-    (us, intersects) = bezierClipWithBezierCurve(us, them, &originalUs, &usRange)
+    (us, intersects) = bezierClipWithBezierCurve(us, curve: them, originalCurve: &originalUs, originalRange: &usRange)
     if !intersects {
-      (us, intersects) = bezierClipWithBezierCurve(nonpointUs, nonpointThem, &originalUs, &usRange)
+      (us, intersects) = bezierClipWithBezierCurve(nonpointUs, curve: nonpointThem, originalCurve: &originalUs, originalRange: &usRange)
     }
 
-    (them, intersects) = bezierClipWithBezierCurve(them, us, &originalThem, &themRange)
+    (them, intersects) = bezierClipWithBezierCurve(them, curve: us, originalCurve: &originalThem, originalRange: &themRange)
     if !intersects {
-      (them, intersects) = bezierClipWithBezierCurve(nonpointThem, nonpointUs, &originalThem, &themRange)
+      (them, intersects) = bezierClipWithBezierCurve(nonpointThem, curve: nonpointUs, originalCurve: &originalThem, originalRange: &themRange)
     }
     if !them.isPoint() {
       nonpointThem = them
@@ -1077,13 +1077,13 @@ FBBezierCurveData clippedCurve = FBBezierCurveDataClipLineOriginalCurve(FBBezier
 
 let (clippedCurve, intersects) = clipLineOriginalCurve(blah, blah, blah.....)
 
-:returns: **clippedCurve** - a curve clipped by another
-:returns: **intersects** - a success flag
+- returns: **clippedCurve** - a curve clipped by another
+- returns: **intersects** - a success flag
 */
 private func clipLineOriginalCurve(originalCurve: FBBezierCurveData, curve: FBBezierCurveData, inout originalRange: FBRange, otherCurve: FBBezierCurveData) -> (clippedCurve: FBBezierCurveData, intersects: Bool)
 {
-  let themOnUs1 = FBParameterOfPointOnLine(curve.endPoint1, curve.endPoint2, otherCurve.endPoint1)
-  let themOnUs2 = FBParameterOfPointOnLine(curve.endPoint1, curve.endPoint2, otherCurve.endPoint2)
+  let themOnUs1 = FBParameterOfPointOnLine(curve.endPoint1, lineEnd: curve.endPoint2, point: otherCurve.endPoint1)
+  let themOnUs2 = FBParameterOfPointOnLine(curve.endPoint1, lineEnd: curve.endPoint2, point: otherCurve.endPoint2)
   let clippedRange = FBRangeMake(max(0, min(themOnUs1, themOnUs2)), min(1, max(themOnUs1, themOnUs2)))
 
   if clippedRange.minimum > clippedRange.maximum {
@@ -1119,7 +1119,7 @@ let overlaps = checkLinesForOverlap(blah, blah, blah.....)
 private func checkLinesForOverlap(me: FBBezierCurveData, inout usRange: FBRange, inout themRange: FBRange, originalUs: FBBezierCurveData, originalThem: FBBezierCurveData, inout us: FBBezierCurveData, inout them: FBBezierCurveData) -> Bool
 {
   // First see if its possible for them to overlap at all
-  if !FBLineBoundsMightOverlap(us.bounds, them.bounds) {
+  if !FBLineBoundsMightOverlap(us.bounds, bounds2: them.bounds) {
     return false
   }
 
@@ -1127,26 +1127,26 @@ private func checkLinesForOverlap(me: FBBezierCurveData, inout usRange: FBRange,
   let errorThreshold = CGFloat(1e-7)
 
   let isColinear = FBAreValuesCloseWithOptions(
-    CounterClockwiseTurn(us.endPoint1, us.endPoint2, them.endPoint1),
-    CGFloat(0.0),
-    errorThreshold)
+    CounterClockwiseTurn(us.endPoint1, point2: us.endPoint2, point3: them.endPoint1),
+    value2: CGFloat(0.0),
+    threshold: errorThreshold)
     && FBAreValuesCloseWithOptions(
-      CounterClockwiseTurn(us.endPoint1, us.endPoint2, them.endPoint2),
-      CGFloat(0.0),
-      errorThreshold)
+      CounterClockwiseTurn(us.endPoint1, point2: us.endPoint2, point3: them.endPoint2),
+      value2: CGFloat(0.0),
+      threshold: errorThreshold)
 
   if !isColinear {
     return false
   }
 
   var intersects = false
-  (us, intersects) = clipLineOriginalCurve(originalUs, us, &usRange, them)
+  (us, intersects) = clipLineOriginalCurve(originalUs, curve: us, originalRange: &usRange, otherCurve: them)
   //    *us = FBBezierCurveDataClipLineOriginalCurve(me, originalUs, *us, usRange, *them, &intersects);
   if !intersects {
     return false
   }
 
-  (them, intersects) = clipLineOriginalCurve(originalThem, them, &themRange, us)
+  (them, intersects) = clipLineOriginalCurve(originalThem, curve: them, originalRange: &themRange, otherCurve: us)
   //    *them = FBBezierCurveDataClipLineOriginalCurve(me, originalThem, *them, themRange, *us, &intersects);
 
   return intersects
@@ -1161,17 +1161,17 @@ private func convertSelfAndPoint(me: FBBezierCurveData, point: CGPoint) -> [CGPo
 
   // c[i] in the paper
   let distanceFromPoint = [
-    FBSubtractPoint(selfPoints[0], point),
-    FBSubtractPoint(selfPoints[1], point),
-    FBSubtractPoint(selfPoints[2], point),
-    FBSubtractPoint(selfPoints[3], point)
+    FBSubtractPoint(selfPoints[0], point2: point),
+    FBSubtractPoint(selfPoints[1], point2: point),
+    FBSubtractPoint(selfPoints[2], point2: point),
+    FBSubtractPoint(selfPoints[3], point2: point)
   ]
 
   // d[i] in the paper
   let weightedDelta = [
-    FBScalePoint(FBSubtractPoint(selfPoints[1], selfPoints[0]), 3),
-    FBScalePoint(FBSubtractPoint(selfPoints[2], selfPoints[1]), 3),
-    FBScalePoint(FBSubtractPoint(selfPoints[3], selfPoints[2]), 3)
+    FBScalePoint(FBSubtractPoint(selfPoints[1], point2: selfPoints[0]), scale: 3),
+    FBScalePoint(FBSubtractPoint(selfPoints[2], point2: selfPoints[1]), scale: 3),
+    FBScalePoint(FBSubtractPoint(selfPoints[3], point2: selfPoints[2]), scale: 3)
   ]
 
   // Precompute the dot product of distanceFromPoint and weightedDelta in order to speed things up
@@ -1224,9 +1224,9 @@ private func convertSelfAndPoint(me: FBBezierCurveData, point: CGPoint) -> [CGPo
 
 private func xxxXclosestLocationToPoint(me: FBBezierCurveData, point: CGPoint) -> FBBezierCurveLocation
 {
-  var bezierPoints = convertSelfAndPoint(me, point)
+  var bezierPoints = convertSelfAndPoint(me, point: point)
 
-  var distance = FBDistanceBetweenPoints(me.endPoint1, point)
+  var distance = FBDistanceBetweenPoints(me.endPoint1, point2: point)
   var parameter = CGFloat(0.0)
 
   FBFindBezierRoots(bezierPoints, 5) { (root) -> Void in
@@ -1239,7 +1239,7 @@ private func xxxXclosestLocationToPoint(me: FBBezierCurveData, point: CGPoint) -
     }
   }
 
-  var lastDistance = FBDistanceBetweenPoints(me.endPoint2, point)
+  var lastDistance = FBDistanceBetweenPoints(me.endPoint2, point2: point)
   if ( lastDistance < distance ) {
     distance = lastDistance;
     parameter = 1.0;
@@ -1263,10 +1263,10 @@ private func isEqualWithOptions(me: FBBezierCurveData, other: FBBezierCurveData,
   }
 
   if me.isStraightLine {
-    return FBArePointsCloseWithOptions(me.endPoint1, other.endPoint1, threshold) && FBArePointsCloseWithOptions(me.endPoint2, other.endPoint2, threshold)
+    return FBArePointsCloseWithOptions(me.endPoint1, point2: other.endPoint1, threshold: threshold) && FBArePointsCloseWithOptions(me.endPoint2, point2: other.endPoint2, threshold: threshold)
   }
 
-  return FBArePointsCloseWithOptions(me.endPoint1, other.endPoint1, threshold) && FBArePointsCloseWithOptions(me.controlPoint1, other.controlPoint1, threshold) && FBArePointsCloseWithOptions(me.controlPoint2, other.controlPoint2, threshold) && FBArePointsCloseWithOptions(me.endPoint2, other.endPoint2, threshold)
+  return FBArePointsCloseWithOptions(me.endPoint1, point2: other.endPoint1, threshold: threshold) && FBArePointsCloseWithOptions(me.controlPoint1, point2: other.controlPoint1, threshold: threshold) && FBArePointsCloseWithOptions(me.controlPoint2, point2: other.controlPoint2, threshold: threshold) && FBArePointsCloseWithOptions(me.endPoint2, point2: other.endPoint2, threshold: threshold)
 }
 
 // 906
@@ -1285,13 +1285,13 @@ private func curvesAreEqual(me: FBBezierCurveData, other: FBBezierCurveData) -> 
   let controlPointThreshold = CGFloat(1e-1)
 
   if me.isStraightLine {
-    return FBArePointsCloseWithOptions(me.endPoint1, other.endPoint1, endPointThreshold) && FBArePointsCloseWithOptions(me.endPoint2, other.endPoint2, endPointThreshold);
+    return FBArePointsCloseWithOptions(me.endPoint1, point2: other.endPoint1, threshold: endPointThreshold) && FBArePointsCloseWithOptions(me.endPoint2, point2: other.endPoint2, threshold: endPointThreshold);
   }
 
-  return FBArePointsCloseWithOptions(me.endPoint1, other.endPoint1, endPointThreshold)
-    && FBArePointsCloseWithOptions(me.controlPoint1, other.controlPoint1, controlPointThreshold)
-    && FBArePointsCloseWithOptions(me.controlPoint2, other.controlPoint2, controlPointThreshold)
-    && FBArePointsCloseWithOptions(me.endPoint2, other.endPoint2, endPointThreshold);
+  return FBArePointsCloseWithOptions(me.endPoint1, point2: other.endPoint1, threshold: endPointThreshold)
+    && FBArePointsCloseWithOptions(me.controlPoint1, point2: other.controlPoint1, threshold: controlPointThreshold)
+    && FBArePointsCloseWithOptions(me.controlPoint2, point2: other.controlPoint2, threshold: controlPointThreshold)
+    && FBArePointsCloseWithOptions(me.endPoint2, point2: other.endPoint2, threshold: endPointThreshold);
 }
 
 
@@ -1301,7 +1301,7 @@ private func dataIsEqual(me: FBBezierCurveData, other: FBBezierCurveData) -> Boo
 {
   // LRT - fiddle with these
 //  return isEqualWithOptions(me, other, 1e-10)
-  return isEqualWithOptions(me, other, 1e-6)
+  return isEqualWithOptions(me, other: other, threshold: 1e-6)
 }
 
 // 931
@@ -1316,13 +1316,13 @@ private func reversed(me: FBBezierCurveData) -> FBBezierCurveData
 // static BOOL FBBezierCurveDataCheckForOverlapRange(FBBezierCurveData me, FBBezierIntersectRange **intersectRange, FBRange *usRange, FBRange *themRange, FBBezierCurve* originalUs, FBBezierCurve* originalThem, FBBezierCurveData us, FBBezierCurveData them)
 private func checkForOverlapRange(me: FBBezierCurveData, inout intersectRange: FBBezierIntersectRange?, inout usRange: FBRange, inout themRange: FBRange, originalUs: FBBezierCurve, originalThem: FBBezierCurve, us: FBBezierCurveData, them: FBBezierCurveData) -> Bool
 {
-  if curvesAreEqual(us, them) {
+  if curvesAreEqual(us, other: them) {
     // TODO: Is this range not being sent back up to the inout parameter ?
     // LRT - 2015.08.07 07:00:33 PM
     // Verified that it definitely is setting the original inout var
     intersectRange = FBBezierIntersectRange(curve1: originalUs, parameterRange1: usRange, curve2:originalThem, parameterRange2: themRange, reversed: false)
     return true
-  } else if curvesAreEqual(us, them.reversed()) {
+  } else if curvesAreEqual(us, other: them.reversed()) {
     intersectRange = FBBezierIntersectRange(curve1: originalUs, parameterRange1: usRange, curve2:originalThem, parameterRange2: themRange, reversed: true)
     return true
   }
@@ -1336,7 +1336,7 @@ private func findPossibleOverlap(me: FBBezierCurveData, originalUs: FBBezierCurv
 {
   var themOnUs1 = originalUs.closestLocationToPoint(them.endPoint1)
   var themOnUs2 = originalUs.closestLocationToPoint(them.endPoint2)
-  var range = FBRangeMake(min(themOnUs1.parameter, themOnUs2.parameter), max(themOnUs1.parameter, themOnUs2.parameter));
+  var range = FBRangeMake(min(themOnUs1.parameter, themOnUs2.parameter), maximum: max(themOnUs1.parameter, themOnUs2.parameter));
 
   possibleRange = range;
 
@@ -1356,15 +1356,15 @@ private func checkCurvesForOverlapRange(
   them: FBBezierCurveData
   ) -> Bool
 {
-  if checkForOverlapRange(me, &intersectRange, &usRange, &themRange, originalUs, originalThem, us, them) {
+  if checkForOverlapRange(me, intersectRange: &intersectRange, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, us: us, them: them) {
     return true
   }
 
   var usSubcurveRange = FBRange(minimum: 0.0, maximum: 0.0)
-  var usSubcurve = findPossibleOverlap(me, originalUs.data, them, &usSubcurveRange)
+  var usSubcurve = findPossibleOverlap(me, originalUs: originalUs.data, them: them, possibleRange: &usSubcurveRange)
 
   var themSubcurveRange = FBRange(minimum: 0.0, maximum: 0.0)
-  var themSubcurve = findPossibleOverlap(me, originalThem.data, us, &themSubcurveRange)
+  var themSubcurve = findPossibleOverlap(me, originalUs: originalThem.data, them: us, possibleRange: &themSubcurveRange)
 
   let threshold = CGFloat(1e-4)
   if isEqualWithOptions(usSubcurve, themSubcurve, threshold) || isEqualWithOptions(usSubcurve, reversed(themSubcurve), threshold) {
@@ -1398,10 +1398,10 @@ private func checkNoIntersectionsForOverlapRange(
   )
 {
   if us.isStraightLine && them.isStraightLine {
-    checkLinesForOverlap(me, &usRange, &themRange, originalUs.data, originalThem.data, &us, &them)
+    checkLinesForOverlap(me, usRange: &usRange, themRange: &themRange, originalUs: originalUs.data, originalThem: originalThem.data, us: &us, them: &them)
   }
 
-  checkForOverlapRange(me, &intersectRange, &usRange, &themRange, originalUs, originalThem, us, them)
+  checkForOverlapRange(me, intersectRange: &intersectRange, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, us: us, them: them)
 }
 
 // 990
@@ -1422,11 +1422,11 @@ private func straightLineOverlap(
   var hasOverlap = false
 
   if us.isStraightLine && them.isStraightLine {
-    hasOverlap = checkLinesForOverlap(me, &usRange, &themRange, originalUs.data, originalThem.data, &us, &them)
+    hasOverlap = checkLinesForOverlap(me, usRange: &usRange, themRange: &themRange, originalUs: originalUs.data, originalThem: originalThem.data, us: &us, them: &them)
   }
 
   if hasOverlap {
-    hasOverlap = checkForOverlapRange(me, &intersectRange, &usRange, &themRange, originalUs, originalThem, us, them)
+    hasOverlap = checkForOverlapRange(me, intersectRange: &intersectRange, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, us: us, them: them)
   }
 
   return hasOverlap
@@ -1454,7 +1454,7 @@ private func pfRefineParameter(me: FBBezierCurveData, parameter: CGFloat, point:
   var bezierPoints: [CGPoint] = [me.endPoint1, me.controlPoint1, me.controlPoint2, me.endPoint2]
 
   // Compute Q(parameter)
-  let qAtParameter = BezierWithPoints(3, bezierPoints, parameter, false).point
+  let qAtParameter = BezierWithPoints(3, bezierPoints: bezierPoints, parameter: parameter, withCurves: false).point
 
   // Compute Q'(parameter)
   let qPrimePoints: [CGPoint] = [
@@ -1471,7 +1471,7 @@ private func pfRefineParameter(me: FBBezierCurveData, parameter: CGFloat, point:
       y:(bezierPoints[3].y - bezierPoints[2].y) * 3.0
     )
   ]
-  let qPrimeAtParameter = BezierWithPoints(2, qPrimePoints, parameter, false).point
+  let qPrimeAtParameter = BezierWithPoints(2, bezierPoints: qPrimePoints, parameter: parameter, withCurves: false).point
 
   // Compute Q''(parameter)
   let qPrimePrimePoints: [CGPoint] = [
@@ -1484,7 +1484,7 @@ private func pfRefineParameter(me: FBBezierCurveData, parameter: CGFloat, point:
       y: (qPrimePoints[2].y - qPrimePoints[1].y) * 2.0
     )
   ]
-  let qPrimePrimeAtParameter = BezierWithPoints(1, qPrimePrimePoints, parameter, false).point
+  let qPrimePrimeAtParameter = BezierWithPoints(1, bezierPoints: qPrimePrimePoints, parameter: parameter, withCurves: false).point
 
   // Compute f(parameter) and f'(parameter)
   let qMinusPoint = FBSubtractPoint(qAtParameter, point)
@@ -1534,17 +1534,17 @@ private func intersectionsWithStraightLines(
 
 
   var intersectionPoint = CGPointZero
-  var intersects = FBLinesIntersect(me.endPoint1, me.endPoint2, curve.endPoint1, curve.endPoint2, &intersectionPoint)
+  var intersects = FBLinesIntersect(me.endPoint1, line1End: me.endPoint2, line2Start: curve.endPoint1, line2End: curve.endPoint2, outIntersect: &intersectionPoint)
   if !intersects {
     return false
   }
 
-  let meParam = FBParameterOfPointOnLine(me.endPoint1, me.endPoint2, intersectionPoint)
+  let meParam = FBParameterOfPointOnLine(me.endPoint1, lineEnd: me.endPoint2, point: intersectionPoint)
   if FBIsValueLessThan(meParam, 0.0) || FBIsValueGreaterThan(meParam, 1.0) {
     return false
   }
 
-  let curveParam = FBParameterOfPointOnLine(curve.endPoint1, curve.endPoint2, intersectionPoint)
+  let curveParam = FBParameterOfPointOnLine(curve.endPoint1, lineEnd: curve.endPoint2, point: intersectionPoint)
   if FBIsValueLessThan(curveParam, 0.0) || FBIsValueGreaterThan(curveParam, 1.0) {
     return false
   }
@@ -1614,12 +1614,12 @@ internal func pfIntersectionsWithBezierCurve(
   // as intersecting at the endpoints.
   //
   // Try to detect that kind of overlap at the start.
-  if straightLineOverlap(me, &intersectRange, &usRange, &themRange, originalUs, originalThem, &us, &them, nonpointUs, nonpointThem) {
+  if straightLineOverlap(me, intersectRange: &intersectRange, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, us: &us, them: &them, nonpointUs: nonpointUs, nonpointThem: nonpointThem) {
     return
   }
 
   if us.isStraightLine && them.isStraightLine {
-    intersectionsWithStraightLines(me, curve, &usRange, &themRange, originalUs, originalThem, &stop, outputBlock)
+    intersectionsWithStraightLines(me, curve: curve, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, stop: &stop, outputBlock: outputBlock)
     return
   }
 
@@ -1634,7 +1634,7 @@ internal func pfIntersectionsWithBezierCurve(
   var iterations = 0
   var hadConverged = true
 
-  while ( iterations < maxIterations && ((iterations == 0) || (!FBRangeHasConverged(usRange, places) || !FBRangeHasConverged(themRange, places))) ) {
+  while ( iterations < maxIterations && ((iterations == 0) || (!FBRangeHasConverged(usRange, decimalPlaces: places) || !FBRangeHasConverged(themRange, decimalPlaces: places))) ) {
 
     // Remember what the current range is so we can calculate how much it changed later
     var previousUsRange = usRange
@@ -1647,9 +1647,9 @@ internal func pfIntersectionsWithBezierCurve(
     if !them.isPoint() {
       nonpointThem = them
     }
-    (us, intersects) = bezierClipWithBezierCurve(nonpointUs, nonpointThem, &originalUsData, &usRange);
+    (us, intersects) = bezierClipWithBezierCurve(nonpointUs, curve: nonpointThem, originalCurve: &originalUsData, originalRange: &usRange);
     if !intersects {
-      checkNoIntersectionsForOverlapRange(me, &intersectRange, &usRange, &themRange, originalUs, originalThem, &us, &them, nonpointUs, nonpointThem)
+      checkNoIntersectionsForOverlapRange(me, intersectRange: &intersectRange, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, us: &us, them: &them, nonpointUs: nonpointUs, nonpointThem: nonpointThem)
       return  // If they don't intersect at all stop now
     }
     if iterations > 0 && (us.isPoint() || them.isPoint())
@@ -1671,9 +1671,9 @@ internal func pfIntersectionsWithBezierCurve(
       hadConverged = false
     }
 
-    (them, intersects) = bezierClipWithBezierCurve(nonpointThem, nonpointUs, &originalThemData, &themRange)
+    (them, intersects) = bezierClipWithBezierCurve(nonpointThem, curve: nonpointUs, originalCurve: &originalThemData, originalRange: &themRange)
     if !intersects {
-      checkNoIntersectionsForOverlapRange(me, &intersectRange, &usRange, &themRange, originalUs, originalThem, &us, &them, nonpointUs, nonpointThem)
+      checkNoIntersectionsForOverlapRange(me, intersectRange: &intersectRange, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, us: &us, them: &them, nonpointUs: nonpointUs, nonpointThem: nonpointThem)
       return  // If they don't intersect at all stop now
     }
     if iterations > 0 && (us.isPoint() || them.isPoint())
@@ -1692,18 +1692,18 @@ internal func pfIntersectionsWithBezierCurve(
       // multiple intersections here.
 
       // Or the curves are the same, check for that first.
-      if checkCurvesForOverlapRange(me, &intersectRange, &usRange, &themRange, originalUs, originalThem, us, them) {
+      if checkCurvesForOverlapRange(me, intersectRange: &intersectRange, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, us: us, them: them) {
         return
       }
 
       // Divide and conquer. Divide the longer curve in half, and recurse
       if FBRangeGetSize(usRange) > FBRangeGetSize(themRange) {
         // Since our remaining range is longer, split the remains of us in half at the midway point
-        var usRange1 = FBRangeMake(usRange.minimum, (usRange.minimum + usRange.maximum) / 2.0)
+        var usRange1 = FBRangeMake(usRange.minimum, maximum: (usRange.minimum + usRange.maximum) / 2.0)
         var us1 = originalUsData.subcurveWithRange(usRange1)
         var themRangeCopy1 = themRange  // make a local copy because it'll get modified when we recurse
 
-        var usRange2 = FBRangeMake((usRange.minimum + usRange.maximum) / 2.0, usRange.maximum)
+        var usRange2 = FBRangeMake((usRange.minimum + usRange.maximum) / 2.0, maximum: usRange.maximum)
         var us2 = originalUsData.subcurveWithRange(usRange2)
         var themRangeCopy2 = themRange  // make a local copy because it'll get modified when we recurse
 
@@ -1715,7 +1715,7 @@ internal func pfIntersectionsWithBezierCurve(
           var leftIntersectRange : FBBezierIntersectRange? // = nil
           pfIntersectionsWithBezierCurve(us1, them, &usRange1, &themRangeCopy1, originalUs, originalThem, &leftIntersectRange, depth + 1, &stop, outputBlock)
 
-          intersectRange = mergeIntersectRange(intersectRange, leftIntersectRange)
+          intersectRange = mergeIntersectRange(intersectRange, otherIntersectRange: leftIntersectRange)
 
           if stop {
             return
@@ -1724,7 +1724,7 @@ internal func pfIntersectionsWithBezierCurve(
           var rightIntersectRange : FBBezierIntersectRange? // = nil
           pfIntersectionsWithBezierCurve(us2, them, &usRange2, &themRangeCopy2, originalUs, originalThem, &rightIntersectRange, depth + 1, &stop, outputBlock);
 
-          intersectRange = mergeIntersectRange(intersectRange, rightIntersectRange)
+          intersectRange = mergeIntersectRange(intersectRange, otherIntersectRange: rightIntersectRange)
 
           return
         } else {
@@ -1735,11 +1735,11 @@ internal func pfIntersectionsWithBezierCurve(
       {
         // Since their remaining range is longer, split the
         // remains of them in half at the midway point
-        var themRange1 = FBRangeMake(themRange.minimum, (themRange.minimum + themRange.maximum) / 2.0)
+        var themRange1 = FBRangeMake(themRange.minimum, maximum: (themRange.minimum + themRange.maximum) / 2.0)
         var them1 = originalThemData.subcurveWithRange(themRange1)
         var usRangeCopy1 = usRange  // make a local copy because it'll get modified when we recurse
 
-        var themRange2 = FBRangeMake((themRange.minimum + themRange.maximum) / 2.0, themRange.maximum)
+        var themRange2 = FBRangeMake((themRange.minimum + themRange.maximum) / 2.0, maximum: themRange.maximum)
         var them2 = originalThemData.subcurveWithRange(themRange2)
         var usRangeCopy2 = usRange  // make a local copy because it'll get modified when we recurse
 
@@ -1751,7 +1751,7 @@ internal func pfIntersectionsWithBezierCurve(
           var leftIntersectRange : FBBezierIntersectRange? // = nil
           pfIntersectionsWithBezierCurve(us, them1, &usRangeCopy1, &themRange1, originalUs, originalThem, &leftIntersectRange, depth + 1, &stop, outputBlock)
 
-          intersectRange = mergeIntersectRange(intersectRange, leftIntersectRange)
+          intersectRange = mergeIntersectRange(intersectRange, otherIntersectRange: leftIntersectRange)
 
           if stop {
             return
@@ -1760,7 +1760,7 @@ internal func pfIntersectionsWithBezierCurve(
           var rightIntersectRange : FBBezierIntersectRange? // = nil
           pfIntersectionsWithBezierCurve(us, them2, &usRangeCopy2, &themRange2, originalUs, originalThem, &rightIntersectRange, depth + 1, &stop, outputBlock)
 
-          intersectRange = mergeIntersectRange(intersectRange, rightIntersectRange)
+          intersectRange = mergeIntersectRange(intersectRange, otherIntersectRange: rightIntersectRange)
 
           return
         } else {
@@ -1790,9 +1790,9 @@ internal func pfIntersectionsWithBezierCurve(
   // That means we can use Newton's method to refine the parameter of the curve
   // that didn't converge.
 
-  if !FBRangeHasConverged(usRange, places) || !FBRangeHasConverged(themRange, places) {
+  if !FBRangeHasConverged(usRange, decimalPlaces: places) || !FBRangeHasConverged(themRange, decimalPlaces: places) {
     // Maybe there's an overlap in here?
-    if checkCurvesForOverlapRange(me, &intersectRange, &usRange, &themRange, originalUs, originalThem, originalUsData, originalThemData) {
+    if checkCurvesForOverlapRange(me, intersectRange: &intersectRange, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, us: originalUsData, them: originalThemData) {
       return
     }
 
@@ -1807,17 +1807,17 @@ internal func pfIntersectionsWithBezierCurve(
     // If the math falls apart because everything's a point, that's OK since we
     // already have a "reasonable" estimation of the parameters.
 
-    refineIntersectionsOverIterations(3, &usRange, &themRange, &originalUsData, &originalThemData, &us, &them, &nonpointUs, &nonpointThem)
+    refineIntersectionsOverIterations(3, usRange: &usRange, themRange: &themRange, originalUs: &originalUsData, originalThem: &originalThemData, us: &us, them: &them, nonpointUs: &nonpointUs, nonpointThem: &nonpointThem)
 
     // Sometimes we need a little more precision. Be careful though, because
     // in some cases trying for more makes the math fall apart.
 
-    if !FBRangeHasConverged(usRange, places) || !FBRangeHasConverged(themRange, places) {
-      refineIntersectionsOverIterations(4, &usRange, &themRange, &originalUsData, &originalThemData, &us, &them, &nonpointUs, &nonpointThem)
+    if !FBRangeHasConverged(usRange, decimalPlaces: places) || !FBRangeHasConverged(themRange, decimalPlaces: places) {
+      refineIntersectionsOverIterations(4, usRange: &usRange, themRange: &themRange, originalUs: &originalUsData, originalThem: &originalThemData, us: &us, them: &them, nonpointUs: &nonpointUs, nonpointThem: &nonpointThem)
     }
   }
 
-  if FBRangeHasConverged(usRange, places) && !FBRangeHasConverged(themRange, places) {
+  if FBRangeHasConverged(usRange, decimalPlaces: places) && !FBRangeHasConverged(themRange, decimalPlaces: places) {
     // Refine the them range since it didn't converge
     let intersectionPoint = originalUsData.pointAtParameter(FBRangeAverage(usRange)).point
 
@@ -1825,14 +1825,14 @@ internal func pfIntersectionsWithBezierCurve(
     // approximation which is all Newton needs
     var refinedParameter = FBRangeAverage(themRange)
     for var i = 0; i < 3; i++ {
-      refinedParameter = pfRefineParameter(originalThemData, refinedParameter, intersectionPoint)
+      refinedParameter = pfRefineParameter(originalThemData, parameter: refinedParameter, point: intersectionPoint)
       refinedParameter = min(themRange.maximum, max(themRange.minimum, refinedParameter))
     }
     themRange.minimum = refinedParameter
     themRange.maximum = refinedParameter
     hadConverged = false
   }
-  else if !FBRangeHasConverged(usRange, places) && FBRangeHasConverged(themRange, places) {
+  else if !FBRangeHasConverged(usRange, decimalPlaces: places) && FBRangeHasConverged(themRange, decimalPlaces: places) {
     // Refine the us range since it didn't converge
     let intersectionPoint = originalThemData.pointAtParameter(FBRangeAverage(themRange)).point
 
@@ -1840,7 +1840,7 @@ internal func pfIntersectionsWithBezierCurve(
     // approximation which is all Newton needs
     var refinedParameter = FBRangeAverage(usRange)
     for var i = 0; i < 3; i++ {
-      refinedParameter = pfRefineParameter(originalUsData, refinedParameter, intersectionPoint)
+      refinedParameter = pfRefineParameter(originalUsData, parameter: refinedParameter, point: intersectionPoint)
       refinedParameter = min(usRange.maximum, max(usRange.minimum, refinedParameter))
     }
     usRange.minimum = refinedParameter
@@ -1850,8 +1850,8 @@ internal func pfIntersectionsWithBezierCurve(
 
   // If it never converged and we stopped because of our loop max,
   // assume overlap or something else. Bail.
-  if (!FBRangeHasConverged(usRange, places) || !FBRangeHasConverged(themRange, places)) && iterations >= maxIterations {
-    checkForOverlapRange(me, &intersectRange, &usRange, &themRange, originalUs, originalThem, us, them)
+  if (!FBRangeHasConverged(usRange, decimalPlaces: places) || !FBRangeHasConverged(themRange, decimalPlaces: places)) && iterations >= maxIterations {
+    checkForOverlapRange(me, intersectRange: &intersectRange, usRange: &usRange, themRange: &themRange, originalUs: originalUs, originalThem: originalThem, us: us, them: them)
 
     return
   }
@@ -1861,7 +1861,7 @@ internal func pfIntersectionsWithBezierCurve(
     // Compute the point from both and compare
     let intersectionPoint = originalUsData.pointAtParameter(FBRangeAverage(usRange)).point
     let checkPoint = originalThemData.pointAtParameter(FBRangeAverage(themRange)).point
-    if !FBArePointsCloseWithOptions(intersectionPoint, checkPoint, 1e-3) {
+    if !FBArePointsCloseWithOptions(intersectionPoint, point2: checkPoint, threshold: 1e-3) {
       return
     }
   }
@@ -1898,10 +1898,10 @@ internal func pfIntersectionsWithBezierCurve(
 //
 
 func ==(lhs: FBBezierCurve, rhs: FBBezierCurve) -> Bool {
-  return dataIsEqual(lhs.data, rhs.data)
+  return dataIsEqual(lhs.data, other: rhs.data)
 }
 
-class FBBezierCurve : DebugPrintable, Printable, Equatable {
+class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equatable {
 
   // MARK: edge extensions
 
@@ -2000,8 +2000,8 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
     //  has to deal with curves, not lines). As long as the control points are colinear with the
     //  end points, it'll be a line. But for consistency sake, we put the control points inside
     //  the end points, 1/3 of the total distance away from their respective end point.
-    let distance = FBDistanceBetweenPoints(startPoint, endPoint)
-    let leftTangent = FBNormalizePoint(FBSubtractPoint(endPoint, startPoint))
+    let distance = FBDistanceBetweenPoints(startPoint, point2: endPoint)
+    let leftTangent = FBNormalizePoint(FBSubtractPoint(endPoint, point2: startPoint))
 
     _data = FBBezierCurveData(
       endPoint1: startPoint,
@@ -2145,7 +2145,7 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
   func isEqual(object: AnyObject) -> Bool
   {
     if let other = object as? FBBezierCurve {
-      return dataIsEqual(_data, other._data)
+      return dataIsEqual(_data, other: other._data)
     } else {
       return false
     }
@@ -2173,16 +2173,16 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
     withBlock block : (intersect: FBBezierIntersection) -> (setStop: Bool, stopValue:Bool))
   {
     // For performance reasons, do a quick bounds check to see if these even might intersect
-    if !FBLineBoundsMightOverlap(_data.boundingRect, curve._data.boundingRect) {
+    if !FBLineBoundsMightOverlap(_data.boundingRect, bounds2: curve._data.boundingRect) {
       return
     }
 
-    if !FBLineBoundsMightOverlap(_data.bounds, curve._data.bounds) {
+    if !FBLineBoundsMightOverlap(_data.bounds, bounds2: curve._data.bounds) {
       return
     }
 
-    var usRange = FBRangeMake(0, 1)
-    var themRange = FBRangeMake(0, 1)
+    var usRange = FBRangeMake(0, maximum: 1)
+    var themRange = FBRangeMake(0, maximum: 1)
     var stop = false
     pfIntersectionsWithBezierCurve(_data, curve.data, &usRange, &themRange, self, curve, &overlapRange, 0, &stop, block)
   }
@@ -2285,7 +2285,7 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
   // 1535
   //- (CGFloat) refineParameter:(CGFloat)parameter forPoint:(NSPoint)point
   private func refineParameter(parameter: CGFloat, forPoint point: CGPoint) -> CGFloat {
-    return pfRefineParameter(self.data, parameter, point)
+    return pfRefineParameter(self.data, parameter: parameter, point: point)
   }
 
   // 1540
@@ -2350,11 +2350,11 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
   func tangentFromRightOffset(var offset: CGFloat) -> CGPoint
   {
     if _data.isStraightLine && !_data.isPoint() {
-      return FBSubtractPoint(_data.endPoint1, _data.endPoint2)
+      return FBSubtractPoint(_data.endPoint1, point2: _data.endPoint2)
     }
 
     if offset == 0.0 && !CGPointEqualToPoint(_data.controlPoint2, _data.endPoint2) {
-      return FBSubtractPoint(_data.controlPoint2, _data.endPoint2)
+      return FBSubtractPoint(_data.controlPoint2, point2: _data.endPoint2)
     } else {
       let len = length()
       if offset == 0.0 {
@@ -2363,7 +2363,7 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
       let time = 1.0 - (offset / len)
       let pap = _data.pointAtParameter(time)
       if let curve = pap.leftCurve {
-        return FBSubtractPoint(curve.controlPoint2, curve.endPoint2)
+        return FBSubtractPoint(curve.controlPoint2, point2: curve.endPoint2)
       }
     }
     
@@ -2375,11 +2375,11 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
   func tangentFromLeftOffset(var offset: CGFloat) -> CGPoint
   {
     if _data.isStraightLine && !_data.isPoint() {
-      return FBSubtractPoint(_data.endPoint2, _data.endPoint1)
+      return FBSubtractPoint(_data.endPoint2, point2: _data.endPoint1)
     }
 
     if offset == 0.0 && !CGPointEqualToPoint(_data.controlPoint1, _data.endPoint1) {
-      return FBSubtractPoint(_data.controlPoint1, _data.endPoint1)
+      return FBSubtractPoint(_data.controlPoint1, point2: _data.endPoint1)
     } else {
       let len = length()
       if offset == 0.0 {
@@ -2388,7 +2388,7 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
       let time = offset / len
       let pap = _data.pointAtParameter(time)
       if let curve = pap.rightCurve {
-        return FBSubtractPoint(curve.controlPoint2, curve.endPoint2)
+        return FBSubtractPoint(curve.controlPoint2, point2: curve.endPoint2)
       }
     }
 
@@ -2399,7 +2399,7 @@ class FBBezierCurve : DebugPrintable, Printable, Equatable {
   //- (NSBezierPath *) bezierPath
   var bezierPath : UIBezierPath
   {
-    var path = UIBezierPath()
+    let path = UIBezierPath()
     path.moveToPoint(endPoint1)
     path.addCurveToPoint(endPoint2, controlPoint1: controlPoint1, controlPoint2: controlPoint2)
     return path

@@ -78,10 +78,10 @@ class FBBezierIntersection {
     computeCurve2()
 
     // Compute the tangents at the intersection.
-    let curve1LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve1LeftBezier!.controlPoint2, _curve1LeftBezier!.endPoint2))
-    let curve1RightTangent = FBNormalizePoint(FBSubtractPoint(_curve1RightBezier!.controlPoint1, _curve1RightBezier!.endPoint1))
-    let curve2LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve2LeftBezier!.controlPoint2, _curve2LeftBezier!.endPoint2))
-    let curve2RightTangent = FBNormalizePoint(FBSubtractPoint(_curve2RightBezier!.controlPoint1, _curve2RightBezier!.endPoint1))
+    let curve1LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve1LeftBezier!.controlPoint2, point2: _curve1LeftBezier!.endPoint2))
+    let curve1RightTangent = FBNormalizePoint(FBSubtractPoint(_curve1RightBezier!.controlPoint1, point2: _curve1RightBezier!.endPoint1))
+    let curve2LeftTangent = FBNormalizePoint(FBSubtractPoint(_curve2LeftBezier!.controlPoint2, point2: _curve2LeftBezier!.endPoint2))
+    let curve2RightTangent = FBNormalizePoint(FBSubtractPoint(_curve2RightBezier!.controlPoint1, point2: _curve2RightBezier!.endPoint1))
 
     // See if the tangents are the same. If so, then we're tangent at the intersection point
     return FBArePointsCloseWithOptions(curve1LeftTangent, curve2LeftTangent, FBPointCloseThreshold)
@@ -117,12 +117,12 @@ class FBBezierIntersection {
 
   //- (BOOL) isAtStartOfCurve1
   var isAtStartOfCurve1 : Bool {
-    return FBAreValuesCloseWithOptions(_parameter1, 0.0, FBParameterCloseThreshold) || _curve1.isPoint
+    return FBAreValuesCloseWithOptions(_parameter1, value2: 0.0, threshold: FBParameterCloseThreshold) || _curve1.isPoint
   }
 
   //- (BOOL) isAtStopOfCurve1
   var isAtStopOfCurve1 : Bool {
-    return FBAreValuesCloseWithOptions(_parameter1, 1.0, FBParameterCloseThreshold) || _curve1.isPoint
+    return FBAreValuesCloseWithOptions(_parameter1, value2: 1.0, threshold: FBParameterCloseThreshold) || _curve1.isPoint
   }
 
   //- (BOOL) isAtEndPointOfCurve1
@@ -133,12 +133,12 @@ class FBBezierIntersection {
 
   //- (BOOL) isAtStartOfCurve2
   var isAtStartOfCurve2 : Bool {
-    return FBAreValuesCloseWithOptions(_parameter2, 0.0, FBParameterCloseThreshold) || _curve2.isPoint
+    return FBAreValuesCloseWithOptions(_parameter2, value2: 0.0, threshold: FBParameterCloseThreshold) || _curve2.isPoint
   }
 
   //- (BOOL) isAtStopOfCurve2
   var isAtStopOfCurve2 : Bool {
-    return FBAreValuesCloseWithOptions(_parameter2, 1.0, FBParameterCloseThreshold) || _curve2.isPoint
+    return FBAreValuesCloseWithOptions(_parameter2, value2: 1.0, threshold: FBParameterCloseThreshold) || _curve2.isPoint
   }
 
   //- (BOOL) isAtEndPointOfCurve2

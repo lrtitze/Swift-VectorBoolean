@@ -41,7 +41,7 @@ extension UIBezierPath {
   //+ (NSBezierPath *) circleAtPoint:(NSPoint)point
   static func circleAtPoint(point: CGPoint) -> UIBezierPath {
 
-    var rect = CGRect(
+    let rect = CGRect(
       x: point.x - FBDebugPointSize * 0.5,
       y: point.y - FBDebugPointSize * 0.5,
       width: FBDebugPointSize,
@@ -54,7 +54,7 @@ extension UIBezierPath {
   //+ (NSBezierPath *) rectAtPoint:(NSPoint)point
   static func rectAtPoint(point: CGPoint) -> UIBezierPath {
 
-    var rect = CGRect(
+    let rect = CGRect(
       x: point.x - FBDebugPointSize * 0.5,
       y: point.y - FBDebugPointSize * 0.5,
       width: FBDebugPointSize,
@@ -66,7 +66,7 @@ extension UIBezierPath {
   // 117
   static func smallCircleAtPoint(point: CGPoint) -> UIBezierPath {
 
-    var rect = CGRect(
+    let rect = CGRect(
       x: point.x - FBDebugSmallPointSize * 0.5,
       y: point.y - FBDebugSmallPointSize * 0.5,
       width: FBDebugSmallPointSize,
@@ -79,7 +79,7 @@ extension UIBezierPath {
   //+ (NSBezierPath *) smallRectAtPoint:(NSPoint)point
   static func smallRectAtPoint(point: CGPoint) -> UIBezierPath {
 
-    var rect = CGRect(
+    let rect = CGRect(
       x: point.x - FBDebugSmallPointSize * 0.5,
       y: point.y - FBDebugSmallPointSize * 0.5,
       width: FBDebugSmallPointSize,
@@ -92,7 +92,7 @@ extension UIBezierPath {
   //+ (NSBezierPath *) triangleAtPoint:(NSPoint)point direction:(NSPoint)tangent
   static func triangleAtPoint(point: CGPoint, direction tangent: CGPoint) -> UIBezierPath {
 
-    let endPoint = FBAddPoint(point, FBScalePoint(tangent, FBDebugPointSize * 1.5))
+    let endPoint = FBAddPoint(point, point2: FBScalePoint(tangent, scale: FBDebugPointSize * 1.5))
     let normal1 = FBLineNormal(point, endPoint)
     let normal2 = CGPoint(x: -normal1.x, y: -normal1.y)
     let basePoint1 = FBAddPoint(point, FBScalePoint(normal1, FBDebugPointSize * 0.5))

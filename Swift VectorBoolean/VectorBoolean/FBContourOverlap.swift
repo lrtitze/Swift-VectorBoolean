@@ -54,7 +54,7 @@ class FBContourOverlap {
     }
 
     if createNewRun {
-      var run = FBEdgeOverlapRun()
+      let run = FBEdgeOverlapRun()
       run.insertOverlap(overlap)
       runs.append(run)
     }

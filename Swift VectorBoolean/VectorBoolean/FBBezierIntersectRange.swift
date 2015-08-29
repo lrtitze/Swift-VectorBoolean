@@ -101,22 +101,22 @@ class FBBezierIntersectRange {
 
   //- (BOOL) isAtStartOfCurve1
   var isAtStartOfCurve1 : Bool {
-    return FBAreValuesCloseWithOptions(_parameterRange1.minimum, 0.0, FBParameterCloseThreshold)
+    return FBAreValuesCloseWithOptions(_parameterRange1.minimum, value2: 0.0, threshold: FBParameterCloseThreshold)
   }
 
   //- (BOOL) isAtStopOfCurve1
   var isAtStopOfCurve1 : Bool {
-    return FBAreValuesCloseWithOptions(_parameterRange1.maximum, 1.0, FBParameterCloseThreshold)
+    return FBAreValuesCloseWithOptions(_parameterRange1.maximum, value2: 1.0, threshold: FBParameterCloseThreshold)
   }
 
   //- (BOOL) isAtStartOfCurve2
   var isAtStartOfCurve2 : Bool {
-    return FBAreValuesCloseWithOptions(_parameterRange2.minimum, 0.0, FBParameterCloseThreshold)
+    return FBAreValuesCloseWithOptions(_parameterRange2.minimum, value2: 0.0, threshold: FBParameterCloseThreshold)
   }
 
   //- (BOOL) isAtStopOfCurve2
   var isAtStopOfCurve2 : Bool {
-    return FBAreValuesCloseWithOptions(_parameterRange2.maximum, 1.0, FBParameterCloseThreshold)
+    return FBAreValuesCloseWithOptions(_parameterRange2.maximum, value2: 1.0, threshold: FBParameterCloseThreshold)
   }
 
   //- (FBBezierIntersection *) middleIntersection
@@ -132,8 +132,8 @@ class FBBezierIntersectRange {
   func merge(other: FBBezierIntersectRange) {
 
     // We assume the caller already knows we're talking about the same curves
-    _parameterRange1 = FBRangeUnion(_parameterRange1, other._parameterRange1);
-    _parameterRange2 = FBRangeUnion(_parameterRange2, other._parameterRange2);
+    _parameterRange1 = FBRangeUnion(_parameterRange1, range2: other._parameterRange1);
+    _parameterRange2 = FBRangeUnion(_parameterRange2, range2: other._parameterRange2);
 
     clearCache()
   }

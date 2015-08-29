@@ -60,8 +60,8 @@ class FBBezierContour {
   init() {
     self._edges = []
     self._overlaps = []
-    self._bounds = CGRect.nullRect
-    self._boundingRect = CGRect.nullRect
+    self._bounds = CGRect.null
+    self._boundingRect = CGRect.null
     self._inside = .Filled
   }
 
@@ -86,12 +86,12 @@ class FBBezierContour {
   //- (void) addCurve:(FBBezierCurve *)curve
   func addCurve(curve: FBBezierCurve?) {
     // Add the curve by wrapping it in an edge
-    if var curve = curve {
+    if let curve = curve {
       curve.contour = self;
       curve.index = _edges.count
       _edges.append(curve)
-      _bounds = CGRect.nullRect   // force the bounds to be recalculated
-      _boundingRect = CGRect.nullRect
+      _bounds = CGRect.null   // force the bounds to be recalculated
+      _boundingRect = CGRect.null
       _bezPathCache = nil
     }
   }
@@ -113,7 +113,7 @@ class FBBezierContour {
       curve = startCrossing.rightCurve
     } else if let startCrossing = startCrossing, endCrossing = endCrossing {
       // From startCrossing to endCrossing
-      curve = startCrossing.curve?.subcurveWithRange(FBRangeMake(startCrossing.parameter, endCrossing.parameter))
+      curve = startCrossing.curve?.subcurveWithRange(FBRangeMake(startCrossing.parameter, maximum: endCrossing.parameter))
     }
 
     if let curve = curve {
@@ -150,7 +150,7 @@ class FBBezierContour {
       curve = startCrossing.rightCurve
     } else if let startCrossing = startCrossing, endCrossing = endCrossing {
       // From startCrossing to endCrossing
-      curve = startCrossing.curve?.subcurveWithRange(FBRangeMake(startCrossing.parameter, endCrossing.parameter))
+      curve = startCrossing.curve?.subcurveWithRange(FBRangeMake(startCrossing.parameter, maximum: endCrossing.parameter))
     }
 
     if let curve = curve {
@@ -163,19 +163,19 @@ class FBBezierContour {
   //- (NSRect) bounds
   var bounds : CGRect {
     // Cache the bounds to save time
-    if !CGRectEqualToRect(_bounds, CGRect.nullRect) {
+    if !CGRectEqualToRect(_bounds, CGRect.null) {
       return _bounds
     }
 
     // If no edges, no bounds
     if _edges.count == 0 {
-      return CGRect.zeroRect
+      return CGRect.zero
     }
 
-    var totalBounds = CGRect.zeroRect
+    var totalBounds = CGRect.zero
     for edge in _edges {
       let edgeBounds : CGRect = edge.bounds
-      if CGRectEqualToRect(totalBounds, CGRect.zeroRect) {
+      if CGRectEqualToRect(totalBounds, CGRect.zero) {
         totalBounds = edgeBounds
       } else {
         // This was:
@@ -194,19 +194,19 @@ class FBBezierContour {
   //- (NSRect) boundingRect
   var boundingRect : CGRect {
     // Cache the boundingRect to save time
-    if !CGRectEqualToRect(_boundingRect, CGRect.nullRect) {
+    if !CGRectEqualToRect(_boundingRect, CGRect.null) {
       return _boundingRect
     }
 
     // If no edges, no bounds
     if _edges.count == 0 {
-      return CGRect.zeroRect
+      return CGRect.zero
     }
 
-    var totalBounds = CGRect.zeroRect
+    var totalBounds = CGRect.zero
     for edge in _edges {
       let edgeBounds : CGRect = edge.boundingRect
-      if CGRectEqualToRect(totalBounds, CGRect.zeroRect) {
+      if CGRectEqualToRect(totalBounds, CGRect.zero) {
         totalBounds = edgeBounds
       } else {
         // This was:
@@ -225,7 +225,7 @@ class FBBezierContour {
   //- (NSPoint) firstPoint
   var firstPoint : CGPoint {
     if _edges.count == 0 {
-      return CGPoint.zeroPoint
+      return CGPoint.zero
     }
 
     return _edges[0].endPoint1
@@ -365,7 +365,7 @@ class FBBezierContour {
     }
     return testEdge.pointAtParameter(parameter).point
     } else {
-      return CGPoint.zeroPoint
+      return CGPoint.zero
     }
   }
 
@@ -451,7 +451,7 @@ class FBBezierContour {
       // is equivalent to
       //   ![arrayOfObjs containsObject:obj]
       let other = crossing.counterpart?.edge?.contour
-      var notContained = otherContours.filter({ el in el === other }).count == 0
+      let notContained = otherContours.filter({ el in el === other }).count == 0
       if crossing.isSelfCrossing || notContained {
         return (false, false) // skip
       }
@@ -528,7 +528,7 @@ class FBBezierContour {
 
     let first = _edges[0]
     if let last = _edges.last {
-      if !FBArePointsClose(first.endPoint1, last.endPoint2) {
+      if !FBArePointsClose(first.endPoint1, point2: last.endPoint2) {
         addCurve(FBBezierCurve(startPoint: last.endPoint2, endPoint: first.endPoint1))
       }
     }
@@ -538,7 +538,7 @@ class FBBezierContour {
   // 417
   //- (FBBezierContour*) reversedContour	// GPC: added
   var reversedContour : FBBezierContour {
-    var revContour = FBBezierContour()
+    let revContour = FBBezierContour()
 
     for edge in _edges {
       revContour.addReverseCurve(edge)
@@ -552,7 +552,7 @@ class FBBezierContour {
   //- (FBContourDirection) direction
   var direction : FBContourDirection {
 
-    var lastPoint = CGPoint.zeroPoint, currentPoint = CGPoint.zeroPoint
+    var lastPoint = CGPoint.zero, currentPoint = CGPoint.zero
     var firstPoint = true
   	var a = CGFloat(0.0)
 
@@ -751,7 +751,7 @@ class FBBezierContour {
     var location = FBBezierCurveLocation(parameter: 0.0, distance: 0.0)
 
     for edge in _edges {
-      var edgeLocation = edge.closestLocationToPoint(point)
+      let edgeLocation = edge.closestLocationToPoint(point)
       if closestEdge == nil || edgeLocation.distance < location.distance {
         closestEdge = edge
         location = edgeLocation
@@ -759,7 +759,7 @@ class FBBezierContour {
     }
 
     if let closestEdge = closestEdge {
-      var curveLocation = FBCurveLocation(edge: closestEdge, parameter: location.parameter, distance: location.distance)
+      let curveLocation = FBCurveLocation(edge: closestEdge, parameter: location.parameter, distance: location.distance)
       curveLocation.contour = self
       return curveLocation
     } else {
@@ -805,7 +805,7 @@ class FBBezierContour {
 
     // Add the start point and direction for marking
     if let startEdge = self.startEdge {
-      let startEdgeTangent = FBNormalizePoint(FBSubtractPoint(startEdge.controlPoint1, startEdge.endPoint1));
+      let startEdgeTangent = FBNormalizePoint(FBSubtractPoint(startEdge.controlPoint1, point2: startEdge.endPoint1));
       path.appendPath(UIBezierPath.triangleAtPoint(startEdge.endPoint1, direction: startEdgeTangent))
     }
 

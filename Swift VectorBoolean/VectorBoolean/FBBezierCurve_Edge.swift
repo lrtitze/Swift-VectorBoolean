@@ -121,7 +121,7 @@ extension FBBezierCurve {
     //crossing.edge = nil   // cannot nil a non-optional
 
     //[_crossings removeObject:crossing];
-    for (index, element) in enumerate(crossings)
+    for (index, element) in crossings.enumerate()
     {
       if element === crossing
       {
@@ -355,26 +355,26 @@ extension FBBezierCurve {
     // Calculate the four tangents:
     //   The two tangents moving away from the intersection point on self and
     //   the two tangents moving away from the intersection point on edge2.
-    var edge1Tangents = FBTangentPair(left: CGPoint.zeroPoint, right: CGPoint.zeroPoint)
-    var edge2Tangents = FBTangentPair(left: CGPoint.zeroPoint, right: CGPoint.zeroPoint)
+    var edge1Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
+    var edge2Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
     var offset = CGFloat(0.0)
 
-    let (edge1LeftCurve, edge1RightCurve) = FBFindEdge1TangentCurves(self, intersection)
+    let (edge1LeftCurve, edge1RightCurve) = FBFindEdge1TangentCurves(self, intersection: intersection)
     let edge1Length = min(edge1LeftCurve.length(), edge1RightCurve.length())
 
-    let (edge2LeftCurve, edge2RightCurve) = FBFindEdge2TangentCurves(edge2, intersection)
+    let (edge2LeftCurve, edge2RightCurve) = FBFindEdge2TangentCurves(edge2, intersection: intersection)
     let edge2Length = min(edge2LeftCurve.length(), edge2RightCurve.length())
 
     let maxOffset = min(edge1Length, edge2Length)
 
-    do {
+    repeat {
       FBComputeEdgeTangents(edge1LeftCurve, edge1RightCurve, offset, &edge1Tangents)
       FBComputeEdgeTangents(edge2LeftCurve, edge2RightCurve, offset, &edge2Tangents)
 
       offset += 1.0
     } while FBAreTangentsAmbigious(edge1Tangents, edge2Tangents) && offset < maxOffset
 
-    return FBTangentsCross(edge1Tangents, edge2Tangents)
+    return FBTangentsCross(edge1Tangents, edge2Tangents: edge2Tangents)
   }
 
   // 332
@@ -383,27 +383,27 @@ extension FBBezierCurve {
     // Calculate the four tangents:
     // The two tangents moving away from the intersection point on self, and
     // the two tangents moving away from the intersection point on edge2.
-    var edge1Tangents = FBTangentPair(left: CGPoint.zeroPoint, right: CGPoint.zeroPoint)
-    var edge2Tangents = FBTangentPair(left: CGPoint.zeroPoint, right: CGPoint.zeroPoint)
+    var edge1Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
+    var edge2Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
     var offset = CGFloat(0.0)
 
-    var (edge1LeftCurve, edge1RightCurve) = FBComputeEdge1RangeTangentCurves(self, intersectRange)
+    var (edge1LeftCurve, edge1RightCurve) = FBComputeEdge1RangeTangentCurves(self, intersectRange: intersectRange)
 
     let edge1Length = min(edge1LeftCurve.length(), edge1RightCurve.length())
 
-    var (edge2LeftCurve, edge2RightCurve) = FBComputeEdge2RangeTangentCurves(edge2, intersectRange)
+    var (edge2LeftCurve, edge2RightCurve) = FBComputeEdge2RangeTangentCurves(edge2, intersectRange: intersectRange)
     let edge2Length = min(edge2LeftCurve.length(), edge2RightCurve.length())
 
     let maxOffset = min(edge1Length, edge2Length);
 
-    do {
+    repeat {
       FBComputeEdgeTangents(edge1LeftCurve, edge1RightCurve, offset, &edge1Tangents)
       FBComputeEdgeTangents(edge2LeftCurve, edge2RightCurve, offset, &edge2Tangents)
 
       offset += 1.0
     } while FBAreTangentsAmbigious(edge1Tangents, edge2Tangents) && offset < maxOffset
 
-    return FBTangentsCross(edge1Tangents, edge2Tangents);
+    return FBTangentsCross(edge1Tangents, edge2Tangents: edge2Tangents);
   }
 
 
@@ -418,9 +418,9 @@ extension FBBezierCurve {
 
     // Sort by the "order" of the crossing and then
     // assign indices so next and previous work correctly.
-    crossings.sort({ $0.order < $1.order })
+    crossings.sortInPlace({ $0.order < $1.order })
 
-    for (index, crossing) in enumerate(crossings) {
+    for (index, crossing) in crossings.enumerate() {
       crossing.index = index
     }
   }

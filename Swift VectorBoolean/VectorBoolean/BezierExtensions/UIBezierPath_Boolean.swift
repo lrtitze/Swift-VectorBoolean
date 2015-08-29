@@ -15,10 +15,10 @@ extension UIBezierPath {
   // 15
   //- (NSBezierPath *) fb_union:(NSBezierPath *)path
   func fb_union(path: UIBezierPath) -> UIBezierPath {
-    var thisGraph = FBBezierGraph(path: self)
-    var otherGraph = FBBezierGraph(path: path)
-    var resultGraph = thisGraph.unionWithBezierGraph(otherGraph)
-    var result = resultGraph.bezierPath
+    let thisGraph = FBBezierGraph(path: self)
+    let otherGraph = FBBezierGraph(path: path)
+    let resultGraph = thisGraph.unionWithBezierGraph(otherGraph)
+    let result = resultGraph.bezierPath
     result.fb_copyAttributesFrom(self)
     return result
   }
@@ -26,9 +26,9 @@ extension UIBezierPath {
   // 24
   //- (NSBezierPath *) fb_intersect:(NSBezierPath *)path
   func fb_intersect(path: UIBezierPath) -> UIBezierPath {
-    var thisGraph = FBBezierGraph(path: self)
-    var otherGraph = FBBezierGraph(path: path)
-    var result = thisGraph.intersectWithBezierGraph(otherGraph).bezierPath
+    let thisGraph = FBBezierGraph(path: self)
+    let otherGraph = FBBezierGraph(path: path)
+    let result = thisGraph.intersectWithBezierGraph(otherGraph).bezierPath
     result.fb_copyAttributesFrom(self)
     return result
   }
@@ -36,9 +36,9 @@ extension UIBezierPath {
   // 33
   //- (NSBezierPath *) fb_difference:(NSBezierPath *)path
   func fb_difference(path: UIBezierPath) -> UIBezierPath {
-    var thisGraph = FBBezierGraph(path: self)
-    var otherGraph = FBBezierGraph(path: path)
-    var result = thisGraph.differenceWithBezierGraph(otherGraph).bezierPath
+    let thisGraph = FBBezierGraph(path: self)
+    let otherGraph = FBBezierGraph(path: path)
+    let result = thisGraph.differenceWithBezierGraph(otherGraph).bezierPath
     result.fb_copyAttributesFrom(self)
     return result
   }
@@ -46,9 +46,9 @@ extension UIBezierPath {
   // 42
   //- (NSBezierPath *) fb_xor:(NSBezierPath *)path
   func fb_xor(path: UIBezierPath) -> UIBezierPath {
-    var thisGraph = FBBezierGraph(path: self)
-    var otherGraph = FBBezierGraph(path: path)
-    var result = thisGraph.xorWithBezierGraph(otherGraph).bezierPath
+    let thisGraph = FBBezierGraph(path: self)
+    let otherGraph = FBBezierGraph(path: path)
+    let result = thisGraph.xorWithBezierGraph(otherGraph).bezierPath
     result.fb_copyAttributesFrom(self)
     return result
   }

@@ -9,22 +9,22 @@ import QuartzCore
 private func demunge(@noescape fn: CGPath.Element -> Void)(ptr: UnsafePointer<CGPathElement>) {
     let points = ptr.memory.points
     switch ptr.memory.type {
-    case kCGPathElementMoveToPoint:
+    case CGPathElementType.MoveToPoint:
         fn(.Move(to: points[0]))
-    case kCGPathElementAddLineToPoint:
+    case CGPathElementType.AddLineToPoint:
         fn(.Line(to: points[0]))
-    case kCGPathElementAddQuadCurveToPoint:
+    case CGPathElementType.AddQuadCurveToPoint:
         fn(.QuadCurve(to: points[1], via: points[0]))
-    case kCGPathElementAddCurveToPoint:
+    case CGPathElementType.AddCurveToPoint:
         fn(.CubicCurve(to: points[2], v1: points[0], v2: points[1]))
-    case kCGPathElementCloseSubpath:
+    case CGPathElementType.CloseSubpath:
         fn(.Close)
     default: break
     }
 }
 
 private func ~=(lhs: CGPathElementType, rhs: CGPathElementType) -> Bool {
-    return rhs.value == lhs.value
+    return rhs.rawValue == lhs.rawValue
 }
 
 public extension CGPath {

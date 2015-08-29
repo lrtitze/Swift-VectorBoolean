@@ -30,28 +30,28 @@ class FBEdgeOverlap {
 
   //- (BOOL) fitsBefore:(FBEdgeOverlap *)nextOverlap
   func fitsBefore(nextOverlap: FBEdgeOverlap) -> Bool {
-    if FBAreValuesCloseWithOptions(range.parameterRange1.maximum, 1.0, FBOverlapThreshold) {
+    if FBAreValuesCloseWithOptions(range.parameterRange1.maximum, value2: 1.0, threshold: FBOverlapThreshold) {
       // nextOverlap should start at 0 of the next edge
       let nextEdge = edge1.next
 
-      return nextOverlap.edge1 == nextEdge && FBAreValuesCloseWithOptions(nextOverlap.range.parameterRange1.minimum, 0.0, FBOverlapThreshold)
+      return nextOverlap.edge1 == nextEdge && FBAreValuesCloseWithOptions(nextOverlap.range.parameterRange1.minimum, value2: 0.0, threshold: FBOverlapThreshold)
     }
 
     // nextOverlap should start at about maximum on the same edge
-    return nextOverlap.edge1 == edge1 && FBAreValuesCloseWithOptions(nextOverlap.range.parameterRange1.minimum, range.parameterRange1.maximum, FBOverlapThreshold)
+    return nextOverlap.edge1 == edge1 && FBAreValuesCloseWithOptions(nextOverlap.range.parameterRange1.minimum, value2: range.parameterRange1.maximum, threshold: FBOverlapThreshold)
   }
 
   //- (BOOL) fitsAfter:(FBEdgeOverlap *)previousOverlap
   func fitsAfter(previousOverlap: FBEdgeOverlap) -> Bool {
-    if FBAreValuesCloseWithOptions(range.parameterRange1.minimum, 0.0, FBOverlapThreshold) {
+    if FBAreValuesCloseWithOptions(range.parameterRange1.minimum, value2: 0.0, threshold: FBOverlapThreshold) {
       // previousOverlap should end at 1 of the previous edge
       let previousEdge = edge1.previous
 
-      return previousOverlap.edge1 == previousEdge && FBAreValuesCloseWithOptions(previousOverlap.range.parameterRange1.maximum, 1.0, FBOverlapThreshold)
+      return previousOverlap.edge1 == previousEdge && FBAreValuesCloseWithOptions(previousOverlap.range.parameterRange1.maximum, value2: 1.0, threshold: FBOverlapThreshold)
     }
 
     // previousOverlap should end at about the minimum on the same edge
-    return previousOverlap.edge1 == edge1 && FBAreValuesCloseWithOptions(previousOverlap.range.parameterRange1.maximum, range.parameterRange1.minimum, FBOverlapThreshold)
+    return previousOverlap.edge1 == edge1 && FBAreValuesCloseWithOptions(previousOverlap.range.parameterRange1.maximum, value2: range.parameterRange1.minimum, threshold: FBOverlapThreshold)
   }
 
   //- (void) addMiddleCrossing
@@ -59,8 +59,8 @@ class FBEdgeOverlap {
   {
     let intersection = _range.middleIntersection
 
-    var ourCrossing = FBEdgeCrossing(intersection: intersection)
-    var theirCrossing = FBEdgeCrossing(intersection: intersection)
+    let ourCrossing = FBEdgeCrossing(intersection: intersection)
+    let theirCrossing = FBEdgeCrossing(intersection: intersection)
 
     ourCrossing.counterpart = theirCrossing
     theirCrossing.counterpart = ourCrossing

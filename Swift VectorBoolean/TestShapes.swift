@@ -89,11 +89,11 @@ class TestShape_Debug : TestShape, SampleShapeMaker {
   }
 
   func otherShapes() -> UIBezierPath {
-    var rect1 = UIBezierPath(rect: CGRect(x: 50, y: 50, width: 250, height: 200))
-    var circle = UIBezierPath()
+    let rect1 = UIBezierPath(rect: CGRect(x: 50, y: 50, width: 250, height: 200))
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 150+125, y: 150+125), withRadius: 125, toPath: circle)
 
-    var joinedU = rect1.fb_union(circle)
+    let joinedU = rect1.fb_union(circle)
     //var joinedD = rect1.fb_difference(circle)
     //var joinedI = rect1.fb_intersect(circle)
     //var joinedX = rect1.fb_xor(circle)
@@ -102,7 +102,7 @@ class TestShape_Debug : TestShape, SampleShapeMaker {
   }
 
   func topShape() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
     //        var circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
     return circle
@@ -116,10 +116,10 @@ class TestShape_Debug001 : TestShape, SampleShapeMaker {
   }
 
   func otherShapes() -> UIBezierPath {
-    var rect1 = UIBezierPath(rect: CGRect(x: 50, y: 50, width: 250, height: 200))
-    var rect2 = UIBezierPath(rect: CGRect(x: 150, y: 150, width: 250, height: 250))
+    let rect1 = UIBezierPath(rect: CGRect(x: 50, y: 50, width: 250, height: 200))
+    let rect2 = UIBezierPath(rect: CGRect(x: 150, y: 150, width: 250, height: 250))
 
-    var joinedU = rect1.fb_union(rect2)
+    let joinedU = rect1.fb_union(rect2)
     //var joinedD = rect1.fb_difference(rect2)
     //var joinedI = rect1.fb_intersect(rect2)
     //var joinedX = rect1.fb_xor(rect2)
@@ -128,7 +128,7 @@ class TestShape_Debug001 : TestShape, SampleShapeMaker {
   }
 
   func topShape() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
     //        var circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
     return circle
@@ -143,16 +143,16 @@ class TestShape_Debug002 : TestShape, SampleShapeMaker {
 
   func otherShapes() -> UIBezierPath {
 
-    var holeyRectangle = UIBezierPath()
+    let holeyRectangle = UIBezierPath()
     //holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
     holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 250, height: 200)))
     //addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
     //var circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
-    var circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
+    let circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
     //var allParts = holeyRectangle.fb_difference(circle)
     //var allParts = holeyRectangle.fb_union(circle)
     //var allParts = holeyRectangle.fb_intersect(circle)
-    var allParts = holeyRectangle.fb_xor(circle)
+    let allParts = holeyRectangle.fb_xor(circle)
     return allParts
     /*
     holeyRectangle.appendPath(circle)
@@ -166,7 +166,7 @@ class TestShape_Debug002 : TestShape, SampleShapeMaker {
   }
 
   func topShape() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
     //        var circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
     return circle
@@ -180,7 +180,7 @@ class TestShape_Debug003 : TestShape, SampleShapeMaker {
   }
 
   func otherShapes() -> UIBezierPath {
-    var arc2 = UIBezierPath()
+    let arc2 = UIBezierPath()
     arc2.moveToPoint(CGPoint(x: 0, y: 250))
     arc2.addCurveToPoint(
       CGPoint(x: 250, y: 0),
@@ -195,7 +195,7 @@ class TestShape_Debug003 : TestShape, SampleShapeMaker {
   }
 
   func topShape() -> UIBezierPath {
-    var arc1 = UIBezierPath()
+    let arc1 = UIBezierPath()
     arc1.moveToPoint(CGPoint(x: 250, y: 250))
     arc1.addCurveToPoint(
       CGPoint(x: 0, y: 0),
@@ -219,7 +219,7 @@ class TestShape_Circle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
   }
 
   func topShape() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 355, y: 240), withRadius: 125.0, toPath: circle)
     return circle
   }
@@ -281,7 +281,7 @@ class TestShape_Circle_in_Rectangle : TestShape, SampleShapeMaker {
   }
 
   func topShape() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125.0, toPath: circle)
     return circle
   }
@@ -294,7 +294,7 @@ class TestShape_Rectangle_in_Circle : TestShape, SampleShapeMaker {
   }
 
   func otherShapes() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 185.0, toPath: circle)
     return circle
   }
@@ -315,7 +315,7 @@ class TestShape_Circle_on_Rectangle : TestShape, SampleShapeMaker {
   }
 
   func topShape() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 200, y: 200), withRadius: 185, toPath: circle)
     return circle
   }
@@ -328,7 +328,7 @@ class TestShape_Rect_Over_Rect_w_Hole : TestShape, SampleShapeMaker {
   }
 
   func otherShapes() -> UIBezierPath {
-    var holeyRectangle = UIBezierPath()
+    let holeyRectangle = UIBezierPath()
     holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
     addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
     return holeyRectangle
@@ -346,14 +346,14 @@ class TestShape_Circle_Over_Two_Rects : TestShape, SampleShapeMaker {
   }
 
   func otherShapes() -> UIBezierPath {
-    var rectangles = UIBezierPath()
+    let rectangles = UIBezierPath()
     rectangles.appendPath(UIBezierPath(rect: CGRect(x:  50, y: 5, width: 100, height: 400)))
     rectangles.appendPath(UIBezierPath(rect: CGRect(x: 350, y: 5, width: 100, height: 400)))
     return rectangles
   }
 
   func topShape() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 200, y: 200), withRadius: 185, toPath: circle)
     return circle
   }
@@ -366,13 +366,13 @@ class TestShape_Circle_Over_Circle : TestShape, SampleShapeMaker {
   }
 
   func otherShapes() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 355, y: 240), withRadius: 125, toPath: circle)
     return circle
   }
 
   func topShape() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 100, toPath: circle)
     return circle
   }
@@ -385,7 +385,7 @@ class TestShape_Complex_Shapes : TestShape, SampleShapeMaker {
   }
 
   func otherShapes() -> UIBezierPath {
-    var holeyRectangle = UIBezierPath()
+    let holeyRectangle = UIBezierPath()
     holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
     addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
 
@@ -397,7 +397,7 @@ class TestShape_Complex_Shapes : TestShape, SampleShapeMaker {
   }
 
   func topShape() -> UIBezierPath {
-    var circle = UIBezierPath()
+    let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
     return circle
   }

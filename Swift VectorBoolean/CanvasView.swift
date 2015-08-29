@@ -29,7 +29,7 @@ class PathItem {
 class CanvasView: UIView {
 
   private var paths: [PathItem] = []
-  var boundsOfPaths: CGRect = CGRect.zeroRect
+  var boundsOfPaths: CGRect = CGRect.zero
 
   private var _unionPath: UIBezierPath?
   private var _intersectPath: UIBezierPath?
@@ -100,10 +100,10 @@ class CanvasView: UIView {
     // calculate a useful scale and offset for drawing these paths
     // as large as possible in the middle of the display
     // expand size by 20 to provide a margin
-    var expandedPathBounds = CGRectInset(boundsOfPaths, -10, -10)
+    let expandedPathBounds = CGRectInset(boundsOfPaths, -10, -10)
     let pSz = expandedPathBounds.size
     let pOr = expandedPathBounds.origin
-    var vSz = self.bounds.size
+    let vSz = self.bounds.size
 
     let scaleX = vSz.width / pSz.width
     let scaleY = vSz.height / pSz.height
@@ -213,8 +213,8 @@ class CanvasView: UIView {
       let path1 = paths[0].path
       let path2 = paths[1].path
       // get both [FBBezierCurve] sets
-      var curves1 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
-      var curves2 = FBBezierCurve.bezierCurvesFromBezierPath(path2)
+      let curves1 = FBBezierCurve.bezierCurvesFromBezierPath(path1)
+      let curves2 = FBBezierCurve.bezierCurvesFromBezierPath(path2)
 
       for curve1 in curves1 {
         for curve2 in curves2 {

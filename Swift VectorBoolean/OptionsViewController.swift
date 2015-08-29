@@ -16,12 +16,12 @@ class OptionsViewController: UIViewController {
   @IBOutlet var intersectionsSwitch: UISwitch!
 
   override func viewWillAppear(animated: Bool) {
-    var currentPreferredSize = self.preferredContentSize
+    let currentPreferredSize = self.preferredContentSize
     var fakeMomentarySize = CGSize(
       width: currentPreferredSize.width - 1.0,
       height: currentPreferredSize.height - 1.0
     )
-    self.preferredContentSize = CGSize.zeroSize
+    self.preferredContentSize = CGSize.zero
     let newSize = CGSize(width: currentPreferredSize.width, height: 300)
     self.preferredContentSize = newSize
   }

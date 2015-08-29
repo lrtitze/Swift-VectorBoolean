@@ -134,7 +134,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     canvasView.boundsOfPaths = current.boundsOfPaths
   }
 
-  override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
+  override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
     if identifier == "showShapeSelector" {
       return true
     } else if identifier == "showOptions" {
@@ -171,7 +171,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentat
     }
   }
 
-  func adaptivePresentationStyleForPresentationController(controller: UIPresentationController!, traitCollection: UITraitCollection!) -> UIModalPresentationStyle {
+  func adaptivePresentationStyleForPresentationController(controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
     // Give the popover a PresentationStyle.None for iPhone
     return UIModalPresentationStyle.None
   }
