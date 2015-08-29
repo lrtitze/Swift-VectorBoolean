@@ -151,7 +151,6 @@ class FBEdgeOverlapRun {
       // Only way to tell now is to perform an actual point test
       var testPoints = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
       FBComputeEdge1TestPoints(firstOverlap, lastOverlap: lastOverlap, offset: 1.0, testPoints: &testPoints)
-      let testPoint1Inside = false
       if let contour2 = firstOverlap.edge2.contour {
         let testPoint1Inside = contour2.containsPoint(testPoints.left)
         let testPoint2Inside = contour2.containsPoint(testPoints.right)
