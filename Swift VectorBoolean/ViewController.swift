@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIPickerViewDelegate, UIPopoverPresentationControllerDelegate {
+class ViewController: UIViewController, UIPickerViewDelegate {
 
   @IBOutlet var canvasView: CanvasView!
   @IBOutlet var operationLabel: UILabel!
