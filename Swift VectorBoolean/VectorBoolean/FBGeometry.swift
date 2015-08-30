@@ -41,16 +41,21 @@ func FBDistancePointToLine(point: CGPoint, lineStartPoint: CGPoint, lineEndPoint
     return 0.0
   }
 
-  let u = ((point.x - lineStartPoint.x) * (lineEndPoint.x - lineStartPoint.x) + (point.y - lineStartPoint.y) * (lineEndPoint.y - lineStartPoint.y)) / (lineLength * lineLength);
+  let u = ((point.x - lineStartPoint.x) * (lineEndPoint.x - lineStartPoint.x) + (point.y - lineStartPoint.y) * (lineEndPoint.y - lineStartPoint.y)) / (lineLength * lineLength)
 
-  let intersectionPoint = CGPointMake(lineStartPoint.x + u * (lineEndPoint.x - lineStartPoint.x), lineStartPoint.y + u * (lineEndPoint.y - lineStartPoint.y))
+  let intersectionPoint = CGPoint(
+    x: lineStartPoint.x + u * (lineEndPoint.x - lineStartPoint.x),
+    y: lineStartPoint.y + u * (lineEndPoint.y - lineStartPoint.y)
+  )
 
   return FBDistanceBetweenPoints(point, point2: intersectionPoint)
 }
 
 func FBAddPoint(point1: CGPoint, point2: CGPoint) -> CGPoint {
 
-  return CGPointMake(point1.x + point2.x, point1.y + point2.y)
+  return CGPoint(
+    x: point1.x + point2.x,
+    y: point1.y + point2.y)
 }
 
 func FBUnitScalePoint(point: CGPoint, scale: CGFloat) -> CGPoint {
@@ -66,7 +71,9 @@ func FBUnitScalePoint(point: CGPoint, scale: CGFloat) -> CGPoint {
 
 func FBScalePoint(point: CGPoint, scale: CGFloat) -> CGPoint {
 
-  return CGPointMake(point.x * scale, point.y * scale)
+  return CGPoint(
+    x: point.x * scale,
+    y: point.y * scale)
 }
 
 func FBDotMultiplyPoint(point1: CGPoint, point2: CGPoint) -> CGFloat {
@@ -76,7 +83,9 @@ func FBDotMultiplyPoint(point1: CGPoint, point2: CGPoint) -> CGFloat {
 
 func FBSubtractPoint(point1: CGPoint, point2: CGPoint) -> CGPoint {
 
-  return CGPointMake(point1.x - point2.x, point1.y - point2.y)
+  return CGPoint(
+    x: point1.x - point2.x,
+    y: point1.y - point2.y)
 }
 
 func FBPointLength(point: CGPoint) -> CGFloat {
@@ -101,17 +110,23 @@ func FBNormalizePoint(point: CGPoint) -> CGPoint {
 
 func FBNegatePoint(point: CGPoint) -> CGPoint {
 
-  return CGPointMake(-point.x, -point.y)
+  return CGPoint(
+    x: -point.x,
+    y: -point.y)
 }
 
 func FBRoundPoint(point: CGPoint) -> CGPoint {
 
-  return CGPointMake(round(point.x), round(point.y))
+  return CGPoint(
+    x: round(point.x),
+    y: round(point.y))
 }
 
 func FBLineNormal(lineStart: CGPoint, lineEnd: CGPoint) -> CGPoint {
 
-  return FBNormalizePoint(CGPointMake(-(lineEnd.y - lineStart.y), lineEnd.x - lineStart.x))
+  return FBNormalizePoint(CGPoint(
+    x: -(lineEnd.y - lineStart.y),
+    y: lineEnd.x - lineStart.x))
 }
 
 func FBLineMidpoint(lineStart: CGPoint, lineEnd: CGPoint) -> CGPoint {
@@ -123,22 +138,30 @@ func FBLineMidpoint(lineStart: CGPoint, lineEnd: CGPoint) -> CGPoint {
 
 func FBRectGetTopLeft(rect : CGRect) -> CGPoint {
 
-  return CGPointMake(CGRectGetMinX(rect), CGRectGetMinY(rect))
+  return CGPoint(
+    x: CGRectGetMinX(rect),
+    y: CGRectGetMinY(rect))
 }
 
 func FBRectGetTopRight(rect : CGRect) -> CGPoint {
 
-  return CGPointMake(CGRectGetMaxX(rect), CGRectGetMinY(rect))
+  return CGPoint(
+    x: CGRectGetMaxX(rect),
+    y: CGRectGetMinY(rect))
 }
 
 func FBRectGetBottomLeft(rect : CGRect) -> CGPoint {
 
-  return CGPointMake(CGRectGetMinX(rect), CGRectGetMaxY(rect))
+  return CGPoint(
+    x: CGRectGetMinX(rect),
+    y: CGRectGetMaxY(rect))
 }
 
 func FBRectGetBottomRight(rect : CGRect) -> CGPoint {
 
-  return CGPointMake(CGRectGetMaxX(rect), CGRectGetMaxY(rect))
+  return CGPoint(
+    x: CGRectGetMaxX(rect),
+    y: CGRectGetMaxY(rect))
 }
 
 func FBExpandBoundsByPoint(inout topLeft: CGPoint, inout bottomRight: CGPoint, point: CGPoint) {
@@ -161,7 +184,11 @@ func FBUnionRect(rect1: CGRect, rect2: CGRect) -> CGRect {
   FBExpandBoundsByPoint(&topLeft, bottomRight: &bottomRight, point: FBRectGetBottomRight(rect2))
   FBExpandBoundsByPoint(&topLeft, bottomRight: &bottomRight, point: FBRectGetBottomLeft(rect2))
 
-  return CGRectMake(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y)
+  return CGRect(
+    x: topLeft.x,
+    y: topLeft.y,
+    width: bottomRight.x - topLeft.x,
+    height: bottomRight.y - topLeft.y)
 }
 
 

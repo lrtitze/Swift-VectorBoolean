@@ -69,12 +69,15 @@ func FBNormalizedLineDistanceFromPoint(line: FBNormalizedLine, point: CGPoint) -
   return line.a * point.x + line.b * point.y + line.c;
 }
 
+// 64
+//static NSPoint FBNormalizedLineIntersection(FBNormalizedLine line1, FBNormalizedLine line2)
 func FBNormalizedLineIntersection(line1: FBNormalizedLine, line2: FBNormalizedLine) -> CGPoint
 {
-  let denominator = line1.a * line2.b - line2.a * line1.b
-  let x = (line1.b * line2.c - line2.b * line1.c) / denominator
-  let y = (line1.a * line2.c - line2.a * line1.c) / denominator
-  return CGPointMake(x, y)
+  let denominator = (line1.a * line2.b) - (line2.a * line1.b)
+
+  return CGPoint(
+    x: (line1.b * line2.c - line2.b * line1.c) / denominator,
+    y: (line1.a * line2.c - line2.a * line1.c) / denominator)
 }
 
 
@@ -145,11 +148,11 @@ func LineIntersectsHorizontalLine(startPoint: CGPoint, endPoint: CGPoint, y: CGF
 
   // There's an intersection here somewhere
   if startPoint.x == endPoint.x {
-    intersectPoint = CGPointMake(startPoint.x, y)
+    intersectPoint = CGPoint(x: startPoint.x, y: y)
   }
   else {
     let slope = (endPoint.y - startPoint.y) / (endPoint.x - startPoint.x)
-    intersectPoint = CGPointMake((y - startPoint.y) / slope + startPoint.x, y);
+    intersectPoint = CGPoint(x: (y - startPoint.y) / slope + startPoint.x, y: y)
   }
 
   return true
@@ -849,10 +852,18 @@ class FBBezierCurveData {
 
     // First calculate bezier curve points distance from the fat line that's clipping us
     let distanceBezierPoints : [CGPoint] = [
-      CGPointMake(0.0, FBNormalizedLineDistanceFromPoint(fatLine, point: endPoint1)),
-      CGPointMake(1.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, point: controlPoint1)),
-      CGPointMake(2.0/3.0, FBNormalizedLineDistanceFromPoint(fatLine, point: controlPoint2)),
-      CGPointMake(1.0, FBNormalizedLineDistanceFromPoint(fatLine, point: endPoint2))
+      CGPoint(
+        x: 0.0,
+        y: FBNormalizedLineDistanceFromPoint(fatLine, point: endPoint1)),
+      CGPoint(
+        x: 1.0/3.0,
+        y: FBNormalizedLineDistanceFromPoint(fatLine, point: controlPoint1)),
+      CGPoint(
+        x: 2.0/3.0,
+        y: FBNormalizedLineDistanceFromPoint(fatLine, point: controlPoint2)),
+      CGPoint(
+        x: 1.0,
+        y: FBNormalizedLineDistanceFromPoint(fatLine, point: endPoint2))
     ]
 
     let (convexHull, convexHullLength) = FBConvexHullBuildFromPoints(distanceBezierPoints)
@@ -866,7 +877,7 @@ class FBBezierCurveData {
 
       let startPoint = convexHull[i]
       let endPoint = convexHull[indexOfNext]
-      var intersectionPoint = CGPointZero
+      var intersectionPoint = CGPoint.zero
 
       // See if the segment of the convex hull intersects with the minimum fat line bounds
       if LineIntersectsHorizontalLine(startPoint, endPoint: endPoint, y: bounds.minimum, intersectPoint: &intersectionPoint) {
