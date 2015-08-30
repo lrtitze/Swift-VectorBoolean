@@ -22,32 +22,36 @@ struct FBNormalizedLine {
   var a : CGFloat // * x +
   var b : CGFloat // * y +
   var c : CGFloat // constant
-}
 
-
-// Create a normalized line such that computing the distance from it is quick.
-//  See:    http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm#Distance%20to%20an%20Infinite%20Line
-//          http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/basic.html
-//
- func FBNormalizedLineMake(point1: CGPoint, point2: CGPoint) -> FBNormalizedLine {
-
-  var line = FBNormalizedLine(a: point1.y - point2.y, b: point2.x - point1.x, c: point1.x * point2.y - point2.x * point1.y)
-
-  let distance = sqrt(line.b * line.b + line.a * line.a)
-
-  // GPC: prevent divide-by-zero from putting NaNs into the values which cause trouble further on. I'm not sure
-  // what cases trigger this, but sometimes point1 == point2 so distance is 0.
-  if distance != 0.0 {
-    line.a /= distance
-    line.b /= distance
-    line.c /= distance
-  } else {
-    line.a = 0
-    line.b = 0
-    line.c = 0
+  init(a: CGFloat, b : CGFloat, c : CGFloat) {
+    self.a = a
+    self.b = b
+    self.c = c
   }
 
-  return line;
+  // Create a normalized line such that computing the distance from it is quick.
+  //  See:    http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm#Distance%20to%20an%20Infinite%20Line
+  //          http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/basic.html
+  //
+  init(point1: CGPoint, point2: CGPoint) {
+    self.a = point1.y - point2.y
+    self.b = point2.x - point1.x
+    self.c = point1.x * point2.y - point2.x * point1.y
+
+    let distance = sqrt(self.b * self.b + self.a * self.a)
+
+    // GPC: prevent divide-by-zero from putting NaNs into the values which cause trouble further on. I'm not sure
+    // what cases trigger this, but sometimes point1 == point2 so distance is 0.
+    if distance != 0.0 {
+      self.a /= distance
+      self.b /= distance
+      self.c /= distance
+    } else {
+      self.a = 0
+      self.b = 0
+      self.c = 0
+    }
+  }
 }
 
 
@@ -109,8 +113,8 @@ func FBParameterOfPointOnLine(lineStart: CGPoint, lineEnd: CGPoint, point: CGPoi
 
 func FBLinesIntersect(line1Start: CGPoint, line1End: CGPoint, line2Start: CGPoint, line2End: CGPoint, inout outIntersect: CGPoint) -> Bool
 {
-  let line1 = FBNormalizedLineMake(line1Start, point2: line1End)
-  let line2 = FBNormalizedLineMake(line2Start, point2: line2End)
+  let line1 = FBNormalizedLine(point1: line1Start, point2: line1End)
+  let line2 = FBNormalizedLine(point1: line2Start, point2: line2End)
   outIntersect = FBNormalizedLineIntersection(line1, line2: line2);
   if outIntersect.x.isNaN || outIntersect.y.isNaN {
     return false
@@ -347,7 +351,7 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
 
   let FBFindBezierRootsErrorThreshold = CGFloat(ldexpf(Float(1.0), Int32(-1 * (FBFindBezierRootsMaximumDepth - 1))))
 
-  let line = FBNormalizedLineMake(bezierPoints[0], point2: bezierPoints[degree])
+  let line = FBNormalizedLine(point1: bezierPoints[0], point2: bezierPoints[degree])
 
   // Find the bounds around the line
   var belowDistance = CGFloat(0)
@@ -775,7 +779,7 @@ class FBBezierCurveData {
   func regularFatLineBounds(inout range: FBRange) -> FBNormalizedLine
   {
     // Create the fat line based on the end points
-    let line = FBNormalizedLineMake(endPoint1, point2: endPoint2)
+    let line = FBNormalizedLine(point1: endPoint1, point2: endPoint2)
 
     // Compute the bounds of the fat line. The fat line bounds should entirely encompass the
     //  bezier curve. Since we know the convex hull entirely compasses the curve, just take
@@ -806,7 +810,7 @@ class FBBezierCurveData {
     let normal = FBLineNormal(endPoint1, lineEnd: endPoint2)
     let startPoint = FBLineMidpoint(endPoint1, lineEnd: endPoint2)
     let endPoint = FBAddPoint(startPoint, point2: normal)
-    let line = FBNormalizedLineMake(startPoint, point2: endPoint)
+    let line = FBNormalizedLine(point1: startPoint, point2: endPoint)
 
     // Compute the bounds of the fat line. The fat line bounds should entirely encompass the
     //  bezier curve. Since we know the convex hull entirely compasses the curve, just take
