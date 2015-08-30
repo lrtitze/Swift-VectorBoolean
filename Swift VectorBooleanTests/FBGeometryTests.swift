@@ -62,8 +62,8 @@ class FBGeometryTests: XCTestCase {
       isStraightLine: true)
     XCTAssert(otherCurveData.isStraightLine, "This is a striaght line already")
 
-    var usRange = FBRangeMake(0, maximum: 1)
-    var themRange = FBRangeMake(0, maximum: 1)
+    var usRange = FBRange(minimum: 0, maximum: 1)
+    var themRange = FBRange(minimum: 0, maximum: 1)
     var stop = false
     var overlapRange : FBBezierIntersectRange?
 

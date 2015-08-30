@@ -370,13 +370,6 @@ struct FBRange {
   var maximum : CGFloat
 }
 
-// NOTE: Should just use Swift:
-//    var something = FBRange(minimum: 12.0, maximum: 4.0)
-func FBRangeMake(minimum: CGFloat, maximum: CGFloat) -> FBRange {
-
-  return FBRange(minimum: minimum, maximum: maximum)
-}
-
 func FBRangeHasConverged(range: FBRange, decimalPlaces: Int) -> Bool {
 
   let factor = pow(CGFloat(10.0), CGFloat(decimalPlaces))

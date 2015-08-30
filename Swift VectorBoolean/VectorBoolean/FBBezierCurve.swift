@@ -789,7 +789,7 @@ class FBBezierCurveData {
     let minim = min(controlPoint1Distance, min(controlPoint2Distance, 0.0))
     let maxim = max(controlPoint1Distance, max(controlPoint2Distance, 0.0))
 
-    let newRange = FBRangeMake(minim, maximum: maxim);
+    let newRange = FBRange(minimum: minim, maximum: maxim);
     range.minimum = newRange.minimum
     range.maximum = newRange.maximum
 
@@ -820,7 +820,7 @@ class FBBezierCurveData {
     let minim = min(controlPoint1Distance, min(controlPoint2Distance, min(point1Distance, point2Distance)))
     let maxim = max(controlPoint1Distance, max(controlPoint2Distance, max(point1Distance, point2Distance)))
 
-    let newRange = FBRangeMake(minim, maximum: maxim);
+    let newRange = FBRange(minimum: minim, maximum: maxim);
     range.minimum = newRange.minimum
     range.maximum = newRange.maximum
 
@@ -869,7 +869,7 @@ class FBBezierCurveData {
     let (convexHull, convexHullLength) = FBConvexHullBuildFromPoints(distanceBezierPoints)
 
     // Find intersections of convex hull with the fat line bounds
-    var range = FBRangeMake(1.0, maximum: 0.0)
+    var range = FBRange(minimum: 1.0, maximum: 0.0)
 
     for var i = 0; i < convexHullLength; i++ {
       // Pull out the current line on the convex hull
@@ -914,7 +914,7 @@ class FBBezierCurveData {
 
     // Check for bad values
     if range.minimum.isInfinite || range.minimum.isNaN || range.maximum.isInfinite || range.maximum.isNaN {
-      range = FBRangeMake(0, maximum: 1); // equivalent to: something went wrong, so I don't know
+      range = FBRange(minimum: 0, maximum: 1); // equivalent to: something went wrong, so I don't know
     }
     
     return range
@@ -982,7 +982,7 @@ func bezierClipWithBezierCurve(me: FBBezierCurveData, curve: FBBezierCurveData, 
 
   // Compute the regular fat line using the end points, then compute the range that could still possibly intersect
   //  with the other curve
-  var fatLineBounds = FBRangeMake(0, maximum: 0)
+  var fatLineBounds = FBRange(minimum: 0, maximum: 0)
   let fatLine = curve.regularFatLineBounds(&fatLineBounds)
   let regularClippedRange = me.clipWithFatLine(fatLine, bounds: fatLineBounds)
 
@@ -993,7 +993,7 @@ func bezierClipWithBezierCurve(me: FBBezierCurveData, curve: FBBezierCurveData, 
   }
 
   // Just in case the regular fat line isn't good enough, try the perpendicular one
-  var perpendicularLineBounds = FBRangeMake(0, maximum: 0)
+  var perpendicularLineBounds = FBRange(minimum: 0, maximum: 0)
   let perpendicularLine = curve.perpendicularFatLineBounds(&perpendicularLineBounds)
   let perpendicularClippedRange = me.clipWithFatLine(perpendicularLine, bounds: perpendicularLineBounds)
 
@@ -1003,11 +1003,15 @@ func bezierClipWithBezierCurve(me: FBBezierCurveData, curve: FBBezierCurveData, 
 
   // Combine to form Voltron.
   // Take the intersection of the regular fat line range and the perpendicular one.
-  let clippedRange = FBRangeMake(max(regularClippedRange.minimum, perpendicularClippedRange.minimum), maximum: min(regularClippedRange.maximum, perpendicularClippedRange.maximum))
+  let clippedRange = FBRange(
+    minimum: max(regularClippedRange.minimum, perpendicularClippedRange.minimum),
+    maximum: min(regularClippedRange.maximum, perpendicularClippedRange.maximum))
 
   // Right now the clipped range is relative to ourself, not the original curve.
   // So map the newly clipped range onto the original range
-  let newRange = FBRangeMake(FBRangeScaleNormalizedValue(originalRange, value: clippedRange.minimum), maximum: FBRangeScaleNormalizedValue(originalRange, value: clippedRange.maximum))
+  let newRange = FBRange(
+    minimum: FBRangeScaleNormalizedValue(originalRange, value: clippedRange.minimum),
+    maximum: FBRangeScaleNormalizedValue(originalRange, value: clippedRange.maximum))
 
   originalRange.minimum = newRange.minimum
   originalRange.maximum = newRange.maximum
@@ -1095,7 +1099,9 @@ private func clipLineOriginalCurve(originalCurve: FBBezierCurveData, curve: FBBe
 {
   let themOnUs1 = FBParameterOfPointOnLine(curve.endPoint1, lineEnd: curve.endPoint2, point: otherCurve.endPoint1)
   let themOnUs2 = FBParameterOfPointOnLine(curve.endPoint1, lineEnd: curve.endPoint2, point: otherCurve.endPoint2)
-  let clippedRange = FBRangeMake(max(0, min(themOnUs1, themOnUs2)), maximum: min(1, max(themOnUs1, themOnUs2)))
+  let clippedRange = FBRange(
+    minimum: max(0, min(themOnUs1, themOnUs2)),
+    maximum: min(1, max(themOnUs1, themOnUs2)))
 
   if clippedRange.minimum > clippedRange.maximum {
     return (curve, false)   // No intersection
@@ -1103,7 +1109,9 @@ private func clipLineOriginalCurve(originalCurve: FBBezierCurveData, curve: FBBe
 
   // Right now the clipped range is relative to ourself, not the original curve,
   // so map the newly clipped range onto the original range.
-  originalRange = FBRangeMake(FBRangeScaleNormalizedValue(originalRange, value: clippedRange.minimum), maximum: FBRangeScaleNormalizedValue(originalRange, value: clippedRange.maximum))
+  originalRange = FBRange(
+    minimum: FBRangeScaleNormalizedValue(originalRange, value: clippedRange.minimum),
+    maximum: FBRangeScaleNormalizedValue(originalRange, value: clippedRange.maximum))
 
   return (originalCurve.subcurveWithRange(originalRange) , true)
 }
@@ -1347,7 +1355,9 @@ private func findPossibleOverlap(me: FBBezierCurveData, originalUs: FBBezierCurv
 {
   let themOnUs1 = originalUs.closestLocationToPoint(them.endPoint1)
   let themOnUs2 = originalUs.closestLocationToPoint(them.endPoint2)
-  let range = FBRangeMake(min(themOnUs1.parameter, themOnUs2.parameter), maximum: max(themOnUs1.parameter, themOnUs2.parameter));
+  let range = FBRange(
+    minimum: min(themOnUs1.parameter, themOnUs2.parameter),
+    maximum: max(themOnUs1.parameter, themOnUs2.parameter));
 
   possibleRange = range;
 
@@ -1710,11 +1720,15 @@ internal func pfIntersectionsWithBezierCurve(
       // Divide and conquer. Divide the longer curve in half, and recurse
       if FBRangeGetSize(usRange) > FBRangeGetSize(themRange) {
         // Since our remaining range is longer, split the remains of us in half at the midway point
-        var usRange1 = FBRangeMake(usRange.minimum, maximum: (usRange.minimum + usRange.maximum) / 2.0)
+        var usRange1 = FBRange(
+          minimum: usRange.minimum,
+          maximum: (usRange.minimum + usRange.maximum) / 2.0)
         let us1 = originalUsData.subcurveWithRange(usRange1)
         var themRangeCopy1 = themRange  // make a local copy because it'll get modified when we recurse
 
-        var usRange2 = FBRangeMake((usRange.minimum + usRange.maximum) / 2.0, maximum: usRange.maximum)
+        var usRange2 = FBRange(
+          minimum: (usRange.minimum + usRange.maximum) / 2.0,
+          maximum: usRange.maximum)
         let us2 = originalUsData.subcurveWithRange(usRange2)
         var themRangeCopy2 = themRange  // make a local copy because it'll get modified when we recurse
 
@@ -1746,11 +1760,15 @@ internal func pfIntersectionsWithBezierCurve(
       {
         // Since their remaining range is longer, split the
         // remains of them in half at the midway point
-        var themRange1 = FBRangeMake(themRange.minimum, maximum: (themRange.minimum + themRange.maximum) / 2.0)
+        var themRange1 = FBRange(
+          minimum: themRange.minimum,
+          maximum: (themRange.minimum + themRange.maximum) / 2.0)
         let them1 = originalThemData.subcurveWithRange(themRange1)
         var usRangeCopy1 = usRange  // make a local copy because it'll get modified when we recurse
 
-        var themRange2 = FBRangeMake((themRange.minimum + themRange.maximum) / 2.0, maximum: themRange.maximum)
+        var themRange2 = FBRange(
+          minimum: (themRange.minimum + themRange.maximum) / 2.0,
+          maximum: themRange.maximum)
         let them2 = originalThemData.subcurveWithRange(themRange2)
         var usRangeCopy2 = usRange  // make a local copy because it'll get modified when we recurse
 
@@ -2192,8 +2210,8 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
       return
     }
 
-    var usRange = FBRangeMake(0, maximum: 1)
-    var themRange = FBRangeMake(0, maximum: 1)
+    var usRange = FBRange(minimum: 0, maximum: 1)
+    var themRange = FBRange(minimum: 0, maximum: 1)
     var stop = false
     pfIntersectionsWithBezierCurve(_data, curve: curve.data, usRange: &usRange, themRange: &themRange, originalUs: self, originalThem: curve, intersectRange: &overlapRange, depth: 0, stop: &stop, outputBlock: block)
   }

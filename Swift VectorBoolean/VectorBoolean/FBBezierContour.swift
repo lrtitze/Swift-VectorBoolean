@@ -113,7 +113,7 @@ class FBBezierContour {
       curve = startCrossing.rightCurve
     } else if let startCrossing = startCrossing, endCrossing = endCrossing {
       // From startCrossing to endCrossing
-      curve = startCrossing.curve?.subcurveWithRange(FBRangeMake(startCrossing.parameter, maximum: endCrossing.parameter))
+      curve = startCrossing.curve?.subcurveWithRange(FBRange(minimum: startCrossing.parameter, maximum: endCrossing.parameter))
     }
 
     if let curve = curve {
@@ -150,7 +150,7 @@ class FBBezierContour {
       curve = startCrossing.rightCurve
     } else if let startCrossing = startCrossing, endCrossing = endCrossing {
       // From startCrossing to endCrossing
-      curve = startCrossing.curve?.subcurveWithRange(FBRangeMake(startCrossing.parameter, maximum: endCrossing.parameter))
+      curve = startCrossing.curve?.subcurveWithRange(FBRange(minimum: startCrossing.parameter, maximum: endCrossing.parameter))
     }
 
     if let curve = curve {
