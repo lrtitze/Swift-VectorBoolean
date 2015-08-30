@@ -45,7 +45,7 @@ func FBDistancePointToLine(point: CGPoint, lineStartPoint: CGPoint, lineEndPoint
 
   let intersectionPoint = CGPointMake(lineStartPoint.x + u * (lineEndPoint.x - lineStartPoint.x), lineStartPoint.y + u * (lineEndPoint.y - lineStartPoint.y))
 
-  return FBDistanceBetweenPoints(point, intersectionPoint)
+  return FBDistanceBetweenPoints(point, point2: intersectionPoint)
 }
 
 func FBAddPoint(point1: CGPoint, point2: CGPoint) -> CGPoint {
@@ -118,7 +118,7 @@ func FBLineMidpoint(lineStart: CGPoint, lineEnd: CGPoint) -> CGPoint {
 
   let distance = FBDistanceBetweenPoints(lineStart, point2: lineEnd)
   let tangent = FBNormalizePoint(FBSubtractPoint(lineEnd, point2: lineStart))
-  return FBAddPoint(lineStart, FBUnitScalePoint(tangent, distance / 2.0))
+  return FBAddPoint(lineStart, point2: FBUnitScalePoint(tangent, scale: distance / 2.0))
 }
 
 func FBRectGetTopLeft(rect : CGRect) -> CGPoint {

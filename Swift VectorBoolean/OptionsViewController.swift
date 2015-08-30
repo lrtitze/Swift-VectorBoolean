@@ -17,10 +17,6 @@ class OptionsViewController: UIViewController {
 
   override func viewWillAppear(animated: Bool) {
     let currentPreferredSize = self.preferredContentSize
-    var fakeMomentarySize = CGSize(
-      width: currentPreferredSize.width - 1.0,
-      height: currentPreferredSize.height - 1.0
-    )
     self.preferredContentSize = CGSize.zero
     let newSize = CGSize(width: currentPreferredSize.width, height: 300)
     self.preferredContentSize = newSize

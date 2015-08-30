@@ -19,7 +19,6 @@ private func demunge(@noescape fn: CGPath.Element -> Void)(ptr: UnsafePointer<CG
         fn(.CubicCurve(to: points[2], v1: points[0], v2: points[1]))
     case CGPathElementType.CloseSubpath:
         fn(.Close)
-    default: break
     }
 }
 
@@ -37,7 +36,7 @@ public extension CGPath {
         case Close
     }
     
-    @asmname("_CGPathApplyWithBlock") private func ApplyToPath(path: CGPath, @noescape block: @objc_block (UnsafePointer<CGPathElement>) -> Void)
+    @asmname("_CGPathApplyWithBlock") private func ApplyToPath(path: CGPath, @noescape block: @convention(block) (UnsafePointer<CGPathElement>) -> Void)
     
     func apply(@noescape fn: Element -> Void) {
         ApplyToPath(self, block: demunge(fn))

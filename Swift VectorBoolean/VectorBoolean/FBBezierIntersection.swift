@@ -84,10 +84,10 @@ class FBBezierIntersection {
     let curve2RightTangent = FBNormalizePoint(FBSubtractPoint(_curve2RightBezier!.controlPoint1, point2: _curve2RightBezier!.endPoint1))
 
     // See if the tangents are the same. If so, then we're tangent at the intersection point
-    return FBArePointsCloseWithOptions(curve1LeftTangent, curve2LeftTangent, FBPointCloseThreshold)
-      || FBArePointsCloseWithOptions(curve1LeftTangent, curve2RightTangent, FBPointCloseThreshold)
-      || FBArePointsCloseWithOptions(curve1RightTangent, curve2LeftTangent, FBPointCloseThreshold)
-      || FBArePointsCloseWithOptions(curve1RightTangent, curve2RightTangent, FBPointCloseThreshold)
+    return FBArePointsCloseWithOptions(curve1LeftTangent, point2: curve2LeftTangent, threshold: FBPointCloseThreshold)
+      || FBArePointsCloseWithOptions(curve1LeftTangent, point2: curve2RightTangent, threshold: FBPointCloseThreshold)
+      || FBArePointsCloseWithOptions(curve1RightTangent, point2: curve2LeftTangent, threshold: FBPointCloseThreshold)
+      || FBArePointsCloseWithOptions(curve1RightTangent, point2: curve2RightTangent, threshold: FBPointCloseThreshold)
   }
 
   //- (FBBezierCurve *) curve1LeftBezier

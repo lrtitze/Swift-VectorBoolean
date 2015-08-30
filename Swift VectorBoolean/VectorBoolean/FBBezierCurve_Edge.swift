@@ -368,11 +368,11 @@ extension FBBezierCurve {
     let maxOffset = min(edge1Length, edge2Length)
 
     repeat {
-      FBComputeEdgeTangents(edge1LeftCurve, edge1RightCurve, offset, &edge1Tangents)
-      FBComputeEdgeTangents(edge2LeftCurve, edge2RightCurve, offset, &edge2Tangents)
+      FBComputeEdgeTangents(edge1LeftCurve, rightCurve: edge1RightCurve, offset: offset, edgeTangents: &edge1Tangents)
+      FBComputeEdgeTangents(edge2LeftCurve, rightCurve: edge2RightCurve, offset: offset, edgeTangents: &edge2Tangents)
 
       offset += 1.0
-    } while FBAreTangentsAmbigious(edge1Tangents, edge2Tangents) && offset < maxOffset
+    } while FBAreTangentsAmbigious(edge1Tangents, edge2Tangents: edge2Tangents) && offset < maxOffset
 
     return FBTangentsCross(edge1Tangents, edge2Tangents: edge2Tangents)
   }
@@ -387,21 +387,21 @@ extension FBBezierCurve {
     var edge2Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
     var offset = CGFloat(0.0)
 
-    var (edge1LeftCurve, edge1RightCurve) = FBComputeEdge1RangeTangentCurves(self, intersectRange: intersectRange)
+    let (edge1LeftCurve, edge1RightCurve) = FBComputeEdge1RangeTangentCurves(self, intersectRange: intersectRange)
 
     let edge1Length = min(edge1LeftCurve.length(), edge1RightCurve.length())
 
-    var (edge2LeftCurve, edge2RightCurve) = FBComputeEdge2RangeTangentCurves(edge2, intersectRange: intersectRange)
+    let (edge2LeftCurve, edge2RightCurve) = FBComputeEdge2RangeTangentCurves(edge2, intersectRange: intersectRange)
     let edge2Length = min(edge2LeftCurve.length(), edge2RightCurve.length())
 
     let maxOffset = min(edge1Length, edge2Length);
 
     repeat {
-      FBComputeEdgeTangents(edge1LeftCurve, edge1RightCurve, offset, &edge1Tangents)
-      FBComputeEdgeTangents(edge2LeftCurve, edge2RightCurve, offset, &edge2Tangents)
+      FBComputeEdgeTangents(edge1LeftCurve, rightCurve: edge1RightCurve, offset: offset, edgeTangents: &edge1Tangents)
+      FBComputeEdgeTangents(edge2LeftCurve, rightCurve: edge2RightCurve, offset: offset, edgeTangents: &edge2Tangents)
 
       offset += 1.0
-    } while FBAreTangentsAmbigious(edge1Tangents, edge2Tangents) && offset < maxOffset
+    } while FBAreTangentsAmbigious(edge1Tangents, edge2Tangents: edge2Tangents) && offset < maxOffset
 
     return FBTangentsCross(edge1Tangents, edge2Tangents: edge2Tangents);
   }

@@ -93,10 +93,10 @@ extension UIBezierPath {
   static func triangleAtPoint(point: CGPoint, direction tangent: CGPoint) -> UIBezierPath {
 
     let endPoint = FBAddPoint(point, point2: FBScalePoint(tangent, scale: FBDebugPointSize * 1.5))
-    let normal1 = FBLineNormal(point, endPoint)
+    let normal1 = FBLineNormal(point, lineEnd: endPoint)
     let normal2 = CGPoint(x: -normal1.x, y: -normal1.y)
-    let basePoint1 = FBAddPoint(point, FBScalePoint(normal1, FBDebugPointSize * 0.5))
-    let basePoint2 = FBAddPoint(point, FBScalePoint(normal2, FBDebugPointSize * 0.5))
+    let basePoint1 = FBAddPoint(point, point2: FBScalePoint(normal1, scale: FBDebugPointSize * 0.5))
+    let basePoint2 = FBAddPoint(point, point2: FBScalePoint(normal2, scale: FBDebugPointSize * 0.5))
     let path = UIBezierPath()
     path.moveToPoint(basePoint1)
     path.addLineToPoint(endPoint)

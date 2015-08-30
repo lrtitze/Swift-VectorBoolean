@@ -408,7 +408,7 @@ class FBBezierContour {
     // When marking we need to start at a point that is clearly
     // either inside or outside the other graph, otherwise we
     // could mark the crossings exactly opposite of what they're supposed to be.
-    var (startEdge, startParameter, startPoint) = startingEdge()
+    let (startEdge, startParameter, startPoint) = startingEdge()
 
     // Calculate the first entry value.
     // We need to determine if the edge we're starting
@@ -476,7 +476,6 @@ class FBBezierContour {
     if containsPoint(point) {
       containerCount++
     }
-    let intersectingContours = self.selfIntersectingContours
     for contour in selfIntersectingContours {
       if contour.containsPoint(point) {
         containerCount++
@@ -777,7 +776,7 @@ class FBBezierContour {
   /// are easier to spot at a glance.
   func debugPathForIntersectionType(itersectionType: Int) -> UIBezierPath {
 
-    var path : UIBezierPath = UIBezierPath()
+    let path : UIBezierPath = UIBezierPath()
 
     for edge in _edges {
 

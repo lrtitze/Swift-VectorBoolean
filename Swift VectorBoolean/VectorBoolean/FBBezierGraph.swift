@@ -65,7 +65,7 @@ class FBBezierGraph {
 
     // This is done in a completely different way than was used for NSBezierPath
 
-    for (ix, elem) in bezier.elements.enumerate() {
+    for (_, elem) in bezier.elements.enumerate() {
       switch elem {
 
       case let .Move(toPt):
@@ -105,7 +105,7 @@ class FBBezierGraph {
           lastPoint = toPt
         }
 
-      case let .Close:
+      case .Close:
 
         // [MO] attempt to close the bezier contour by
         // mapping closepaths to equivalent lineto operations,
@@ -127,9 +127,6 @@ class FBBezierGraph {
           }
         }
         lastPoint = CGPoint.zero
-
-      default:
-        print("Other")
       }
     }
     // to mimic the peculiar behavior of the Objective-C version
@@ -811,8 +808,8 @@ class FBBezierGraph {
                 }
 
                 // Add crossings to both graphs for this intersection, and point them at each other
-                var firstCrossing = FBEdgeCrossing(intersection: intersection)
-                var secondCrossing = FBEdgeCrossing(intersection: intersection)
+                let firstCrossing = FBEdgeCrossing(intersection: intersection)
+                let secondCrossing = FBEdgeCrossing(intersection: intersection)
 
                 firstCrossing.selfCrossing = true
                 secondCrossing.selfCrossing = true
@@ -1256,7 +1253,7 @@ class FBBezierGraph {
 
           // Create a crossing for it so we know what edge it is associated with.
           // Don't insert it into a graph or anything though.
-          var crossing = FBEdgeCrossing(intersection: intersection)
+          let crossing = FBEdgeCrossing(intersection: intersection)
           crossing.edge = containerEdge
 
           // Special case if the bounds are just a point, and this crossing is on that point.

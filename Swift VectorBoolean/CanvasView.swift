@@ -78,8 +78,8 @@ class CanvasView: UIView {
     let visualWidth = CGFloat(9 / viewScale)
     let offset = visualWidth / 2
     let left = point.x - offset
-    let right = point.x + offset
-    let top = point.y + offset
+    //let right = point.x + offset
+    //let top = point.y + offset
     let bottom = point.y - offset
     return CGRect(x: left, y: bottom, width: visualWidth, height: visualWidth)
   }
@@ -167,8 +167,6 @@ class CanvasView: UIView {
       for pathItem in paths {
         let bezier = LRTBezierPathWrapper(pathItem.path)
 
-        var previousPoint = CGPointZero
-
         for item in bezier.elements {
 
           var showMe : UIBezierPath?
@@ -183,8 +181,8 @@ class CanvasView: UIView {
             // Just set control point to be in the line formed by the end points
             showMe = UIBezierPath(rect: BoxFrame(v))
 
-          case .QuadCurve(let to, let via):
-            previousPoint = to
+          case .QuadCurve(_, _):
+            break
 
           case .CubicCurve(let to, let v1, let v2):
             showMe = UIBezierPath(rect: BoxFrame(to))
@@ -196,9 +194,10 @@ class CanvasView: UIView {
             cp2.lineWidth = decorationLineWidth / 2
             cp2.stroke()
 
-          case let .Close:
-            previousPoint = CGPointZero
+          case .Close:
+            break
           }
+
           UIColor.redColor().setStroke()
           showMe?.lineWidth = decorationLineWidth
           showMe?.stroke()
@@ -245,7 +244,7 @@ class CanvasView: UIView {
   func drawEndPointsForPath(path: UIBezierPath) {
     let bezier = LRTBezierPathWrapper(path)
 
-    var previousPoint = CGPointZero
+    //var previousPoint = CGPointZero
 
     for item in bezier.elements {
 
@@ -261,8 +260,9 @@ class CanvasView: UIView {
         // Just set control point to be in the line formed by the end points
         showMe = UIBezierPath(rect: BoxFrame(v))
 
-      case .QuadCurve(let to, let via):
-        previousPoint = to
+      case .QuadCurve(_, _):
+        break
+        //previousPoint = to
 
       case .CubicCurve(let to, let v1, let v2):
         showMe = UIBezierPath(rect: BoxFrame(to))
@@ -274,8 +274,9 @@ class CanvasView: UIView {
         cp2.lineWidth = decorationLineWidth / 2
         cp2.stroke()
 
-      case let .Close:
-        previousPoint = CGPointZero
+      case .Close:
+        break
+        //previousPoint = CGPointZero
       }
       UIColor.redColor().setStroke()
       showMe?.lineWidth = decorationLineWidth
