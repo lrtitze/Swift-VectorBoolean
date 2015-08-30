@@ -25,15 +25,20 @@ class FBGeometryTests: XCTestCase {
     // cribbed from FBTangentsCross
     let e1TansLeft = CGPoint(x: -5, y: 0)
     let test1 = PolarAngle(e1TansLeft)
+    XCTAssert(test1.isFinite, "There was a really odd polarangle calculation")
+
     let e1TansRight = CGPoint(x: 0, y: 12)
     let test2 = PolarAngle(e1TansRight)
+    XCTAssert(test2.isFinite, "There was a really odd polarangle calculation")
     //[0]	CGFloat	3.1415926535897931
     //[1]	CGFloat	1.5707963267948966
 
     let e2TansLeft = CGPoint(x: 0, y: 8)
     let test3 = PolarAngle(e2TansLeft)
+    XCTAssert(test3.isFinite, "There was a really odd polarangle calculation")
     let e2TansRight = CGPoint(x: 1.9999999999999982, y: 0)
     let test4 = PolarAngle(e2TansRight)
+    XCTAssert(test4.isFinite, "There was a really odd polarangle calculation")
     //[0]	CGFloat	1.5707963267948966
     //[1]	CGFloat	0
   }
@@ -48,19 +53,21 @@ class FBGeometryTests: XCTestCase {
       controlPoint2: CGPoint(x: 9, y: 0),
       endPoint2: CGPoint(x: 10, y: 0),
       isStraightLine: true)
+    XCTAssert(usCurveData.isStraightLine, "This is a striaght line already")
     let otherCurveData = FBBezierCurveData(
       endPoint1: CGPoint(x: 5, y: 0),
       controlPoint1: CGPoint(x: 6, y: 0),
       controlPoint2: CGPoint(x: 11, y: 0),
       endPoint2: CGPoint(x: 12, y: 0),
       isStraightLine: true)
+    XCTAssert(otherCurveData.isStraightLine, "This is a striaght line already")
 
     var usRange = FBRangeMake(0, maximum: 1)
     var themRange = FBRangeMake(0, maximum: 1)
     var stop = false
     var overlapRange : FBBezierIntersectRange?
 
-    pfIntersectionsWithBezierCurve(usCurve.data, otherCurve.data, &usRange, &themRange, usCurve, otherCurve, &overlapRange, 0, &stop) {
+    pfIntersectionsWithBezierCurve(usCurve.data, curve: otherCurve.data, usRange: &usRange, themRange: &themRange, originalUs: usCurve, originalThem: otherCurve, intersectRange: &overlapRange, depth: 0, stop: &stop) {
       (intersection: FBBezierIntersection) -> (setStop: Bool, stopValue:Bool) in
       // Make sure this is a proper crossing
       print("Intersection: \(intersection.location)")
@@ -92,10 +99,13 @@ class FBGeometryTests: XCTestCase {
         return true // only want the single one
       })
       if let run = ovRun {
-        let ra = run.overlaps[0]
+        XCTAssert(run.overlaps.count > 0, "No overlaps?")
         let contour1 = run.contour1
+        XCTAssert(contour1 != nil, "No edges?")
         let contour2 = run.contour2
+        XCTAssert(contour2 != nil, "No edges?")
         let a = contour1?.edges
+        XCTAssert(a != nil, "No edges?")
       } else {
         XCTAssert(false, "There was no run created though there was an overlap")
       }
@@ -114,8 +124,8 @@ class FBGeometryTests: XCTestCase {
     // will have a common segment from 5,0 to 10,0
     // will have a crossing at 10,8
 
-    var thisGraph = FBBezierGraph(path: lowRect)
-    var otherGraph = FBBezierGraph(path: topRect)
+    let thisGraph = FBBezierGraph(path: lowRect)
+    let otherGraph = FBBezierGraph(path: topRect)
 
     thisGraph.insertCrossingsWithBezierGraph(otherGraph)
 
@@ -180,14 +190,15 @@ class FBGeometryTests: XCTestCase {
     let crossing = thisGraph.contours[0].edges[1].crossings[0]
     XCTAssert(crossing.location.x == 350 && crossing.location.y == 115, "The second edge crossing is at the wrong location \(crossing.location)")
     let edge = crossing.edge
-    let starts = crossing.isAtStart
-    let ends = crossing.isAtEnd
+    XCTAssert(edge != nil, "No edge?")
+    XCTAssert(crossing.isAtStart, "Crossing is not at start!")
+    XCTAssert(crossing.isAtEnd, "Crossing is not at end!")
     let g1C1 = thisGraph.contours[0].edges[1].crossings[0]
     let g1C2 = thisGraph.contours[0].edges[2].crossings[0]
     let g2C1 = otherGraph.contours[0].edges[0].crossings[0]
     let g2C2 = otherGraph.contours[0].edges[3].crossings[0]
-    let counterpartAMatch = g2C1.counterpart === g1C1
-    let counterpartBMatch = g2C2.counterpart === g1C2
+    XCTAssert(g2C1.counterpart === g1C1, "Counterpart C1 is not equal!")
+    XCTAssert(g2C2.counterpart === g1C2, "Counterpart C2 is not equal!")
     thisGraph.insertSelfCrossings() // none for rects
     otherGraph.insertSelfCrossings() // none for rects
     thisGraph.cleanupCrossingsWithBezierGraph(otherGraph)
@@ -208,7 +219,7 @@ class FBGeometryTests: XCTestCase {
   }
 
   func testFBDistanceBetweenPoints() {
-    var point1 = CGPoint(x: 12, y: 15)
+    let point1 = CGPoint(x: 12, y: 15)
     var point2 = CGPoint(x: 13, y: 16)
     var result = FBDistanceBetweenPoints(point1, point2: point2)
     var check = CGFloat(1.4142135623730951)
@@ -217,17 +228,17 @@ class FBGeometryTests: XCTestCase {
 
 
     point2 = CGPoint(x: 12, y: 16.5)
-    result = FBDistanceBetweenPoints(point1, point2)
+    result = FBDistanceBetweenPoints(point1, point2: point2)
     check = CGFloat(1.5)
 
     XCTAssert(result == check, "Distance between points is being calculated as \(result)")
 }
 
   func testFBDistancePointToLine() {
-    var point1 = CGPoint(x: 0, y: 15) // any y value is okay
-    var point2 = CGPoint(x: 10, y: 0)
-    var point3 = CGPoint(x: 10, y: 20)
-    var result = FBDistancePointToLine(point1, lineStartPoint: point2, lineEndPoint: point3)
+    let point1 = CGPoint(x: 0, y: 15) // any y value is okay
+    let point2 = CGPoint(x: 10, y: 0)
+    let point3 = CGPoint(x: 10, y: 20)
+    let result = FBDistancePointToLine(point1, lineStartPoint: point2, lineEndPoint: point3)
     let check = CGFloat(10.0)
     XCTAssert(result == check, "Distance between points is being calculated as \(result)")
 
