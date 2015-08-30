@@ -55,12 +55,6 @@ struct FBNormalizedLine {
 }
 
 
-func FBNormalizedLineMakeWithCoefficients(a: CGFloat, b: CGFloat, c: CGFloat) -> FBNormalizedLine
-{
-  return FBNormalizedLine(a: a, b: b, c: c)
-}
-
-
 func FBNormalizedLineOffset(line: FBNormalizedLine, offset: CGFloat) -> FBNormalizedLine
 {
   var offsetLine = line
@@ -367,7 +361,7 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
     }
   }
 
-  let zeroLine = FBNormalizedLineMakeWithCoefficients(0, b: 1, c: 0)
+  let zeroLine = FBNormalizedLine(a: 0, b: 1, c: 0)
   let aboveLine = FBNormalizedLineOffset(line, offset: -aboveDistance)
   let intersect1 = FBNormalizedLineIntersection(zeroLine, line2: aboveLine)
 
