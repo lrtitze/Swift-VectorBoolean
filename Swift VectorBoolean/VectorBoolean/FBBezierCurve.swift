@@ -67,18 +67,17 @@ struct FBNormalizedLine {
   {
     return a * point.x + b * point.y + c;
   }
-}
 
+  // 64
+  //static NSPoint FBNormalizedLineIntersection(FBNormalizedLine line1, FBNormalizedLine line2)
+  func intersectionWith(other: FBNormalizedLine) -> CGPoint
+  {
+    let denominator = (self.a * other.b) - (other.a * self.b)
 
-// 64
-//static NSPoint FBNormalizedLineIntersection(FBNormalizedLine line1, FBNormalizedLine line2)
-func FBNormalizedLineIntersection(line1: FBNormalizedLine, line2: FBNormalizedLine) -> CGPoint
-{
-  let denominator = (line1.a * line2.b) - (line2.a * line1.b)
-
-  return CGPoint(
-    x: (line1.b * line2.c - line2.b * line1.c) / denominator,
-    y: (line1.a * line2.c - line2.a * line1.c) / denominator)
+    return CGPoint(
+      x: (self.b * other.c - other.b * self.c) / denominator,
+      y: (self.a * other.c - other.a * self.c) / denominator)
+  }
 }
 
 
@@ -112,7 +111,7 @@ func FBLinesIntersect(line1Start: CGPoint, line1End: CGPoint, line2Start: CGPoin
 {
   let line1 = FBNormalizedLine(point1: line1Start, point2: line1End)
   let line2 = FBNormalizedLine(point1: line2Start, point2: line2End)
-  outIntersect = FBNormalizedLineIntersection(line1, line2: line2);
+  outIntersect = line1.intersectionWith(line2)
   if outIntersect.x.isNaN || outIntersect.y.isNaN {
     return false
   }
@@ -366,15 +365,15 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
   }
 
   let zeroLine = FBNormalizedLine(a: 0, b: 1, c: 0)
-  let intersect1 = FBNormalizedLineIntersection(zeroLine, line2: aboveLine)
   let aboveLine = line.copyWithOffset(-aboveDistance)
+  let intersect1 = zeroLine.intersectionWith(aboveLine)
 
-  let intersect2 = FBNormalizedLineIntersection(zeroLine, line2: belowLine)
   let belowLine = line.copyWithOffset(-belowDistance)
+  let intersect2 = zeroLine.intersectionWith(belowLine)
 
   let error = max(intersect1.x, intersect2.x) - min(intersect1.x, intersect2.x)
   if error < FBFindBezierRootsErrorThreshold {
-    intersectionPoint = FBNormalizedLineIntersection(zeroLine, line2: line)
+    intersectionPoint = zeroLine.intersectionWith(line)
     return true
   }
 
