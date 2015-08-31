@@ -344,6 +344,8 @@ func FBCountBezierCrossings(bezierPoints: [CGPoint], degree: Int) -> Int {
 
 let FBFindBezierRootsMaximumDepth = 64
 
+// 297
+//static BOOL FBIsControlPolygonFlatEnough(NSPoint *bezierPoints, NSUInteger degree, NSPoint *intersectionPoint)
 // FBIsControlPolygonFlatEnough Usage:
 // var intersectAt = CGPoint(x:0,y:0)
 // var boolGotit = FBIsControlPolygonFlatEnough(points,degree,&intersectAt)
@@ -749,7 +751,7 @@ class FBBezierCurveData {
     return (point: bwp.point, leftCurve: leftBCData, rightCurve: rightBCData)
   }
 
-
+  // 492
   // static FBBezierCurveData FBBezierCurveDataSubcurveWithRange(FBBezierCurveData me, FBRange range)
   // Becomes:
   // let new_curve_data = curve_data.subcurveWithRange(range)
@@ -773,6 +775,7 @@ class FBBezierCurveData {
     return lowerCurve
   }
 
+  // 508
   // static FBNormalizedLine FBBezierCurveDataRegularFatLineBounds(FBBezierCurveData me, FBRange *range)
   // Becomes:
   // let normalized_line = curve_data.regularFatLineBounds(&range)
@@ -801,6 +804,7 @@ class FBBezierCurveData {
     return line
   }
 
+  // 530
   // static FBNormalizedLine FBBezierCurveDataPerpendicularFatLineBounds(FBBezierCurveData me, FBRange *range)
   // Becomes:
   // let normalized_line = curve_data.perpendicularFatLineBounds(&range)
@@ -832,7 +836,7 @@ class FBBezierCurveData {
     return line
   }
 
-
+  // 555
   // static FBRange FBBezierCurveDataClipWithFatLine(FBBezierCurveData me, FBNormalizedLine fatLine, FBRange bounds)
   // Becomes:
   // let new_range = curve_data.clipWithFatLine(fatline, bounds)
