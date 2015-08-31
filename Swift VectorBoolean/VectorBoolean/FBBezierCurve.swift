@@ -29,6 +29,8 @@ struct FBNormalizedLine {
     self.c = c
   }
 
+  // 30
+  //static FBNormalizedLine FBNormalizedLineMake(NSPoint point1, NSPoint point2)
   // Create a normalized line such that computing the distance from it is quick.
   //  See:    http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm#Distance%20to%20an%20Infinite%20Line
   //          http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/basic.html
@@ -63,6 +65,8 @@ struct FBNormalizedLine {
       c: self.c + offset)
   }
 
+  // 59
+  // static CGFloat FBNormalizedLineDistanceFromPoint(FBNormalizedLine line, NSPoint point)
   func distanceFromPoint(point: CGPoint) -> CGFloat
   {
     return a * point.x + b * point.y + c;
