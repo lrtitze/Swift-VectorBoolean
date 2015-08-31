@@ -52,6 +52,11 @@ struct FBNormalizedLine {
       self.c = 0
     }
   }
+
+  func distanceFromPoint(point: CGPoint) -> CGFloat
+  {
+    return a * point.x + b * point.y + c;
+  }
 }
 
 
@@ -60,11 +65,6 @@ func FBNormalizedLineOffset(line: FBNormalizedLine, offset: CGFloat) -> FBNormal
   var offsetLine = line
   offsetLine.c = line.c + offset;
   return offsetLine;
-}
-
-func FBNormalizedLineDistanceFromPoint(line: FBNormalizedLine, point: CGPoint) -> CGFloat
-{
-  return line.a * point.x + line.b * point.y + line.c;
 }
 
 // 64
@@ -343,6 +343,7 @@ let FBFindBezierRootsMaximumDepth = 64
 // var boolGotit = FBIsControlPolygonFlatEnough(points,degree,&intersectAt)
 func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout intersectionPoint: CGPoint) -> Bool {
 
+  // 2^-63
   let FBFindBezierRootsErrorThreshold = CGFloat(ldexpf(Float(1.0), Int32(-1 * (FBFindBezierRootsMaximumDepth - 1))))
 
   let line = FBNormalizedLine(point1: bezierPoints[0], point2: bezierPoints[degree])
@@ -351,7 +352,7 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
   var belowDistance = CGFloat(0)
   var aboveDistance = CGFloat(0)
   for var i = 1; i < degree; i++ {
-    let distance = FBNormalizedLineDistanceFromPoint(line, point: bezierPoints[i])
+    let distance = line.distanceFromPoint(bezierPoints[i])
     if distance > aboveDistance {
       aboveDistance = distance
     }
@@ -782,8 +783,8 @@ class FBBezierCurveData {
 
     // In this case, we know that the end points are on the line, thus their distances will be 0.
     //  So we can skip computing those and just use 0.
-    let controlPoint1Distance = FBNormalizedLineDistanceFromPoint(line, point: controlPoint1)
-    let controlPoint2Distance = FBNormalizedLineDistanceFromPoint(line, point: controlPoint2)
+    let controlPoint1Distance = line.distanceFromPoint(controlPoint1)
+    let controlPoint2Distance = line.distanceFromPoint(controlPoint2)
     let minim = min(controlPoint1Distance, min(controlPoint2Distance, 0.0))
     let maxim = max(controlPoint1Distance, max(controlPoint2Distance, 0.0))
 
@@ -810,10 +811,10 @@ class FBBezierCurveData {
     //  bezier curve. Since we know the convex hull entirely compasses the curve, just take
     //  all four points that define this cubic bezier curve. Compute the signed distances of
     //  each of the end and control points from the fat line, and that will give us the bounds.
-    let controlPoint1Distance = FBNormalizedLineDistanceFromPoint(line, point: controlPoint1)
-    let controlPoint2Distance = FBNormalizedLineDistanceFromPoint(line, point: controlPoint2)
-    let point1Distance = FBNormalizedLineDistanceFromPoint(line, point: endPoint1)
-    let point2Distance = FBNormalizedLineDistanceFromPoint(line, point: endPoint2)
+    let controlPoint1Distance = line.distanceFromPoint(controlPoint1)
+    let controlPoint2Distance = line.distanceFromPoint(controlPoint2)
+    let point1Distance = line.distanceFromPoint(endPoint1)
+    let point2Distance = line.distanceFromPoint(endPoint2)
 
     let minim = min(controlPoint1Distance, min(controlPoint2Distance, min(point1Distance, point2Distance)))
     let maxim = max(controlPoint1Distance, max(controlPoint2Distance, max(point1Distance, point2Distance)))
@@ -852,16 +853,16 @@ class FBBezierCurveData {
     let distanceBezierPoints : [CGPoint] = [
       CGPoint(
         x: 0.0,
-        y: FBNormalizedLineDistanceFromPoint(fatLine, point: endPoint1)),
+        y: fatLine.distanceFromPoint(endPoint1)),
       CGPoint(
         x: 1.0/3.0,
-        y: FBNormalizedLineDistanceFromPoint(fatLine, point: controlPoint1)),
+        y: fatLine.distanceFromPoint(controlPoint1)),
       CGPoint(
         x: 2.0/3.0,
-        y: FBNormalizedLineDistanceFromPoint(fatLine, point: controlPoint2)),
+        y: fatLine.distanceFromPoint(controlPoint2)),
       CGPoint(
         x: 1.0,
-        y: FBNormalizedLineDistanceFromPoint(fatLine, point: endPoint2))
+        y: fatLine.distanceFromPoint(endPoint2))
     ]
 
     let (convexHull, convexHullLength) = FBConvexHullBuildFromPoints(distanceBezierPoints)
