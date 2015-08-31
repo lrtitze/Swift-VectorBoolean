@@ -1147,7 +1147,7 @@ private func refineIntersectionsOverIterations(iterations: Int,
   inout nonpointUs: FBBezierCurveData,
   inout nonpointThem: FBBezierCurveData)
 {
-  for var i = 0; i < iterations; i++ {
+  for _ in 0..<iterations {
     var intersects = false
 
     (us, intersects) = bezierClipWithBezierCurve(us, curve: them, originalCurve: &originalUs, originalRange: &usRange)
