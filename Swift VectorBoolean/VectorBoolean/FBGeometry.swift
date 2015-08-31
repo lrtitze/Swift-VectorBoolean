@@ -17,12 +17,12 @@ import UIKit
 // ===================================
 
 // LRT - fiddle with these
-//let FBPointClosenessThreshold   = CGFloat(1e-10)
-//let FBTangentClosenessThreshold = CGFloat(1e-12)
-//let FBBoundsClosenessThreshold  = CGFloat(1e-9)
-let FBPointClosenessThreshold   = CGFloat(1e-7)
-let FBTangentClosenessThreshold = CGFloat(1e-7)
-let FBBoundsClosenessThreshold  = CGFloat(1e-5)
+let FBPointClosenessThreshold   = CGFloat(1e-10)
+let FBTangentClosenessThreshold = CGFloat(1e-12)
+let FBBoundsClosenessThreshold  = CGFloat(1e-9)
+//let FBPointClosenessThreshold   = CGFloat(1e-7)
+//let FBTangentClosenessThreshold = CGFloat(1e-7)
+//let FBBoundsClosenessThreshold  = CGFloat(1e-5)
 
 
 
