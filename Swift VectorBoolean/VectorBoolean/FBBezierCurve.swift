@@ -53,19 +53,22 @@ struct FBNormalizedLine {
     }
   }
 
+  // 53
+  //static FBNormalizedLine FBNormalizedLineOffset(FBNormalizedLine line, CGFloat offset)
+  func copyWithOffset(offset: CGFloat) -> FBNormalizedLine
+  {
+    return FBNormalizedLine(
+      a: self.a,
+      b: self.b,
+      c: self.c + offset)
+  }
+
   func distanceFromPoint(point: CGPoint) -> CGFloat
   {
     return a * point.x + b * point.y + c;
   }
 }
 
-
-func FBNormalizedLineOffset(line: FBNormalizedLine, offset: CGFloat) -> FBNormalizedLine
-{
-  var offsetLine = line
-  offsetLine.c = line.c + offset;
-  return offsetLine;
-}
 
 // 64
 //static NSPoint FBNormalizedLineIntersection(FBNormalizedLine line1, FBNormalizedLine line2)
@@ -363,11 +366,11 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
   }
 
   let zeroLine = FBNormalizedLine(a: 0, b: 1, c: 0)
-  let aboveLine = FBNormalizedLineOffset(line, offset: -aboveDistance)
   let intersect1 = FBNormalizedLineIntersection(zeroLine, line2: aboveLine)
+  let aboveLine = line.copyWithOffset(-aboveDistance)
 
-  let belowLine = FBNormalizedLineOffset(line, offset: -belowDistance)
   let intersect2 = FBNormalizedLineIntersection(zeroLine, line2: belowLine)
+  let belowLine = line.copyWithOffset(-belowDistance)
 
   let error = max(intersect1.x, intersect2.x) - min(intersect1.x, intersect2.x)
   if error < FBFindBezierRootsErrorThreshold {
