@@ -929,11 +929,74 @@ class FBBezierCurveData {
     return range
   }
 
+  // 819
+  //static void FBBezierCurveDataConvertSelfAndPoint(FBBezierCurveData me, NSPoint point, NSPoint *bezierPoints)
+  func convertSelfAndPoint(point: CGPoint) -> [CGPoint]
+  {
+    var selfPoints: [CGPoint] = [endPoint1, controlPoint1, controlPoint2, endPoint2]
+
+    // c[i] in the paper
+    let distanceFromPoint = [
+      FBSubtractPoint(selfPoints[0], point2: point),
+      FBSubtractPoint(selfPoints[1], point2: point),
+      FBSubtractPoint(selfPoints[2], point2: point),
+      FBSubtractPoint(selfPoints[3], point2: point)
+    ]
+
+    // d[i] in the paper
+    let weightedDelta = [
+      FBScalePoint(FBSubtractPoint(selfPoints[1], point2: selfPoints[0]), scale: 3),
+      FBScalePoint(FBSubtractPoint(selfPoints[2], point2: selfPoints[1]), scale: 3),
+      FBScalePoint(FBSubtractPoint(selfPoints[3], point2: selfPoints[2]), scale: 3)
+    ]
+
+    // Precompute the dot product of distanceFromPoint and weightedDelta in order to speed things up
+    var precomputedTable: [[CGFloat]] = [
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+    ]
+    for var row = 0; row < 3; row++ {
+      for var column = 0; column < 4; column++ {
+        precomputedTable[row][column] = FBDotMultiplyPoint(weightedDelta[row], point2: distanceFromPoint[column])
+      }
+    }
+
+    // Precompute some of the values to speed things up
+    let FBZ: [[CGFloat]] = [
+      [1.0, 0.6, 0.3, 0.1],
+      [0.4, 0.6, 0.6, 0.4],
+      [0.1, 0.3, 0.6, 1.0]
+    ]
+
+    // create our output array
+    var bezierPoints = [CGPoint](count: 6, repeatedValue: CGPointZero)
+
+    // Set the x values of the bezier points
+    for var i = 0; i < 6; i++ {
+      bezierPoints[i] = CGPoint(x: CGFloat(i) / 5.0, y: 0);
+    }
+
+    // Finally set the y values of the bezier points
+    let n = 3
+    let m = n - 1
+    for var k = 0; k <= (n + m); k++ {
+      let lowerBound = max(0, k - m)
+      let upperBound = min(k, n)
+      for var i = lowerBound; i <= upperBound; i++ {
+        let j = k - i
+        bezierPoints[i + j].y += precomputedTable[j][i] * FBZ[j][i]
+      }
+    }
+    
+    return bezierPoints
+  }
+
   // 864
   //static FBBezierCurveLocation FBBezierCurveDataClosestLocationToPoint(FBBezierCurveData me, NSPoint point)
   func closestLocationToPoint(point: CGPoint) -> FBBezierCurveLocation
   {
-    let bezierPoints = convertSelfAndPoint(self, point: point)
+    let bezierPoints = convertSelfAndPoint(point)
 
     var distance = FBDistanceBetweenPoints(endPoint1, point2: point)
     var parameter = CGFloat(0.0)
@@ -957,6 +1020,25 @@ class FBBezierCurveData {
     let location = FBBezierCurveLocation(parameter: CGFloat(parameter), distance: CGFloat(distance))
     
     return location
+  }
+
+  // 893
+  //static BOOL FBBezierCurveDataIsEqualWithOptions(FBBezierCurveData me, FBBezierCurveData other, CGFloat threshold)
+  func isEqualWithOptions(other: FBBezierCurveData, threshold: CGFloat) -> Bool
+  {
+    if isPoint() || other.isPoint() {
+      return false
+    }
+
+    if isStraightLine != other.isStraightLine {
+      return false
+    }
+
+    if isStraightLine {
+      return FBArePointsCloseWithOptions(endPoint1, point2: other.endPoint1, threshold: threshold) && FBArePointsCloseWithOptions(endPoint2, point2: other.endPoint2, threshold: threshold)
+    }
+
+    return FBArePointsCloseWithOptions(endPoint1, point2: other.endPoint1, threshold: threshold) && FBArePointsCloseWithOptions(controlPoint1, point2: other.controlPoint1, threshold: threshold) && FBArePointsCloseWithOptions(controlPoint2, point2: other.controlPoint2, threshold: threshold) && FBArePointsCloseWithOptions(endPoint2, point2: other.endPoint2, threshold: threshold)
   }
 
 }
@@ -1181,122 +1263,6 @@ private func checkLinesForOverlap(me: FBBezierCurveData, inout usRange: FBRange,
 }
 
 
-// 819
-//static void FBBezierCurveDataConvertSelfAndPoint(FBBezierCurveData me, NSPoint point, NSPoint *bezierPoints)
-private func convertSelfAndPoint(me: FBBezierCurveData, point: CGPoint) -> [CGPoint]
-{
-  var selfPoints: [CGPoint] = [me.endPoint1, me.controlPoint1, me.controlPoint2, me.endPoint2]
-
-  // c[i] in the paper
-  let distanceFromPoint = [
-    FBSubtractPoint(selfPoints[0], point2: point),
-    FBSubtractPoint(selfPoints[1], point2: point),
-    FBSubtractPoint(selfPoints[2], point2: point),
-    FBSubtractPoint(selfPoints[3], point2: point)
-  ]
-
-  // d[i] in the paper
-  let weightedDelta = [
-    FBScalePoint(FBSubtractPoint(selfPoints[1], point2: selfPoints[0]), scale: 3),
-    FBScalePoint(FBSubtractPoint(selfPoints[2], point2: selfPoints[1]), scale: 3),
-    FBScalePoint(FBSubtractPoint(selfPoints[3], point2: selfPoints[2]), scale: 3)
-  ]
-
-  // Precompute the dot product of distanceFromPoint and weightedDelta in order to speed things up
-  var precomputedTable: [[CGFloat]] = [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0]
-  ]
-  for var row = 0; row < 3; row++ {
-    for var column = 0; column < 4; column++ {
-      precomputedTable[row][column] = FBDotMultiplyPoint(weightedDelta[row], point2: distanceFromPoint[column])
-    }
-  }
-
-  // Precompute some of the values to speed things up
-  let FBZ: [[CGFloat]] = [
-    [1.0, 0.6, 0.3, 0.1],
-    [0.4, 0.6, 0.6, 0.4],
-    [0.1, 0.3, 0.6, 1.0]
-  ]
-
-  // create our output array
-  var bezierPoints = [CGPoint](count: 6, repeatedValue: CGPointZero)
-
-  // Set the x values of the bezier points
-  for var i = 0; i < 6; i++ {
-    bezierPoints[i] = CGPoint(x: CGFloat(i) / 5.0, y: 0);
-  }
-
-  // Finally set the y values of the bezier points
-  let n = 3
-  let m = n - 1
-  for var k = 0; k <= (n + m); k++ {
-    let lowerBound = max(0, k - m)
-    let upperBound = min(k, n)
-    for var i = lowerBound; i <= upperBound; i++ {
-      let j = k - i
-      bezierPoints[i + j].y += precomputedTable[j][i] * FBZ[j][i]
-    }
-  }
-
-  return bezierPoints
-}
-
-
-// 864
-//static FBBezierCurveLocation FBBezierCurveDataClosestLocationToPoint(FBBezierCurveData me, NSPoint point)
-// MOVED TO A CLASS FUNCTION
-//   func closestLocationToPoint(point: CGPoint) -> FBBezierCurveLocation
-
-private func xxxXclosestLocationToPoint(me: FBBezierCurveData, point: CGPoint) -> FBBezierCurveLocation
-{
-  let bezierPoints = convertSelfAndPoint(me, point: point)
-
-  var distance = FBDistanceBetweenPoints(me.endPoint1, point2: point)
-  var parameter = CGFloat(0.0)
-
-  FBFindBezierRoots(bezierPoints, degree: 5) { (root) -> Void in
-
-    let location = me.pointAtParameter(root).point
-    let theDistance = FBDistanceBetweenPoints(location, point2: point)
-    if ( theDistance < distance ) {
-      distance = theDistance
-      parameter = root
-    }
-  }
-
-  let lastDistance = FBDistanceBetweenPoints(me.endPoint2, point2: point)
-  if ( lastDistance < distance ) {
-    distance = lastDistance;
-    parameter = 1.0;
-  }
-
-  let location = FBBezierCurveLocation(parameter: CGFloat(parameter), distance: CGFloat(distance))
-
-  return location
-}
-
-// 893
-//static BOOL FBBezierCurveDataIsEqualWithOptions(FBBezierCurveData me, FBBezierCurveData other, CGFloat threshold)
-private func isEqualWithOptions(me: FBBezierCurveData, other: FBBezierCurveData, threshold: CGFloat) -> Bool
-{
-  if me.isPoint() || other.isPoint() {
-    return false
-  }
-
-  if me.isStraightLine != other.isStraightLine {
-    return false
-  }
-
-  if me.isStraightLine {
-    return FBArePointsCloseWithOptions(me.endPoint1, point2: other.endPoint1, threshold: threshold) && FBArePointsCloseWithOptions(me.endPoint2, point2: other.endPoint2, threshold: threshold)
-  }
-
-  return FBArePointsCloseWithOptions(me.endPoint1, point2: other.endPoint1, threshold: threshold) && FBArePointsCloseWithOptions(me.controlPoint1, point2: other.controlPoint1, threshold: threshold) && FBArePointsCloseWithOptions(me.controlPoint2, point2: other.controlPoint2, threshold: threshold) && FBArePointsCloseWithOptions(me.endPoint2, point2: other.endPoint2, threshold: threshold)
-}
-
 // 906
 //static BOOL FBBezierCurveDataAreCurvesEqual(FBBezierCurveData me, FBBezierCurveData other)
 private func curvesAreEqual(me: FBBezierCurveData, other: FBBezierCurveData) -> Bool
@@ -1328,8 +1294,8 @@ private func curvesAreEqual(me: FBBezierCurveData, other: FBBezierCurveData) -> 
 private func dataIsEqual(me: FBBezierCurveData, other: FBBezierCurveData) -> Bool
 {
   // LRT - fiddle with these
-//  return isEqualWithOptions(me, other, 1e-10)
-  return isEqualWithOptions(me, other: other, threshold: 1e-6)
+  //return me.isEqualWithOptions(other, threshold: 1e-10)
+  return me.isEqualWithOptions(other, threshold: 1e-6)
 }
 
 // 931
@@ -1397,7 +1363,7 @@ private func checkCurvesForOverlapRange(
   let themSubcurve = findPossibleOverlap(me, originalUs: originalThem.data, them: us, possibleRange: &themSubcurveRange)
 
   let threshold = CGFloat(1e-4)
-  if isEqualWithOptions(usSubcurve, other: themSubcurve, threshold: threshold) || isEqualWithOptions(usSubcurve, other: reversed(themSubcurve), threshold: threshold) {
+  if usSubcurve.isEqualWithOptions(themSubcurve, threshold: threshold) || usSubcurve.isEqualWithOptions(reversed(themSubcurve), threshold: threshold) {
     usRange = usSubcurveRange
     themRange = themSubcurveRange
 
