@@ -246,7 +246,7 @@ class FBBezierGraph {
   //- (void) unionEquivalentNonintersectingContours:(NSMutableArray *)ourNonintersectingContours withContours:(NSMutableArray *)theirNonintersectingContours results:(NSMutableArray *)results
   private func unionEquivalentNonintersectingContours(inout ourNonintersectingContours: [FBBezierContour], inout withContours theirNonintersectingContours: [FBBezierContour], inout results: [FBBezierContour]) {
 
-    for ourIndex in 0 ..< ourNonintersectingContours.count {
+    for var ourIndex = 0; ourIndex < ourNonintersectingContours.count; ourIndex++ {
       let ourContour = ourNonintersectingContours[ourIndex]
       for theirIndex in 0 ..< theirNonintersectingContours.count  {
         let theirContour = theirNonintersectingContours[theirIndex]
@@ -367,7 +367,7 @@ class FBBezierGraph {
 
     var results: [FBBezierContour] = []
 
-    for ourIndex in 0 ..< ourNonintersectingContours.count {
+    for var ourIndex = 0; ourIndex < ourNonintersectingContours.count; ourIndex++ {
       let ourContour = ourNonintersectingContours[ourIndex]
       for theirIndex in 0 ..< theirNonintersectingContours.count {
         let theirContour = theirNonintersectingContours[theirIndex]
@@ -462,7 +462,7 @@ class FBBezierGraph {
 
     var results: [FBBezierContour] = []
 
-    for ourIndex in 0 ..< ourNonintersectingContours.count {
+    for var ourIndex = 0; ourIndex < ourNonintersectingContours.count; ourIndex++ {
       let ourContour = ourNonintersectingContours[ourIndex]
       for theirIndex in 0 ..< theirNonintersectingContours.count {
         let theirContour = theirNonintersectingContours[theirIndex]
