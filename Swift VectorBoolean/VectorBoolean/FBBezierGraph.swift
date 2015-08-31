@@ -246,9 +246,9 @@ class FBBezierGraph {
   //- (void) unionEquivalentNonintersectingContours:(NSMutableArray *)ourNonintersectingContours withContours:(NSMutableArray *)theirNonintersectingContours results:(NSMutableArray *)results
   private func unionEquivalentNonintersectingContours(inout ourNonintersectingContours: [FBBezierContour], inout withContours theirNonintersectingContours: [FBBezierContour], inout results: [FBBezierContour]) {
 
-    for var ourIndex = 0; ourIndex < ourNonintersectingContours.count; ourIndex++ {
+    for ourIndex in 0 ..< ourNonintersectingContours.count {
       let ourContour = ourNonintersectingContours[ourIndex]
-      for var theirIndex = 0; theirIndex < theirNonintersectingContours.count; theirIndex++ {
+      for theirIndex in 0 ..< theirNonintersectingContours.count  {
         let theirContour = theirNonintersectingContours[theirIndex]
 
         if !ourContour.isEquivalent(theirContour) {
@@ -367,9 +367,9 @@ class FBBezierGraph {
 
     var results: [FBBezierContour] = []
 
-    for var ourIndex = 0; ourIndex < ourNonintersectingContours.count; ourIndex++ {
+    for ourIndex in 0 ..< ourNonintersectingContours.count {
       let ourContour = ourNonintersectingContours[ourIndex]
-      for var theirIndex = 0; theirIndex < theirNonintersectingContours.count; theirIndex++ {
+      for theirIndex in 0 ..< theirNonintersectingContours.count {
         let theirContour = theirNonintersectingContours[theirIndex]
 
         if !ourContour.isEquivalent(theirContour) {
@@ -462,9 +462,9 @@ class FBBezierGraph {
 
     var results: [FBBezierContour] = []
 
-    for var ourIndex = 0; ourIndex < ourNonintersectingContours.count; ourIndex++ {
+    for ourIndex in 0 ..< ourNonintersectingContours.count {
       let ourContour = ourNonintersectingContours[ourIndex]
-      for var theirIndex = 0; theirIndex < theirNonintersectingContours.count; theirIndex++ {
+      for theirIndex in 0 ..< theirNonintersectingContours.count {
         let theirContour = theirNonintersectingContours[theirIndex]
 
         if !ourContour.isEquivalent(theirContour) {
@@ -1090,7 +1090,7 @@ class FBBezierGraph {
     //  the contours, we do both horizontal and vertical rays.
 
     let count = Int(max(ceil(testContour.bounds.width), ceil(testContour.bounds.height)))
-    for var fraction = 2; fraction <= count * 2; fraction++ {
+    for fraction in 2 ... count * 2 {
       var didEliminate = false
 
       // Send horizontal rays through the test contour

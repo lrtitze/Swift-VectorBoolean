@@ -179,7 +179,7 @@ func BezierWithPoints(degree: Int, bezierPoints: [CGPoint], parameter: CGFloat, 
   // With this algorithm we start out with the points in the bezier path.
   var points : [CGPoint] = [] // we assume we'll never get more than a cubic bezier
 
-  for var i = 0; i <= degree; i++ {
+  for i in 0 ... degree {
     points.append(bezierPoints[i])
   }
 
@@ -192,8 +192,8 @@ func BezierWithPoints(degree: Int, bezierPoints: [CGPoint], parameter: CGFloat, 
     rightArray[degree] = points[degree]
   }
 
-  for var k = 1; k <= degree; k++ {
-    for var i = 0; i <= (degree - k); i++ {
+  for k in 1 ... degree {
+    for i in 0 ... (degree - k) {
       points[i].x = (1.0 - parameter) * points[i].x + parameter * points[i + 1].x
       points[i].y = (1.0 - parameter) * points[i].y + parameter * points[i + 1].y
     }
@@ -310,7 +310,7 @@ func FBGaussQuadratureComputeCurveLengthForCubic(z: CGFloat, steps: Int, p1: CGP
 {
   let z2 = z / 2.0
   var sum : CGFloat = 0.0
-  for var i = 0; i < steps; i++ {
+  for i in 0 ..< steps {
     let correctedT = z2 * FBLegendreGaussAbscissaeValues[steps][i] + z2
     sum += FBLegendreGaussWeightValues[steps][i] * FBGaussQuadratureFOfTForCubic(correctedT, p1: p1, p2: p2, p3: p3, p4: p4)
   }
@@ -332,7 +332,7 @@ func FBCountBezierCrossings(bezierPoints: [CGPoint], degree: Int) -> Int {
   var sign = FBSign(bezierPoints[0].y)
 
   var previousSign = sign
-  for var i : Int = 1; i <= degree; i++ {
+  for i in 1 ... degree {
     sign = FBSign(bezierPoints[i].y)
     if sign != previousSign {
       count++
@@ -359,7 +359,7 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
   // Find the bounds around the line
   var belowDistance = CGFloat(0)
   var aboveDistance = CGFloat(0)
-  for var i = 1; i < degree; i++ {
+  for i in 1 ..< degree {
     let distance = line.distanceFromPoint(bezierPoints[i])
     if distance > aboveDistance {
       aboveDistance = distance
@@ -450,7 +450,7 @@ func FBConvexHullBuildFromPoints(inPoints: [CGPoint]) -> (hull: [CGPoint], hullL
   var sortLength = numberOfPoints
   repeat {
     var newSortLength = 0
-    for var i = 1; i < sortLength; i++ {
+    for i in 1 ..< sortLength {
       if ( points[i - 1].x > points[i].x || (FBAreValuesClose(points[i - 1].x, value2: points[i].x) && points[i - 1].y > points[i].y) ) {
         let tempPoint = points[i]
         points[i] = points[i - 1]
@@ -466,7 +466,7 @@ func FBConvexHullBuildFromPoints(inPoints: [CGPoint]) -> (hull: [CGPoint], hullL
   var results = [CGPoint](count: 8, repeatedValue: CGPointZero)
 
   // Build lower hull
-  for var i = 0; i < numberOfPoints; i++ {
+  for i in 0 ..< numberOfPoints {
     while filledInIx >= 2 && FBConvexHullDoPointsTurnWrongDirection(results[filledInIx - 2], point2: results[filledInIx - 1], point3: points[i]) {
       --filledInIx
     }
@@ -476,7 +476,7 @@ func FBConvexHullBuildFromPoints(inPoints: [CGPoint]) -> (hull: [CGPoint], hullL
 
   // Build upper hull
   let thresholdIndex = filledInIx + 1
-  for var i = numberOfPoints - 2; i >= 0; i-- {
+  for i in (0 ... numberOfPoints - 2).reverse() {
     while filledInIx >= thresholdIndex && FBConvexHullDoPointsTurnWrongDirection(results[filledInIx - 2], point2: results[filledInIx - 1], point3: points[i]) {
       --filledInIx
     }
@@ -654,7 +654,7 @@ class FBBezierCurveData {
       // Find the roots, which should be the extremities
       let xRoots : [CGFloat] = FBComputeCubicFirstDerivativeRoots(endPoint1.x, b: controlPoint1.x, c: controlPoint2.x, d: endPoint2.x)
 
-      for var i = 0; i < xRoots.count; i++ {
+      for i in 0 ..< xRoots.count {
         let t = xRoots[i]
         if t < 0 || t > 1 {
           continue
@@ -664,7 +664,7 @@ class FBBezierCurveData {
       }
 
       let yRoots : [CGFloat] = FBComputeCubicFirstDerivativeRoots(endPoint1.y, b: controlPoint1.y, c: controlPoint2.y, d: endPoint2.y)
-      for var i = 0; i < yRoots.count; i++ {
+      for i in 0 ..< yRoots.count {
         let t = yRoots[i]
         if t < 0 || t > 1 {
           continue
@@ -880,7 +880,7 @@ class FBBezierCurveData {
     // Find intersections of convex hull with the fat line bounds
     var range = FBRange(minimum: 1.0, maximum: 0.0)
 
-    for var i = 0; i < convexHullLength; i++ {
+    for i in 0 ..< convexHullLength {
       // Pull out the current line on the convex hull
       let indexOfNext = i < (convexHullLength - 1) ? i + 1 : 0
 
@@ -956,8 +956,8 @@ class FBBezierCurveData {
       [0, 0, 0, 0],
       [0, 0, 0, 0]
     ]
-    for var row = 0; row < 3; row++ {
-      for var column = 0; column < 4; column++ {
+    for row in 0 ..< 3 {
+      for column in 0 ..< 4 {
         precomputedTable[row][column] = FBDotMultiplyPoint(weightedDelta[row], point2: distanceFromPoint[column])
       }
     }
@@ -973,17 +973,17 @@ class FBBezierCurveData {
     var bezierPoints = [CGPoint](count: 6, repeatedValue: CGPointZero)
 
     // Set the x values of the bezier points
-    for var i = 0; i < 6; i++ {
-      bezierPoints[i] = CGPoint(x: CGFloat(i) / 5.0, y: 0);
+    for i in 0 ..< 6 {
+      bezierPoints[i] = CGPoint(x: CGFloat(i) / 5.0, y: 0)
     }
 
     // Finally set the y values of the bezier points
     let n = 3
     let m = n - 1
-    for var k = 0; k <= (n + m); k++ {
+    for k in 0 ... (n + m) {
       let lowerBound = max(0, k - m)
       let upperBound = min(k, n)
-      for var i = lowerBound; i <= upperBound; i++ {
+      for i in lowerBound ... upperBound {
         let j = k - i
         bezierPoints[i + j].y += precomputedTable[j][i] * FBZ[j][i]
       }
@@ -1828,7 +1828,7 @@ internal func pfIntersectionsWithBezierCurve(
     // Although the range didn't converge, it should be a reasonable
     // approximation which is all Newton needs
     var refinedParameter = FBRangeAverage(themRange)
-    for var i = 0; i < 3; i++ {
+    for _ in 0 ..< 3 {
       refinedParameter = pfRefineParameter(originalThemData, parameter: refinedParameter, point: intersectionPoint)
       refinedParameter = min(themRange.maximum, max(themRange.minimum, refinedParameter))
     }
@@ -1843,7 +1843,7 @@ internal func pfIntersectionsWithBezierCurve(
     // Although the range didn't converge, it should be a reasonable
     // approximation which is all Newton needs
     var refinedParameter = FBRangeAverage(usRange)
-    for var i = 0; i < 3; i++ {
+    for _ in 0 ..< 3 {
       refinedParameter = pfRefineParameter(originalUsData, parameter: refinedParameter, point: intersectionPoint)
       refinedParameter = min(usRange.maximum, max(usRange.minimum, refinedParameter))
     }
