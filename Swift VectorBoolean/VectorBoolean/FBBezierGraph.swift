@@ -1081,7 +1081,7 @@ class FBBezierGraph {
 
     // In the beginning all our contours are possible containers
     // for the test contour.
-    var containers : [FBBezierContour] = []
+    var containers : [FBBezierContour] = self._contours
 
     // Each time through the loop we split the test contour into
     //  any increasing amount of pieces (halves, thirds, quarters, etc)
