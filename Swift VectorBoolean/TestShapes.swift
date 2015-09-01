@@ -59,14 +59,6 @@ class TestShapeData {
     return shapes.count
   }
   let shapes : [TestShape] = [
-    TestShape_Rectangle_Sharing_Edge_With_Rectangle(),
-    TestShape_Rectangle_Overlapping_Rectangle(),
-    TestShape_Tiny_Rectangle_Overlapping_Rectangle(),
-    TestShape_Circle_Overlapping_Rectangle(),
-    TestShape_Debug(),
-    TestShape_Debug001(),
-    TestShape_Debug002(),
-    TestShape_Debug003(),
     TestShape_Circle_Overlapping_Rectangle(),     // 1
     TestShape_Circle_in_Rectangle(),              // 2
     TestShape_Rectangle_in_Circle(),              // 3
@@ -74,7 +66,25 @@ class TestShapeData {
     TestShape_Rect_Over_Rect_w_Hole(),            // 5
     TestShape_Circle_Over_Two_Rects(),            // 6
     TestShape_Circle_Over_Circle(),               // 7
-    TestShape_Complex_Shapes()                    // 8
+    TestShape_Complex_Shapes(),                   // 8
+    TestShape_Complex_Shapes2(),                  // 9
+    TestShape_Triangle_Inside_Rectangle(),        // 10
+    TestShape_Diamond_Overlapping_Rectangle(),    // 11
+    TestShape_Diamond_Inside_Rectangle(),         // 12
+    TestShape_Non_Overlapping_Contours(),         // 13
+    TestShape_More_Non_Overlapping_Contours(),    // 14
+    TestShape_Concentric_Contours(),              // 15
+    TestShape_More_Concentric_Contours(),         // 16
+    TestShape_Circle_Overlapping_Hole(),          // 17
+    TestShape_Rect_w_Hole_Over_Rect_w_Hole(),     // 18
+    TestShape_Curve_Overlapping_Rectangle(),      // 19
+    TestShape_Debug(),
+    TestShape_Debug001(),
+    TestShape_Debug002(),
+    TestShape_Debug003(),
+    TestShape_Rectangle_Sharing_Edge_With_Rectangle(),
+    TestShape_Rectangle_Overlapping_Rectangle(),
+    TestShape_Tiny_Rectangle_Overlapping_Rectangle()
   ]
 }
 
@@ -82,10 +92,445 @@ class TestShapeData {
 // MARK: The set of bezier test case classes
 // =================================================
 
+class TestShape_Circle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Circle Overlapping Rectangle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 50, y: 50, width: 300, height: 200))
+  }
+
+  func topShape() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 355, y: 240), withRadius: 125.0, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Circle_in_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Circle in Rectangle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300))
+  }
+
+  func topShape() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125.0, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Rectangle_in_Circle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Rectangle in Circle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 185.0, toPath: circle)
+    return circle
+  }
+
+  func topShape() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 150, y: 150, width: 150, height: 150))
+  }
+}
+
+// TODO: Track down why this is so messed up
+
+class TestShape_Circle_on_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Circle on Rectangle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 15, y: 15, width: 370, height: 370))
+  }
+
+  func topShape() -> UIBezierPath {
+//  return UIBezierPath(ovalInRect: CGRect(x: 15, y: 15, width: 370, height: 370))
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 200, y: 200), withRadius: 185, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Rect_Over_Rect_w_Hole : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Rect Over Rect with Hole")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let holeyRectangle = UIBezierPath()
+    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
+    return holeyRectangle
+  }
+
+  func topShape() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
+  }
+}
+
+class TestShape_Circle_Over_Two_Rects : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Circle Overlapping Two Rects")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let rectangles = UIBezierPath()
+    rectangles.appendPath(UIBezierPath(rect: CGRect(x:  50, y: 5, width: 100, height: 400)))
+    rectangles.appendPath(UIBezierPath(rect: CGRect(x: 350, y: 5, width: 100, height: 400)))
+    return rectangles
+  }
+
+  func topShape() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 200, y: 200), withRadius: 185, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Circle_Over_Circle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Circle Overlapping Circle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 355, y: 240), withRadius: 125, toPath: circle)
+    return circle
+  }
+
+  func topShape() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 100, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Complex_Shapes : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Complex Shapes")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let holeyRectangle = UIBezierPath()
+    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
+
+    let rectangle = UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
+    //let allParts = holeyRectangle.fb_intersect(rectangle)
+    let allParts = holeyRectangle.fb_union(rectangle)
+
+    return allParts
+  }
+
+  func topShape() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Complex_Shapes2 : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "More Complex Shapes")
+  }
+  func common() -> (rectangles: UIBezierPath, circle: UIBezierPath) {
+    let rectangles = UIBezierPath()
+    rectangles.appendPath(UIBezierPath(rect: CGRect(x:  50, y: 5, width: 100, height: 400)))
+    rectangles.appendPath(UIBezierPath(rect: CGRect(x: 350, y: 5, width: 100, height: 400)))
+
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 200, y: 200), withRadius: 185, toPath: circle)
+    return (rectangles: rectangles, circle: circle)
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let (rectangles, circle) = common()
+
+    return rectangles.fb_union(circle)
+  }
+
+  func topShape() -> UIBezierPath {
+    let (rectangles, circle) = common()
+
+    return rectangles.fb_intersect(circle)
+  }
+}
+
+class TestShape_Triangle_Inside_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Triangle Inside Rectangle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 100, y: 100, width: 300, height: 300))
+  }
+
+  func topShape() -> UIBezierPath {
+    let path = UIBezierPath()
+    path.moveToPoint(CGPoint(x: 100, y: 400))
+    path.addLineToPoint(CGPoint(x: 400, y: 400))
+    path.addLineToPoint(CGPoint(x: 250, y: 250))
+    path.addLineToPoint(CGPoint(x: 100, y: 400))
+    path.closePath()
+    return path
+  }
+}
+
+class TestShape_Diamond_Overlapping_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Diamond Overlapping Rectangle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 50, y: 50, width: 200, height: 200))
+  }
+
+  func topShape() -> UIBezierPath {
+    let path = UIBezierPath()
+    path.moveToPoint(CGPoint(x: 50, y: 250))
+    path.addLineToPoint(CGPoint(x: 150, y: 400))
+    path.addLineToPoint(CGPoint(x: 250, y: 250))
+    path.addLineToPoint(CGPoint(x: 150, y: 100))
+    path.addLineToPoint(CGPoint(x: 50, y: 250))
+    path.closePath()
+
+    return path
+  }
+}
+
+class TestShape_Diamond_Inside_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Diamond Inside Rectangle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 100, y: 100, width: 300, height: 300))
+  }
+
+  func topShape() -> UIBezierPath {
+    let path = UIBezierPath()
+    path.moveToPoint(CGPoint(x: 100, y: 250))
+    path.addLineToPoint(CGPoint(x: 250, y: 400))
+    path.addLineToPoint(CGPoint(x: 400, y: 250))
+    path.addLineToPoint(CGPoint(x: 250, y: 100))
+    path.addLineToPoint(CGPoint(x: 100, y: 250))
+    path.closePath()
+
+    return path
+  }
+}
+
+class TestShape_Non_Overlapping_Contours : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Non-overlapping Contours")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    return UIBezierPath(rect: CGRect(x: 100, y: 200, width: 200, height: 200))
+  }
+
+  func topShape() -> UIBezierPath {
+
+    let circles = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 200, y: 300), withRadius: 85, toPath: circles)
+    addCircleAtPoint(CGPoint(x: 200, y: 95), withRadius: 85, toPath: circles)
+
+    return circles
+  }
+}
+
+class TestShape_More_Non_Overlapping_Contours : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "More Non-overlapping Contours")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let rectangles = UIBezierPath()
+    rectangles.appendPath(UIBezierPath(rect: CGRect(x:  100, y: 200, width: 200, height: 200)))
+    rectangles.appendPath(UIBezierPath(rect: CGRect(x: 175, y: 70, width: 50, height: 50)))
+
+    return rectangles
+  }
+
+  func topShape() -> UIBezierPath {
+    let circles = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 200, y: 300), withRadius: 85, toPath: circles)
+    addCircleAtPoint(CGPoint(x: 200, y: 95), withRadius: 85, toPath: circles)
+
+    return circles
+  }
+}
+
+class TestShape_Concentric_Contours : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Concentric Contours")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let holeyRectangle = UIBezierPath()
+    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
+    return holeyRectangle
+  }
+
+  func topShape() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 140, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_More_Concentric_Contours : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "More Concentric Contours")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let holeyRectangle = UIBezierPath()
+    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
+    return holeyRectangle
+  }
+
+  func topShape() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 70, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Circle_Overlapping_Hole : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Circle Overlapping Hole")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let holeyRectangle = UIBezierPath()
+    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
+    return holeyRectangle
+  }
+
+  func topShape() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 180, y: 180), withRadius: 125, toPath: circle)
+    return circle
+  }
+}
+
+class TestShape_Rect_w_Hole_Over_Rect_w_Hole : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Rect w/Hole Over Rect w/Hole")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let holeyRectangle = UIBezierPath()
+    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
+    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
+    return holeyRectangle
+  }
+
+  func topShape() -> UIBezierPath {
+    let holeyRectangle = UIBezierPath()
+    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 225, y: 65, width: 160, height: 160)))
+    addCircleAtPoint(CGPoint(x: 305, y: 145), withRadius: 65, toPath: holeyRectangle)
+    return holeyRectangle
+  }
+}
+
+class TestShape_Curve_Overlapping_Rectangle : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Curve Overlapping Rectangle")
+  }
+
+  func otherShapes() -> UIBezierPath {
+    let top : CGFloat = 65.0 + 160.0 / 3.0
+
+    let path = UIBezierPath()
+    path.moveToPoint(CGPoint(x: 40, y: top))
+    path.addLineToPoint(CGPoint(x: 410, y: top))
+    path.addLineToPoint(CGPoint(x: 410, y: 50))
+    path.addLineToPoint(CGPoint(x: 40, y: 50))
+    path.addLineToPoint(CGPoint(x: 40, y: top))
+    path.closePath()
+
+    return path
+  }
+
+  func topShape() -> UIBezierPath {
+    let curvyShape = UIBezierPath()
+    curvyShape.moveToPoint(CGPoint(x: 335, y: 203))
+    curvyShape.addCurveToPoint(CGPoint(x: 335, y: 200),
+      controlPoint1: CGPoint(x: 335, y: 202),
+      controlPoint2: CGPoint(x: 335, y: 201))
+    curvyShape.addCurveToPoint(CGPoint(x: 270, y: 90),
+      controlPoint1: CGPoint(x: 335, y: 153),
+      controlPoint2: CGPoint(x: 309, y: 111))
+    curvyShape.addCurveToPoint(CGPoint(x: 240, y: 145),
+      controlPoint1: CGPoint(x: 252, y: 102),
+      controlPoint2: CGPoint(x: 240, y: 122))
+    curvyShape.addCurveToPoint(CGPoint(x: 305, y: 210),
+      controlPoint1: CGPoint(x: 240, y: 181),
+      controlPoint2: CGPoint(x: 269, y: 210))
+    curvyShape.addCurveToPoint(CGPoint(x: 335, y: 203),
+      controlPoint1: CGPoint(x: 316, y: 210),
+      controlPoint2: CGPoint(x: 326, y: 207))
+    curvyShape.closePath()
+
+    return curvyShape
+  }
+}
+
+/* Template for creating more
+class TestShape_ : TestShape, SampleShapeMaker {
+
+init() {
+super.init(label: "AAAAAAAAAAAAAAAAAAA")
+}
+
+func otherShapes() -> UIBezierPath {
+}
+
+func topShape() -> UIBezierPath {
+}
+}
+*/
+
+
+// MARK: My extra debug shapes not from Andy Finnel's example
+
+
 class TestShape_Debug : TestShape, SampleShapeMaker {
 
   init() {
-    super.init(label: "Debug")
+    super.init(label: "- Debug -")
   }
 
   func otherShapes() -> UIBezierPath {
@@ -203,25 +648,25 @@ class TestShape_Debug003 : TestShape, SampleShapeMaker {
       controlPoint2: CGPoint(x: 138.071198, y: 0)
     )
     arc1.closePath()
-
+    
     return arc1
   }
 }
 
-class TestShape_Circle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
+// TODO: Track down why this has an extra point (visible in Subtract)
+
+class TestShape_Rectangle_Sharing_Edge_With_Rectangle : TestShape, SampleShapeMaker {
 
   init() {
-    super.init(label: "Circle Overlapping Rectangle")
+    super.init(label: "Shared Edge")
   }
 
   func otherShapes() -> UIBezierPath {
-    return UIBezierPath(rect: CGRect(x: 50, y: 50, width: 300, height: 200))
+    return UIBezierPath(rect: CGRect(x: 10, y: 10, width: 100, height: 130))
   }
 
   func topShape() -> UIBezierPath {
-    let circle = UIBezierPath()
-    addCircleAtPoint(CGPoint(x: 355, y: 240), withRadius: 125.0, toPath: circle)
-    return circle
+    return UIBezierPath(rect: CGRect(x: 40, y: 10, width: 120, height: 80))
   }
 }
 
@@ -240,21 +685,6 @@ class TestShape_Rectangle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
   }
 }
 
-class TestShape_Rectangle_Sharing_Edge_With_Rectangle : TestShape, SampleShapeMaker {
-
-  init() {
-    super.init(label: "Shared Edge")
-  }
-
-  func otherShapes() -> UIBezierPath {
-    return UIBezierPath(rect: CGRect(x: 0, y: 0, width: 10, height: 13))
-  }
-
-  func topShape() -> UIBezierPath {
-    return UIBezierPath(rect: CGRect(x: 5, y: 0, width: 11, height: 8))
-  }
-}
-
 class TestShape_Tiny_Rectangle_Overlapping_Rectangle : TestShape, SampleShapeMaker {
 
   init() {
@@ -270,168 +700,7 @@ class TestShape_Tiny_Rectangle_Overlapping_Rectangle : TestShape, SampleShapeMak
   }
 }
 
-class TestShape_Circle_in_Rectangle : TestShape, SampleShapeMaker {
-
-  init() {
-    super.init(label: "Circle in Rectangle")
-  }
-
-  func otherShapes() -> UIBezierPath {
-    return UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300))
-  }
-
-  func topShape() -> UIBezierPath {
-    let circle = UIBezierPath()
-    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125.0, toPath: circle)
-    return circle
-  }
-}
-
-class TestShape_Rectangle_in_Circle : TestShape, SampleShapeMaker {
-
-  init() {
-    super.init(label: "Rectangle in Circle")
-  }
-
-  func otherShapes() -> UIBezierPath {
-    let circle = UIBezierPath()
-    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 185.0, toPath: circle)
-    return circle
-  }
-
-  func topShape() -> UIBezierPath {
-    return UIBezierPath(rect: CGRect(x: 150, y: 150, width: 150, height: 150))
-  }
-}
-
-class TestShape_Circle_on_Rectangle : TestShape, SampleShapeMaker {
-
-  init() {
-    super.init(label: "Circle on Rectangle")
-  }
-
-  func otherShapes() -> UIBezierPath {
-    return UIBezierPath(rect: CGRect(x: 15, y: 15, width: 370, height: 370))
-  }
-
-  func topShape() -> UIBezierPath {
-    let circle = UIBezierPath()
-    addCircleAtPoint(CGPoint(x: 200, y: 200), withRadius: 185, toPath: circle)
-    return circle
-  }
-}
-
-class TestShape_Rect_Over_Rect_w_Hole : TestShape, SampleShapeMaker {
-
-  init() {
-    super.init(label: "Rect Over Rect with Hole")
-  }
-
-  func otherShapes() -> UIBezierPath {
-    let holeyRectangle = UIBezierPath()
-    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
-    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
-    return holeyRectangle
-  }
-
-  func topShape() -> UIBezierPath {
-    return UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
-  }
-}
-
-class TestShape_Circle_Over_Two_Rects : TestShape, SampleShapeMaker {
-
-  init() {
-    super.init(label: "Circle Overlapping Two Rects")
-  }
-
-  func otherShapes() -> UIBezierPath {
-    let rectangles = UIBezierPath()
-    rectangles.appendPath(UIBezierPath(rect: CGRect(x:  50, y: 5, width: 100, height: 400)))
-    rectangles.appendPath(UIBezierPath(rect: CGRect(x: 350, y: 5, width: 100, height: 400)))
-    return rectangles
-  }
-
-  func topShape() -> UIBezierPath {
-    let circle = UIBezierPath()
-    addCircleAtPoint(CGPoint(x: 200, y: 200), withRadius: 185, toPath: circle)
-    return circle
-  }
-}
-
-class TestShape_Circle_Over_Circle : TestShape, SampleShapeMaker {
-
-  init() {
-    super.init(label: "Circle Overlapping Circle")
-  }
-
-  func otherShapes() -> UIBezierPath {
-    let circle = UIBezierPath()
-    addCircleAtPoint(CGPoint(x: 355, y: 240), withRadius: 125, toPath: circle)
-    return circle
-  }
-
-  func topShape() -> UIBezierPath {
-    let circle = UIBezierPath()
-    addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 100, toPath: circle)
-    return circle
-  }
-}
-
-class TestShape_Complex_Shapes : TestShape, SampleShapeMaker {
-
-  init() {
-    super.init(label: "Complex Shapes")
-  }
-
-  func otherShapes() -> UIBezierPath {
-    let holeyRectangle = UIBezierPath()
-    holeyRectangle.appendPath(UIBezierPath(rect: CGRect(x: 50, y: 50, width: 350, height: 300)))
-    addCircleAtPoint(CGPoint(x: 210, y: 200), withRadius: 125, toPath: holeyRectangle)
-
-    let rectangle = UIBezierPath(rect: CGRect(x: 180, y: 5, width: 100, height: 400))
-    //let allParts = holeyRectangle.fb_intersect(rectangle)
-    let allParts = holeyRectangle.fb_union(rectangle)
-
-    return allParts
-  }
-
-  func topShape() -> UIBezierPath {
-    let circle = UIBezierPath()
-    addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
-    return circle
-  }
-}
-
-
-/*
-class TestShape_ : TestShape, SampleShapeMaker {
-
-init() {
-super.init(label: "AAAAAAAAAAAAAAAAAAA")
-}
-
-func otherShapes() -> UIBezierPath {
-}
-
-func topShape() -> UIBezierPath {
-}
-}
-*/
-
-/*
-    TestShape(label: "More Complex Shapes"),
-    TestShape(label: "Triangle Inside Rectangle"),
-    TestShape(label: "Diamond Overlapping Rectangle"),
-    TestShape(label: "Diamond Inside Rectangle"),
-    TestShape(label: "Non-overlapping Contours"),
-    TestShape(label: "More Non-overlapping Contours"),
-    TestShape(label: "Concentric Contours"),
-    TestShape(label: "More Concentric Contours"),
-    TestShape(label: "Circle Overlapping Hole"),
-    TestShape(label: "Rect w/Hole Overlapping Rect w/Hole"),
-    TestShape(label: "Curve Overlapping Rectangle")
-*/
+// MARK: Extra functions
 
 func addCircleAtPoint(center: CGPoint, withRadius radius: CGFloat, toPath circle: UIBezierPath)
   {
