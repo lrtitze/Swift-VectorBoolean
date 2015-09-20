@@ -240,7 +240,7 @@ func FBComputeCubicFirstDerivativeRoots(a: Double, b: Double, c: Double, d: Doub
 }
 
 /// Legendre-Gauss abscissae (xi values, defined at i=n as the roots of the nth order Legendre polynomial Pn(x))
-let FBLegendreGaussAbscissaeValues : [[CGFloat]] = [
+let FBLegendreGaussAbscissaeValues : [[Double]] = [
   [], [],
   [-0.5773502691896257310588680411456152796745, 0.5773502691896257310588680411456152796745],
   [0.0000000000000000000000000000000000000000, -0.7745966692414834042779148148838430643082, 0.7745966692414834042779148148838430643082],
@@ -267,7 +267,7 @@ let FBLegendreGaussAbscissaeValues : [[CGFloat]] = [
   [-0.0640568928626056299791002857091370970011, 0.0640568928626056299791002857091370970011, -0.1911188674736163106704367464772076345980, 0.1911188674736163106704367464772076345980, -0.3150426796961633968408023065421730279922, 0.3150426796961633968408023065421730279922, -0.4337935076260451272567308933503227308393, 0.4337935076260451272567308933503227308393, -0.5454214713888395626995020393223967403173, 0.5454214713888395626995020393223967403173, -0.6480936519369755455244330732966773211956, 0.6480936519369755455244330732966773211956, -0.7401241915785543579175964623573236167431, 0.7401241915785543579175964623573236167431, -0.8200019859739029470802051946520805358887, 0.8200019859739029470802051946520805358887, -0.8864155270044010714869386902137193828821, 0.8864155270044010714869386902137193828821, -0.9382745520027327978951348086411599069834, 0.9382745520027327978951348086411599069834, -0.9747285559713094738043537290650419890881, 0.9747285559713094738043537290650419890881, -0.9951872199970213106468008845695294439793, 0.9951872199970213106468008845695294439793]
 ]
 
-let FBLegendreGaussWeightValues : [[CGFloat]] = [
+let FBLegendreGaussWeightValues : [[Double]] = [
   [], [],
   [1.0000000000000000000000000000000000000000,1.0000000000000000000000000000000000000000],
   [0.8888888888888888395456433499930426478386,0.5555555555555555802271783250034786760807,0.5555555555555555802271783250034786760807],
@@ -665,7 +665,7 @@ class FBBezierCurveData {
       FBExpandBoundsByPoint(&topLeft, bottomRight: &bottomRight, point: lastPoint);
 
       // Find the roots, which should be the extremities
-      let xRoots : [CGFloat] = FBComputeCubicFirstDerivativeRoots(endPoint1.x, b: controlPoint1.x, c: controlPoint2.x, d: endPoint2.x)
+      let xRoots : [Double] = FBComputeCubicFirstDerivativeRoots(Double(endPoint1.x), b: Double(controlPoint1.x), c: Double(controlPoint2.x), d: Double(endPoint2.x))
 
       for i in 0 ..< xRoots.count {
         let t = xRoots[i]
@@ -676,7 +676,7 @@ class FBBezierCurveData {
         FBExpandBoundsByPoint(&topLeft, bottomRight: &bottomRight, point: location)
       }
 
-      let yRoots : [CGFloat] = FBComputeCubicFirstDerivativeRoots(endPoint1.y, b: controlPoint1.y, c: controlPoint2.y, d: endPoint2.y)
+      let yRoots : [Double] = FBComputeCubicFirstDerivativeRoots(Double(endPoint1.y), b: Double(controlPoint1.y), c: Double(controlPoint2.y), d: Double(endPoint2.y))
       for i in 0 ..< yRoots.count {
         let t = yRoots[i]
         if t < 0 || t > 1 {
@@ -957,7 +957,7 @@ class FBBezierCurveData {
     ]
 
     // Precompute the dot product of distanceFromPoint and weightedDelta in order to speed things up
-    var precomputedTable: [[CGFloat]] = [
+    var precomputedTable: [[Double]] = [
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0]
@@ -969,7 +969,7 @@ class FBBezierCurveData {
     }
 
     // Precompute some of the values to speed things up
-    let FBZ: [[CGFloat]] = [
+    let FBZ: [[Double]] = [
       [1.0, 0.6, 0.3, 0.1],
       [0.4, 0.6, 0.6, 0.4],
       [0.1, 0.3, 0.6, 1.0]
@@ -991,7 +991,7 @@ class FBBezierCurveData {
       let upperBound = min(k, n)
       for i in lowerBound ... upperBound {
         let j = k - i
-        bezierPoints[i + j].y += precomputedTable[j][i] * FBZ[j][i]
+        bezierPoints[i + j].y += CGFloat(precomputedTable[j][i] * FBZ[j][i])
       }
     }
     
