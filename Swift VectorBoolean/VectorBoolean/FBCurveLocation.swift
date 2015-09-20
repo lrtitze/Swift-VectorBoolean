@@ -16,10 +16,10 @@ class FBCurveLocation {
   var graph : FBBezierGraph?
   var contour : FBBezierContour?
   private var _edge : FBBezierCurve
-  private var _parameter : CGFloat
-  private var _distance : CGFloat
+  private var _parameter : Double
+  private var _distance : Double
 
-  init(edge: FBBezierCurve, parameter: CGFloat, distance: CGFloat) {
+  init(edge: FBBezierCurve, parameter: Double, distance: Double) {
     _edge = edge
     _parameter = parameter
     _distance = distance
@@ -28,10 +28,10 @@ class FBCurveLocation {
   var edge : FBBezierCurve {
     return _edge
   }
-  var parameter : CGFloat {
+  var parameter : Double {
     return _parameter
   }
-  var distance : CGFloat {
+  var distance : Double {
     return _distance
   }
 }

@@ -53,7 +53,7 @@ private func FBFindEdge2TangentCurves(edge: FBBezierCurve, intersection: FBBezie
 
 // 46
 //static void FBComputeEdgeTangents(FBBezierCurve* leftCurve, FBBezierCurve *rightCurve, CGFloat offset, NSPoint edgeTangents[2])
-private func FBComputeEdgeTangents(leftCurve: FBBezierCurve, rightCurve: FBBezierCurve, offset: CGFloat, inout edgeTangents: FBTangentPair) {
+private func FBComputeEdgeTangents(leftCurve: FBBezierCurve, rightCurve: FBBezierCurve, offset: Double, inout edgeTangents: FBTangentPair) {
   edgeTangents.left = leftCurve.tangentFromRightOffset(offset)
   edgeTangents.right = rightCurve.tangentFromLeftOffset(offset)
 }

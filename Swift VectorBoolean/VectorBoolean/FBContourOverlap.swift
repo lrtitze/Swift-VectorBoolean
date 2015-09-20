@@ -76,7 +76,7 @@ class FBContourOverlap {
   }
 
   //- (BOOL) doesContainParameter:(CGFloat)parameter onEdge:(FBBezierCurve *)edge
-  func doesContainParameter(parameter: CGFloat, onEdge edge: FBBezierCurve) -> Bool {
+  func doesContainParameter(parameter: Double, onEdge edge: FBBezierCurve) -> Bool {
     if runs.count == 0 {
       return false
     }

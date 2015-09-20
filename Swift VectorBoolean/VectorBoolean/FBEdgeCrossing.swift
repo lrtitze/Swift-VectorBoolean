@@ -86,7 +86,7 @@ class FBEdgeCrossing {
   }
 
   //- (CGFloat) order
-  var order : CGFloat {
+  var order : Double {
     return parameter
   }
 
@@ -130,7 +130,7 @@ class FBEdgeCrossing {
   // These properties pass through to the underlying intersection
 
   //- (CGFloat) parameter
-  var parameter : CGFloat {
+  var parameter : Double {
     // TODO: Is this actually working? Check equality operator here!
     if edge == _intersection.curve1 {
       return _intersection.parameter1
@@ -155,7 +155,6 @@ class FBEdgeCrossing {
       return nil
     }
 
-    // TODO: Is this actually working? Check equality operator here!
     if edge == _intersection.curve1 {
       return _intersection.curve1LeftBezier
     } else {

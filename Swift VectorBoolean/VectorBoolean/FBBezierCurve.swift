@@ -19,11 +19,12 @@ import UIKit
 // MARK ---- Normalized Line ----
 
 struct FBNormalizedLine {
-  var a : CGFloat // * x +
-  var b : CGFloat // * y +
-  var c : CGFloat // constant
+  var a : Double // * x +
+  var b : Double // * y +
+  var c : Double // constant
 
-  init(a: CGFloat, b : CGFloat, c : CGFloat) {
+
+  init(a: Double, b : Double, c : Double) {
     self.a = a
     self.b = b
     self.c = c
@@ -36,9 +37,9 @@ struct FBNormalizedLine {
   //          http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/basic.html
   //
   init(point1: CGPoint, point2: CGPoint) {
-    self.a = point1.y - point2.y
-    self.b = point2.x - point1.x
-    self.c = point1.x * point2.y - point2.x * point1.y
+    self.a = Double(point1.y - point2.y)
+    self.b = Double(point2.x - point1.x)
+    self.c = Double(point1.x * point2.y - point2.x * point1.y)
 
     let distance = sqrt(self.b * self.b + self.a * self.a)
 
@@ -57,7 +58,7 @@ struct FBNormalizedLine {
 
   // 53
   //static FBNormalizedLine FBNormalizedLineOffset(FBNormalizedLine line, CGFloat offset)
-  func copyWithOffset(offset: CGFloat) -> FBNormalizedLine
+  func copyWithOffset(offset: Double) -> FBNormalizedLine
   {
     return FBNormalizedLine(
       a: self.a,
@@ -67,9 +68,9 @@ struct FBNormalizedLine {
 
   // 59
   // static CGFloat FBNormalizedLineDistanceFromPoint(FBNormalizedLine line, NSPoint point)
-  func distanceFromPoint(point: CGPoint) -> CGFloat
+  func distanceFromPoint(point: CGPoint) -> Double
   {
-    return a * point.x + b * point.y + c;
+    return a * Double(point.x) + b * Double(point.y) + c;
   }
 
   // 64
@@ -90,7 +91,7 @@ struct FBNormalizedLine {
 // ========================================================
 
 
-func FBParameterOfPointOnLine(lineStart: CGPoint, lineEnd: CGPoint, point: CGPoint) -> CGFloat {
+func FBParameterOfPointOnLine(lineStart: CGPoint, lineEnd: CGPoint, point: CGPoint) -> Double {
 
   // Note: its asumed you have already checked that point is colinear with the line (lineStart, lineEnd)
 
@@ -125,38 +126,40 @@ func FBLinesIntersect(line1Start: CGPoint, line1End: CGPoint, line2Start: CGPoin
 
 /// The three points are a counter-clockwise turn if the return value is greater than 0,
 ///  clockwise if less than 0, or colinear if 0.
-func CounterClockwiseTurn(point1: CGPoint, point2: CGPoint, point3: CGPoint) -> CGFloat
+func CounterClockwiseTurn(point1: CGPoint, point2: CGPoint, point3: CGPoint) -> Double
 {
   // We're calculating the signed area of the triangle formed by the three points. Well,
   //  almost the area of the triangle -- we'd need to divide by 2. But since we only
   //  care about the direction (i.e. the sign) dividing by 2 is an unnecessary step.
   // See http://mathworld.wolfram.com/TriangleArea.html for the signed area of a triangle.
 
-  let xDeltaA = point2.x - point1.x
-  let yDeltaB = point3.y - point1.y
-  let yDeltaC = point2.y - point1.y
-  let xDeltaD = point3.x - point1.x
+  let xDeltaA = Double(point2.x - point1.x)
+  let yDeltaB = Double(point3.y - point1.y)
+  let yDeltaC = Double(point2.y - point1.y)
+  let xDeltaD = Double(point3.x - point1.x)
 
   return xDeltaA * yDeltaB - yDeltaC * xDeltaD
 }
 
 
 /// Calculate if and where the given line intersects the horizontal line at y.
-func LineIntersectsHorizontalLine(startPoint: CGPoint, endPoint: CGPoint, y: CGFloat, inout intersectPoint: CGPoint) -> Bool {
+func LineIntersectsHorizontalLine(startPoint: CGPoint, endPoint: CGPoint, y: Double, inout intersectPoint: CGPoint) -> Bool {
   // Do a quick test to see if y even falls on the startPoint,endPoint line
-  let minY = min(startPoint.y, endPoint.y)
-  let maxY = max(startPoint.y, endPoint.y)
+  let minY = Double(min(startPoint.y, endPoint.y))
+  let maxY = Double(max(startPoint.y, endPoint.y))
   if (y < minY && !FBAreValuesClose(y, value2: minY)) || (y > maxY && !FBAreValuesClose(y, value2: maxY)) {
     return false
   }
 
   // There's an intersection here somewhere
   if startPoint.x == endPoint.x {
-    intersectPoint = CGPoint(x: startPoint.x, y: y)
+    intersectPoint = CGPoint(x: startPoint.x, y: CGFloat(y))
   }
   else {
-    let slope = (endPoint.y - startPoint.y) / (endPoint.x - startPoint.x)
-    intersectPoint = CGPoint(x: (y - startPoint.y) / slope + startPoint.x, y: y)
+    let slope = Double(endPoint.y - startPoint.y) / Double(endPoint.x - startPoint.x)
+    intersectPoint = CGPoint(
+      x: CGFloat((y - Double(startPoint.y)) / slope) + startPoint.x,
+      y: CGFloat(y))
   }
 
   return true
@@ -164,7 +167,7 @@ func LineIntersectsHorizontalLine(startPoint: CGPoint, endPoint: CGPoint, y: CGF
 
 // 134
 /// Calculate a point on the bezier curve passed in, specifically the point at parameter.
-func BezierWithPoints(degree: Int, bezierPoints: [CGPoint], parameter: CGFloat, withCurves: Bool) -> (point: CGPoint, leftCurve: [CGPoint]?, rightCurve: [CGPoint]?) {
+func BezierWithPoints(degree: Int, bezierPoints: [CGPoint], parameter: Double, withCurves: Bool) -> (point: CGPoint, leftCurve: [CGPoint]?, rightCurve: [CGPoint]?) {
 
   //  We're using De Casteljau's algorithm, which not only calculates the point at parameter
   //  in a numerically stable way, it also computes the two resulting bezier curves that
@@ -194,8 +197,10 @@ func BezierWithPoints(degree: Int, bezierPoints: [CGPoint], parameter: CGFloat, 
 
   for k in 1 ... degree {
     for i in 0 ... (degree - k) {
-      points[i].x = (1.0 - parameter) * points[i].x + parameter * points[i + 1].x
-      points[i].y = (1.0 - parameter) * points[i].y + parameter * points[i + 1].y
+      let pxV = (1.0 - parameter) * Double(points[i].x) + parameter * Double(points[i + 1].x)
+      points[i].x = CGFloat(pxV)
+      let pyV = (1.0 - parameter) * Double(points[i].y) + parameter * Double(points[i + 1].y)
+      points[i].y = CGFloat(pyV)
     }
     if withCurves {
       leftArray[k] = points[0]
@@ -208,7 +213,7 @@ func BezierWithPoints(degree: Int, bezierPoints: [CGPoint], parameter: CGFloat, 
 }
 
 // 174
-func FBComputeCubicFirstDerivativeRoots(a: CGFloat, b: CGFloat, c: CGFloat, d: CGFloat) -> [CGFloat]
+func FBComputeCubicFirstDerivativeRoots(a: Double, b: Double, c: Double, d: Double) -> [Double]
 {
   // See http://processingjs.nihongoresources.com/bezierinfo/#bounds for where the formulas come from
 
@@ -289,29 +294,37 @@ let FBLegendreGaussWeightValues : [[CGFloat]] = [
   [0.1279381953467521593204025975865079089999,0.1279381953467521593204025975865079089999,0.1258374563468283025002847352880053222179,0.1258374563468283025002847352880053222179,0.1216704729278033914052770114722079597414,0.1216704729278033914052770114722079597414,0.1155056680537255991980671865348995197564,0.1155056680537255991980671865348995197564,0.1074442701159656343712356374453520402312,0.1074442701159656343712356374453520402312,0.0976186521041138843823858906034729443491,0.0976186521041138843823858906034729443491,0.0861901615319532743431096832864568568766,0.0861901615319532743431096832864568568766,0.0733464814110802998392557583429152145982,0.0733464814110802998392557583429152145982,0.0592985849154367833380163688161701429635,0.0592985849154367833380163688161701429635,0.0442774388174198077483545432642131345347,0.0442774388174198077483545432642131345347,0.0285313886289336633705904233693217975087,0.0285313886289336633705904233693217975087,0.0123412297999872001830201639904771582223,0.0123412297999872001830201639904771582223]
 ]
 
-func FBGaussQuadratureBaseForCubic(t: CGFloat, p1: CGFloat, p2: CGFloat, p3: CGFloat, p4: CGFloat) -> CGFloat
+func FBGaussQuadratureBaseForCubic(t: Double, p1: Double, p2: Double, p3: Double, p4: Double) -> Double
 {
-  let t1 = -3.0 * p1 + 9.0 * p2 - 9.0 * p3 + 3.0 * p4
+  let t1 = (-3.0 * p1) + (9.0 * p2) - (9.0 * p3) + (3.0 * p4)
   let t2 = t * t1 + 6.0 * p1 - 12.0 * p2 + 6.0 * p3
 
   return t * t2 - 3.0 * p1 + 3.0 * p2
   //return t * (t * (-3 * p1 + 9 * p2 - 9 * p3 + 3 * p4) + 6 * p1 + 12 * p2 + 3 * p3) - 3 * p1 + 3 * p2
 }
 
-func FBGaussQuadratureFOfTForCubic(t: CGFloat, p1: CGPoint, p2: CGPoint, p3: CGPoint, p4: CGPoint) -> CGFloat
+func FBGaussQuadratureFOfTForCubic(t: Double, p1: CGPoint, p2: CGPoint, p3: CGPoint, p4: CGPoint) -> Double
 {
-  let baseX = FBGaussQuadratureBaseForCubic(t, p1: p1.x, p2: p2.x, p3: p3.x, p4: p4.x)
-  let baseY = FBGaussQuadratureBaseForCubic(t, p1: p1.y, p2: p2.y, p3: p3.y, p4: p4.y)
+  let baseX = FBGaussQuadratureBaseForCubic(t,
+    p1: Double(p1.x),
+    p2: Double(p2.x),
+    p3: Double(p3.x),
+    p4: Double(p4.x))
+  let baseY = FBGaussQuadratureBaseForCubic(t,
+    p1: Double(p1.y),
+    p2: Double(p2.y),
+    p3: Double(p3.y),
+    p4: Double(p4.y))
 
-  return CGFloat(sqrtf(Float(baseX * baseX + baseY * baseY)))
+  return sqrt(baseX * baseX + baseY * baseY)
 }
 
-func FBGaussQuadratureComputeCurveLengthForCubic(z: CGFloat, steps: Int, p1: CGPoint, p2: CGPoint, p3: CGPoint, p4: CGPoint) -> CGFloat
+func FBGaussQuadratureComputeCurveLengthForCubic(z: Double, steps: Int, p1: CGPoint, p2: CGPoint, p3: CGPoint, p4: CGPoint) -> Double
 {
-  let z2 = z / 2.0
-  var sum : CGFloat = 0.0
+  let z2 = Double(z / 2.0)
+  var sum : Double = 0.0
   for i in 0 ..< steps {
-    let correctedT = z2 * FBLegendreGaussAbscissaeValues[steps][i] + z2
+    let correctedT: Double = z2 * FBLegendreGaussAbscissaeValues[steps][i] + z2
     sum += FBLegendreGaussWeightValues[steps][i] * FBGaussQuadratureFOfTForCubic(correctedT, p1: p1, p2: p2, p3: p3, p4: p4)
   }
   return z2 * sum
@@ -370,7 +383,7 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
     }
   }
 
-  let zeroLine = FBNormalizedLine(a: 0, b: 1, c: 0)
+  let zeroLine = FBNormalizedLine(a: 0.0, b: 1.0, c: 0.0)
   let aboveLine = line.copyWithOffset(-aboveDistance)
   let intersect1 = zeroLine.intersectionWith(aboveLine)
 
@@ -387,7 +400,7 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
 }
 
 // 330
-func FBFindBezierRootsWithDepth(bezierPoints: [CGPoint], degree: Int, depth: Int, perform: (root: CGFloat) -> Void) {
+func FBFindBezierRootsWithDepth(bezierPoints: [CGPoint], degree: Int, depth: Int, perform: (root: Double) -> Void) {
 
   let crossingCount = FBCountBezierCrossings(bezierPoints, degree: degree)
   if crossingCount == 0 {
@@ -395,13 +408,13 @@ func FBFindBezierRootsWithDepth(bezierPoints: [CGPoint], degree: Int, depth: Int
   }
   else if crossingCount == 1 {
     if depth >= FBFindBezierRootsMaximumDepth {
-      let root = (bezierPoints[0].x + bezierPoints[degree].x) / 2.0
+      let root = Double(bezierPoints[0].x + bezierPoints[degree].x) / 2.0
       perform(root: root)
       return
     }
     var intersectionPoint = CGPointZero
     if FBIsControlPolygonFlatEnough(bezierPoints, degree: degree, intersectionPoint: &intersectionPoint) {
-      perform(root: intersectionPoint.x)
+      perform(root: Double(intersectionPoint.x))
       return
     }
   }
@@ -413,7 +426,7 @@ func FBFindBezierRootsWithDepth(bezierPoints: [CGPoint], degree: Int, depth: Int
 }
 
 // 356
-func FBFindBezierRoots(bezierPoints: [CGPoint], degree: Int, perform: (root: CGFloat) -> Void) {
+func FBFindBezierRoots(bezierPoints: [CGPoint], degree: Int, perform: (root: Double) -> Void) {
 
   FBFindBezierRootsWithDepth(bezierPoints, degree: degree, depth: 0, perform: perform)
 }
@@ -512,10 +525,10 @@ func ILLUSTRATE_CALL_TO_FBConvexHullBuildFromPoints() {
 
 
 struct FBBezierCurveLocation {
-  var parameter : CGFloat
-  var distance : CGFloat
+  var parameter : Double
+  var distance : Double
 
-  init(parameter: CGFloat, distance: CGFloat) {
+  init(parameter: Double, distance: Double) {
     self.parameter = parameter
     self.distance = distance
   }
@@ -529,7 +542,7 @@ class FBBezierCurveData {
 
   var isStraightLine : Bool		// GPC: flag when curve came from a straight line segment
 
-  var length : CGFloat?         // cached value
+  var length : Double?         // cached value
   private var _bounds : CGRect? // cached value
   var _isPoint : Bool?          // cached value
   var _boundingRect : CGRect?   // cached value
@@ -687,7 +700,7 @@ class FBBezierCurveData {
   // Becomes:
   // let someLength = curve_data.getLengthAtParameter(CGFloat parameter)
   //
-  func getLengthAtParameter(parameter: CGFloat) -> CGFloat {
+  func getLengthAtParameter(parameter: Double) -> Double {
 
     // Use the cached value if at all possible
     if parameter == 1.0 && length != nil && length != FBBezierCurveDataInvalidLength {
@@ -699,7 +712,7 @@ class FBBezierCurveData {
     if isStraightLine {
       calculatedLength = FBDistanceBetweenPoints(endPoint1, point2: endPoint2) * parameter
     } else {
-      calculatedLength = FBGaussQuadratureComputeCurveLengthForCubic(parameter, steps: 12, p1: endPoint1, p2: controlPoint1, p3: controlPoint2, p4: endPoint2)
+      calculatedLength = FBGaussQuadratureComputeCurveLengthForCubic(Double(parameter), steps: 12, p1: endPoint1, p2: controlPoint1, p3: controlPoint2, p4: endPoint2)
     }
 
     // If possible, update our cache
@@ -719,7 +732,7 @@ class FBBezierCurveData {
   // Becomes:
   // let someLength = curve_data.getLength()
   //
-  func getLength() -> CGFloat {
+  func getLength() -> Double {
     return getLengthAtParameter(1.0)
   }
 
@@ -728,7 +741,7 @@ class FBBezierCurveData {
   // Becomes:
   // let (point,left,right) = curve_data.pointAtParameter(param_float)
   //
-  func pointAtParameter(parameter: CGFloat) -> (point: CGPoint, leftCurve: FBBezierCurveData?, rightCurve: FBBezierCurveData?) {
+  func pointAtParameter(parameter: Double) -> (point: CGPoint, leftCurve: FBBezierCurveData?, rightCurve: FBBezierCurveData?) {
 
     // This method is a simple wrapper around the BezierWithPoints() helper function. It computes the 2D point at the given parameter,
     //  and (optionally) the resulting curves that splitting at the parameter would create.
@@ -780,7 +793,7 @@ class FBBezierCurveData {
   // Becomes:
   // let normalized_line = curve_data.regularFatLineBounds(&range)
   //
-  func regularFatLineBounds(inout range: FBRange) -> FBNormalizedLine
+  func regularFatLineBounds() -> (line: FBNormalizedLine, range: FBRange)
   {
     // Create the fat line based on the end points
     let line = FBNormalizedLine(point1: endPoint1, point2: endPoint2)
@@ -790,18 +803,15 @@ class FBBezierCurveData {
     //  all four points that define this cubic bezier curve. Compute the signed distances of
     //  each of the end and control points from the fat line, and that will give us the bounds.
 
-    // In this case, we know that the end points are on the line, thus their distances will be 0.
+    // In this case we know that the end points are on the line, thus their distances will be 0.
     //  So we can skip computing those and just use 0.
     let controlPoint1Distance = line.distanceFromPoint(controlPoint1)
     let controlPoint2Distance = line.distanceFromPoint(controlPoint2)
+
     let minim = min(controlPoint1Distance, min(controlPoint2Distance, 0.0))
     let maxim = max(controlPoint1Distance, max(controlPoint2Distance, 0.0))
 
-    let newRange = FBRange(minimum: minim, maximum: maxim);
-    range.minimum = newRange.minimum
-    range.maximum = newRange.maximum
-
-    return line
+    return (line, FBRange(minimum: minim, maximum: maxim))
   }
 
   // 530
@@ -809,7 +819,7 @@ class FBBezierCurveData {
   // Becomes:
   // let normalized_line = curve_data.perpendicularFatLineBounds(&range)
   //
-  func perpendicularFatLineBounds(inout range: FBRange) -> FBNormalizedLine
+  func perpendicularFatLineBounds() -> (line: FBNormalizedLine, range: FBRange)
   {
     // Create a fat line that's perpendicular to the line created by the two end points.
     let normal = FBLineNormal(endPoint1, lineEnd: endPoint2)
@@ -829,11 +839,7 @@ class FBBezierCurveData {
     let minim = min(controlPoint1Distance, min(controlPoint2Distance, min(point1Distance, point2Distance)))
     let maxim = max(controlPoint1Distance, max(controlPoint2Distance, max(point1Distance, point2Distance)))
 
-    let newRange = FBRange(minimum: minim, maximum: maxim);
-    range.minimum = newRange.minimum
-    range.maximum = newRange.maximum
-
-    return line
+    return (line, FBRange(minimum: minim, maximum: maxim))
   }
 
   // 555
@@ -890,33 +896,33 @@ class FBBezierCurveData {
 
       // See if the segment of the convex hull intersects with the minimum fat line bounds
       if LineIntersectsHorizontalLine(startPoint, endPoint: endPoint, y: bounds.minimum, intersectPoint: &intersectionPoint) {
-        if intersectionPoint.x < range.minimum {
-          range.minimum = intersectionPoint.x
+        if Double(intersectionPoint.x) < range.minimum {
+          range.minimum = Double(intersectionPoint.x)
         }
-        if intersectionPoint.x > range.maximum {
-          range.maximum = intersectionPoint.x
+        if Double(intersectionPoint.x) > range.maximum {
+          range.maximum = Double(intersectionPoint.x)
         }
       }
 
       // See if this segment of the convex hull intersects with the maximum fat line bounds
       if LineIntersectsHorizontalLine(startPoint, endPoint: endPoint, y: bounds.maximum, intersectPoint: &intersectionPoint) {
-        if intersectionPoint.x < range.minimum {
-          range.minimum = intersectionPoint.x
+        if Double(intersectionPoint.x) < range.minimum {
+          range.minimum = Double(intersectionPoint.x)
         }
-        if intersectionPoint.x > range.maximum {
-          range.maximum = intersectionPoint.x
+        if Double(intersectionPoint.x) > range.maximum {
+          range.maximum = Double(intersectionPoint.x)
         }
       }
 
       // We want to be able to refine t even if the convex hull lies completely inside the bounds.
       // This also allows us to be able to use range of [1..0] as a sentinel value meaning the
       // convex hull lies entirely outside of bounds, and the curves don't intersect.
-      if startPoint.y < bounds.maximum && startPoint.y > bounds.minimum {
-        if startPoint.x < range.minimum {
-          range.minimum = startPoint.x
+      if Double(startPoint.y) < bounds.maximum && Double(startPoint.y) > bounds.minimum {
+        if Double(startPoint.x) < range.minimum {
+          range.minimum = Double(startPoint.x)
         }
-        if startPoint.x > range.maximum {
-          range.maximum = startPoint.x
+        if Double(startPoint.x) > range.maximum {
+          range.maximum = Double(startPoint.x)
         }
       }
     }
@@ -1017,14 +1023,14 @@ class FBBezierCurveData {
       parameter = 1.0;
     }
 
-    let location = FBBezierCurveLocation(parameter: CGFloat(parameter), distance: CGFloat(distance))
+    let location = FBBezierCurveLocation(parameter: parameter, distance: distance)
     
     return location
   }
 
   // 893
   //static BOOL FBBezierCurveDataIsEqualWithOptions(FBBezierCurveData me, FBBezierCurveData other, CGFloat threshold)
-  func isEqualWithOptions(other: FBBezierCurveData, threshold: CGFloat) -> Bool
+  func isEqualWithOptions(other: FBBezierCurveData, threshold: Double) -> Bool
   {
     if isPoint() || other.isPoint() {
       return false
@@ -1073,8 +1079,7 @@ func bezierClipWithBezierCurve(me: FBBezierCurveData, curve: FBBezierCurveData, 
 
   // Compute the regular fat line using the end points, then compute the range that could still possibly intersect
   //  with the other curve
-  var fatLineBounds = FBRange(minimum: 0, maximum: 0)
-  let fatLine = curve.regularFatLineBounds(&fatLineBounds)
+  let (fatLine, fatLineBounds) = curve.regularFatLineBounds()
   let regularClippedRange = me.clipWithFatLine(fatLine, bounds: fatLineBounds)
 
   // A range of [1, 0] is a special sentinel value meaning "they don't intersect".
@@ -1084,8 +1089,7 @@ func bezierClipWithBezierCurve(me: FBBezierCurveData, curve: FBBezierCurveData, 
   }
 
   // Just in case the regular fat line isn't good enough, try the perpendicular one
-  var perpendicularLineBounds = FBRange(minimum: 0, maximum: 0)
-  let perpendicularLine = curve.perpendicularFatLineBounds(&perpendicularLineBounds)
+  let (perpendicularLine, perpendicularLineBounds) = curve.perpendicularFatLineBounds()
   let perpendicularClippedRange = me.clipWithFatLine(perpendicularLine, bounds: perpendicularLineBounds)
 
   if perpendicularClippedRange.minimum == 1.0 && perpendicularClippedRange.maximum == 0.0 {
@@ -1191,8 +1195,8 @@ private func clipLineOriginalCurve(originalCurve: FBBezierCurveData, curve: FBBe
   let themOnUs1 = FBParameterOfPointOnLine(curve.endPoint1, lineEnd: curve.endPoint2, point: otherCurve.endPoint1)
   let themOnUs2 = FBParameterOfPointOnLine(curve.endPoint1, lineEnd: curve.endPoint2, point: otherCurve.endPoint2)
   let clippedRange = FBRange(
-    minimum: max(0, min(themOnUs1, themOnUs2)),
-    maximum: min(1, max(themOnUs1, themOnUs2)))
+    minimum: max(0.0, min(themOnUs1, themOnUs2)),
+    maximum: min(1.0, max(themOnUs1, themOnUs2)))
 
   if clippedRange.minimum > clippedRange.maximum {
     return (curve, false)   // No intersection
@@ -1430,7 +1434,7 @@ private func straightLineOverlap(
 
 // 1003
 //static CGFloat FBBezierCurveDataRefineParameter(FBBezierCurveData me, CGFloat parameter, NSPoint point)
-private func pfRefineParameter(me: FBBezierCurveData, parameter: CGFloat, point: CGPoint) -> CGFloat
+private func pfRefineParameter(me: FBBezierCurveData, parameter: Double, point: CGPoint) -> Double
 {
   // Use Newton's Method to refine our parameter. In general, that formula is:
   //
@@ -2271,7 +2275,7 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1521
   //- (NSPoint) pointAtParameter:(CGFloat)parameter leftBezierCurve:(FBBezierCurve **)leftBezierCurve rightBezierCurve:(FBBezierCurve **)rightBezierCurve
-  func pointAtParameter(parameter: CGFloat) -> (point: CGPoint, leftBezierCurve: FBBezierCurve?, rightBezierCurve: FBBezierCurve?) {
+  func pointAtParameter(parameter: Double) -> (point: CGPoint, leftBezierCurve: FBBezierCurve?, rightBezierCurve: FBBezierCurve?) {
 
     var leftBezierCurve: FBBezierCurve?
     var rightBezierCurve: FBBezierCurve?
@@ -2288,19 +2292,19 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1535
   //- (CGFloat) refineParameter:(CGFloat)parameter forPoint:(NSPoint)point
-  private func refineParameter(parameter: CGFloat, forPoint point: CGPoint) -> CGFloat {
+  private func refineParameter(parameter: Double, forPoint point: CGPoint) -> Double {
     return pfRefineParameter(self.data, parameter: parameter, point: point)
   }
 
   // 1540
   //- (CGFloat) length
-  func length() -> CGFloat {
+  func length() -> Double {
     return _data.getLength()
   }
 
   // 1545
   //- (CGFloat) lengthAtParameter:(CGFloat)parameter
-  func lengthAtParameter(parameter: CGFloat) -> CGFloat {
+  func lengthAtParameter(parameter: Double) -> Double {
     return _data.getLengthAtParameter(parameter)
   }
 
@@ -2331,7 +2335,7 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1570
   //- (NSPoint) pointFromRightOffset:(CGFloat)offset
-  func pointFromRightOffset(var offset: CGFloat) -> CGPoint
+  func pointFromRightOffset(var offset: Double) -> CGPoint
   {
     let len = length()
     offset = min(offset, len)
@@ -2341,7 +2345,7 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1578
   //- (NSPoint) pointFromLeftOffset:(CGFloat)offset
-  func pointFromLeftOffset(var offset: CGFloat) -> CGPoint
+  func pointFromLeftOffset(var offset: Double) -> CGPoint
   {
     let len = length()
     offset = min(offset, len)
@@ -2351,7 +2355,7 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1586
   //- (NSPoint) tangentFromRightOffset:(CGFloat)offset
-  func tangentFromRightOffset(var offset: CGFloat) -> CGPoint
+  func tangentFromRightOffset(var offset: Double) -> CGPoint
   {
     if _data.isStraightLine && !_data.isPoint() {
       return FBSubtractPoint(_data.endPoint1, point2: _data.endPoint2)
@@ -2376,7 +2380,7 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1607
   //- (NSPoint) tangentFromLeftOffset:(CGFloat)offset
-  func tangentFromLeftOffset(var offset: CGFloat) -> CGPoint
+  func tangentFromLeftOffset(var offset: Double) -> CGPoint
   {
     if _data.isStraightLine && !_data.isPoint() {
       return FBSubtractPoint(_data.endPoint2, point2: _data.endPoint1)

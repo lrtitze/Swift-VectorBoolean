@@ -33,7 +33,6 @@ class FBEdgeOverlap {
     if FBAreValuesCloseWithOptions(range.parameterRange1.maximum, value2: 1.0, threshold: FBOverlapThreshold) {
       // nextOverlap should start at 0 of the next edge
       let nextEdge = edge1.next
-
       return nextOverlap.edge1 == nextEdge && FBAreValuesCloseWithOptions(nextOverlap.range.parameterRange1.minimum, value2: 0.0, threshold: FBOverlapThreshold)
     }
 
@@ -73,7 +72,7 @@ class FBEdgeOverlap {
   }
 
   //- (BOOL) doesContainParameter:(CGFloat)parameter onEdge:(FBBezierCurve *)edge startExtends:(BOOL)extendsBeforeStart endExtends:(BOOL)extendsAfterEnd
-  func doesContainParameter(parameter: CGFloat, onEdge edge:FBBezierCurve, startExtends extendsBeforeStart: Bool, endExtends extendsAfterEnd: Bool) -> Bool {
+  func doesContainParameter(parameter: Double, onEdge edge:FBBezierCurve, startExtends extendsBeforeStart: Bool, endExtends extendsAfterEnd: Bool) -> Bool {
 
     // By the time this is called, we know the crossing is on one of our edges.
     if extendsBeforeStart && extendsAfterEnd {

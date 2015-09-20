@@ -372,7 +372,7 @@ class FBBezierContour {
 
   // 289
   //- (void) startingEdge:(FBBezierCurve **)outEdge parameter:(CGFloat *)outParameter point:(NSPoint *)outPoint
-  func startingEdge() -> (edge: FBBezierCurve, parameter: CGFloat, point: CGPoint) {
+  func startingEdge() -> (edge: FBBezierCurve, parameter: Double, point: CGPoint) {
     // Start with the startEdge, and if it's not shared (overlapping)
     // then use its first point
     var testEdge = startEdge!
@@ -436,7 +436,7 @@ class FBBezierContour {
 
   // 347
   //- (BOOL) markCrossingsOnEdge:(FBBezierCurve *)edge startParameter:(CGFloat)startParameter stopParameter:(CGFloat)stopParameter otherContours:(NSArray *)otherContours isEntry:(BOOL)startIsEntry
-  func markCrossingsOnEdge(edge: FBBezierCurve, startParameter: CGFloat, stopParameter: CGFloat, otherContours: [FBBezierContour] , var startIsEntry isEntry: Bool) -> Bool {
+  func markCrossingsOnEdge(edge: FBBezierCurve, startParameter: Double, stopParameter: Double, otherContours: [FBBezierContour] , var startIsEntry isEntry: Bool) -> Bool {
 
     // Mark all the crossings on this edge
     edge.crossingsWithBlock() {
@@ -732,7 +732,7 @@ class FBBezierContour {
 
   // 564
   //- (BOOL) doesOverlapContainParameter:(CGFloat)parameter onEdge:(FBBezierCurve *)edge
-  func doesOverlapContainParameter(parameter: CGFloat, onEdge edge: FBBezierCurve) -> Bool {
+  func doesOverlapContainParameter(parameter: Double, onEdge edge: FBBezierCurve) -> Bool {
     if _overlaps.count > 0 {
       for overlap in _overlaps {
         if overlap.doesContainParameter(parameter, onEdge:edge) {

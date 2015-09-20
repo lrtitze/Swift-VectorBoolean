@@ -72,7 +72,7 @@ class FBEdgeOverlapRun {
 
 
   //- (BOOL) doesContainParameter:(CGFloat)parameter onEdge:(FBBezierCurve *)edge
-  func doesContainParameter(parameter: CGFloat, onEdge edge: FBBezierCurve) -> Bool {
+  func doesContainParameter(parameter: Double, onEdge edge: FBBezierCurve) -> Bool {
     if overlaps.count == 0 {
       return false
     }
@@ -207,7 +207,7 @@ class FBEdgeOverlapRun {
 // =============================
 
 //static CGFloat FBComputeEdge1Tangents(FBEdgeOverlap *firstOverlap, FBEdgeOverlap *lastOverlap, CGFloat offset, NSPoint edge1Tangents[2])
-func FBComputeEdge1Tangents(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOverlap, offset: CGFloat, inout edge1Tangents: FBTangentPair) -> CGFloat {
+func FBComputeEdge1Tangents(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOverlap, offset: Double, inout edge1Tangents: FBTangentPair) -> Double {
 
   // edge1Tangents are firstOverlap.range1.minimum going to previous
   // and lastOverlap.range1.maximum going to next
@@ -238,7 +238,7 @@ func FBComputeEdge1Tangents(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOver
 
 
 //static CGFloat FBComputeEdge2Tangents(FBEdgeOverlap *firstOverlap, FBEdgeOverlap *lastOverlap, CGFloat offset, NSPoint edge2Tangents[2])
-func FBComputeEdge2Tangents(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOverlap, offset: CGFloat, inout edge2Tangents: FBTangentPair) -> CGFloat {
+func FBComputeEdge2Tangents(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOverlap, offset: Double, inout edge2Tangents: FBTangentPair) -> Double {
 
   // edge2Tangents are firstOverlap.range2.minimum going to previous
   // and lastOverlap.range2.maximum going to next
@@ -292,7 +292,7 @@ func FBComputeEdge2Tangents(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOver
 }
 
 //static void FBComputeEdge1TestPoints(FBEdgeOverlap *firstOverlap, FBEdgeOverlap *lastOverlap, CGFloat offset, NSPoint testPoints[2])
-func FBComputeEdge1TestPoints(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOverlap, offset: CGFloat, inout testPoints: FBTangentPair) {
+func FBComputeEdge1TestPoints(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOverlap, offset: Double, inout testPoints: FBTangentPair) {
 
   // edge1Tangents are firstOverlap.range1.minimum going to previous
   // and lastOverlap.range1.maximum going to next

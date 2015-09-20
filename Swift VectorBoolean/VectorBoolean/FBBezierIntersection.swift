@@ -24,11 +24,11 @@ let FBParameterCloseThreshold = CGFloat(1e-4)
 class FBBezierIntersection {
   private var _location : CGPoint?
   private var _curve1: FBBezierCurve
-  private var _parameter1: CGFloat
+  private var _parameter1: Double
   private var _curve1LeftBezier: FBBezierCurve?
   private var _curve1RightBezier: FBBezierCurve?
   private var _curve2: FBBezierCurve
-  private var _parameter2: CGFloat
+  private var _parameter2: Double
   private var _curve2LeftBezier: FBBezierCurve?
   private var _curve2RightBezier: FBBezierCurve?
   private var _tangent: Bool = false
@@ -44,7 +44,7 @@ class FBBezierIntersection {
     return _curve1
   }
 
-  var parameter1: CGFloat {
+  var parameter1: Double {
     return _parameter1
   }
 
@@ -52,14 +52,14 @@ class FBBezierIntersection {
     return _curve2
   }
 
-  var parameter2: CGFloat {
+  var parameter2: Double {
     return _parameter2
   }
 
   //+ (id) intersectionWithCurve1:(FBBezierCurve *)curve1 parameter1:(CGFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(CGFloat)parameter2;
   //- (id) initWithCurve1:(FBBezierCurve *)curve1 parameter1:(CGFloat)parameter1 curve2:(FBBezierCurve *)curve2 parameter2:(CGFloat)parameter2;
   // let i = FBBezierIntersection(curve1: dvbc1, param1: p1, curve2: dvbc2, param2: p2)
-  init(curve1: FBBezierCurve, param1: CGFloat, curve2:FBBezierCurve, param2: CGFloat) {
+  init(curve1: FBBezierCurve, param1: Double, curve2:FBBezierCurve, param2: Double) {
     _curve1 = curve1
     _parameter1 = param1
     _curve2 = curve2
