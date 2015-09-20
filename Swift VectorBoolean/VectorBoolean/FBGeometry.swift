@@ -229,9 +229,10 @@ func FBAreValuesCloseWithOptions(value1: CGFloat, value2: CGFloat, threshold: CG
 //////////////////////////////////////////////////////////////////////////
 // Helper methods for angles
 //
-let Two_π = CGFloat(2.0 * M_PI)
-let π = CGFloat(M_PI)
-let Half_π = CGFloat(M_PI_2)
+
+let Two_π = 2.0 * M_PI
+let π = M_PI
+let Half_π = M_PI_2
 
 
 // Normalize the angle between 0 and 2 π
@@ -246,7 +247,7 @@ func NormalizeAngle(var value: CGFloat) -> CGFloat {
 // Compute the polar angle from the cartesian point
 func PolarAngle(point: CGPoint) -> CGFloat {
 
-  var value = CGFloat(0.0)
+  var value = 0.0
 
   if point.x > 0.0 {
     value = atan(point.y / point.x)

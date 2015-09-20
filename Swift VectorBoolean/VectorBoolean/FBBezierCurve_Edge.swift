@@ -357,7 +357,7 @@ extension FBBezierCurve {
     //   the two tangents moving away from the intersection point on edge2.
     var edge1Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
     var edge2Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
-    var offset = CGFloat(0.0)
+    var offset = 0.0
 
     let (edge1LeftCurve, edge1RightCurve) = FBFindEdge1TangentCurves(self, intersection: intersection)
     let edge1Length = min(edge1LeftCurve.length(), edge1RightCurve.length())
@@ -385,7 +385,7 @@ extension FBBezierCurve {
     // the two tangents moving away from the intersection point on edge2.
     var edge1Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
     var edge2Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
-    var offset = CGFloat(0.0)
+    var offset = 0.0
 
     let (edge1LeftCurve, edge1RightCurve) = FBComputeEdge1RangeTangentCurves(self, intersectRange: intersectRange)
 

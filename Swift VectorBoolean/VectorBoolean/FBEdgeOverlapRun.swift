@@ -131,8 +131,8 @@ class FBEdgeOverlapRun {
       var edge1Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
       var edge2Tangents = FBTangentPair(left: CGPoint.zero, right: CGPoint.zero)
 
-      var offset = CGFloat(0.0)
-      var maxOffset = CGFloat(0.0)
+      var offset = 0.0
+      var maxOffset = 0.0
 
       repeat {
         let length1 = FBComputeEdge1Tangents(firstOverlap, lastOverlap: lastOverlap, offset: offset, edge1Tangents: &edge1Tangents)
@@ -212,8 +212,8 @@ func FBComputeEdge1Tangents(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOver
   // edge1Tangents are firstOverlap.range1.minimum going to previous
   // and lastOverlap.range1.maximum going to next
 
-  var firstLength = CGFloat(0.0)
-  var lastLength = CGFloat(0.0)
+  var firstLength = 0.0
+  var lastLength = 0.0
 
   if firstOverlap.range.isAtStartOfCurve1 {
     let otherEdge1 = firstOverlap.edge1.previousNonpoint
@@ -246,8 +246,8 @@ func FBComputeEdge2Tangents(firstOverlap: FBEdgeOverlap, lastOverlap: FBEdgeOver
   // edge2Tangents are firstOverlap.range2.maximum going to next
   // and lastOverlap.range2.minimum going to previous
 
-  var firstLength = CGFloat(0.0)
-  var lastLength = CGFloat(0.0)
+  var firstLength = 0.0
+  var lastLength = 0.0
 
   if !firstOverlap.range.reversed {
     if firstOverlap.range.isAtStartOfCurve2 {

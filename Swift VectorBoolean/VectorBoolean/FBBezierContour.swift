@@ -356,7 +356,7 @@ class FBBezierContour {
     // At this point we know that all the end points defining this contour are shared.
     // We'll need to somewhat arbitrarily pick a point on an edge that's not overlapping
     let stopValue = testEdge
-    let  parameter = CGFloat(0.5)
+    let  parameter = 0.5
     while doesOverlapContainParameter(parameter, onEdge:testEdge) {
       testEdge = testEdge.next;
       if ( testEdge == stopValue ) {
@@ -378,13 +378,13 @@ class FBBezierContour {
     var testEdge = startEdge!
 
     if !testEdge.isStartShared {
-      return (edge: testEdge, parameter: CGFloat(0.0), point: testEdge.endPoint1)
+      return (edge: testEdge, parameter: 0.0, point: testEdge.endPoint1)
     }
 
     // At this point we know that all the end points defining this contour are shared.
     // We'll need to somewhat arbitrarily pick a point on an edge that's not overlapping
     let stopValue = testEdge
-    let parameter = CGFloat(0.5)
+    let parameter = 0.5
     while doesOverlapContainParameter(parameter, onEdge:testEdge) {
       testEdge = testEdge.next
       if testEdge === stopValue {
@@ -394,7 +394,7 @@ class FBBezierContour {
 
     let outPoint = testEdge.pointAtParameter(parameter).point
 
-    return (edge: testEdge, parameter: CGFloat(0.0), point: outPoint)
+    return (edge: testEdge, parameter: 0.0, point: outPoint)
   }
 
 
@@ -418,8 +418,8 @@ class FBBezierContour {
     var otherContours = otherContour.selfIntersectingContours
     otherContours.append(otherContour)
 
-    let FBStopParameterNoLimit = CGFloat(2.0) // needs to be > 1.0
-    let FBStartParameterNoLimit = CGFloat(0.0)
+    let FBStopParameterNoLimit = 2.0 // needs to be > 1.0
+    let FBStartParameterNoLimit = 0.0
 
     // Walk all the edges in this contour and mark the crossings
     isEntry = markCrossingsOnEdge(startEdge, startParameter:startParameter, stopParameter:FBStopParameterNoLimit, otherContours:otherContours, startIsEntry:isEntry)

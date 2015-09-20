@@ -222,14 +222,14 @@ class FBGeometryTests: XCTestCase {
     let point1 = CGPoint(x: 12, y: 15)
     var point2 = CGPoint(x: 13, y: 16)
     var result = FBDistanceBetweenPoints(point1, point2: point2)
-    var check = CGFloat(1.4142135623730951)
+    var check = 1.4142135623730951
 
     XCTAssert(result == check, "Distance between points is being calculated as \(result)")
 
 
     point2 = CGPoint(x: 12, y: 16.5)
     result = FBDistanceBetweenPoints(point1, point2: point2)
-    check = CGFloat(1.5)
+    check = 1.5
 
     XCTAssert(result == check, "Distance between points is being calculated as \(result)")
 }
@@ -239,7 +239,7 @@ class FBGeometryTests: XCTestCase {
     let point2 = CGPoint(x: 10, y: 0)
     let point3 = CGPoint(x: 10, y: 20)
     let result = FBDistancePointToLine(point1, lineStartPoint: point2, lineEndPoint: point3)
-    let check = CGFloat(10.0)
+    let check = 10.0
     XCTAssert(result == check, "Distance between points is being calculated as \(result)")
 
   }

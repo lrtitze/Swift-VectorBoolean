@@ -357,8 +357,8 @@ func FBIsControlPolygonFlatEnough(bezierPoints: [CGPoint], degree: Int, inout in
   let line = FBNormalizedLine(point1: bezierPoints[0], point2: bezierPoints[degree])
 
   // Find the bounds around the line
-  var belowDistance = CGFloat(0)
-  var aboveDistance = CGFloat(0)
+  var belowDistance = 0.0
+  var aboveDistance = 0.0
   for i in 1 ..< degree {
     let distance = line.distanceFromPoint(bezierPoints[i])
     if distance > aboveDistance {
@@ -999,7 +999,7 @@ class FBBezierCurveData {
     let bezierPoints = convertSelfAndPoint(point)
 
     var distance = FBDistanceBetweenPoints(endPoint1, point2: point)
-    var parameter = CGFloat(0.0)
+    var parameter = 0.0
 
     FBFindBezierRoots(bezierPoints, degree: 5) { (root) -> Void in
 
@@ -1238,11 +1238,11 @@ private func checkLinesForOverlap(me: FBBezierCurveData, inout usRange: FBRange,
 
   let isColinear = FBAreValuesCloseWithOptions(
     CounterClockwiseTurn(us.endPoint1, point2: us.endPoint2, point3: them.endPoint1),
-    value2: CGFloat(0.0),
+    value2: 0.0,
     threshold: errorThreshold)
     && FBAreValuesCloseWithOptions(
       CounterClockwiseTurn(us.endPoint1, point2: us.endPoint2, point3: them.endPoint2),
-      value2: CGFloat(0.0),
+      value2: 0.0,
       threshold: errorThreshold)
 
   if !isColinear {
@@ -1276,7 +1276,7 @@ private func curvesAreEqual(me: FBBezierCurveData, other: FBBezierCurveData) -> 
   }
 
   let endPointThreshold = CGFloat(1e-4)
-  let controlPointThreshold = CGFloat(1e-1)
+  let controlPointThreshold = 1e-1
 
   if me.isStraightLine {
     return FBArePointsCloseWithOptions(me.endPoint1, point2: other.endPoint1, threshold: endPointThreshold) && FBArePointsCloseWithOptions(me.endPoint2, point2: other.endPoint2, threshold: endPointThreshold);
@@ -1375,7 +1375,7 @@ private func checkCurvesForOverlapRange(
 
 // TODO: Was still working here
 
-let FBBezierCurveDataInvalidLength = CGFloat(-1.0)
+let FBBezierCurveDataInvalidLength = -1.0
 
 
 // 982
@@ -1592,7 +1592,7 @@ internal func pfIntersectionsWithBezierCurve(
   let places = 6 // How many decimals place to calculate the solution out to
   let maxIterations = 500 // how many iterations to allow before we just give up
   let maxDepth = 10 // how many recursive calls to allow before we just give up
-  let minimumChangeNeeded = CGFloat(0.20) // how much to clip off for a given iteration minimum before we subdivide the curve
+  let minimumChangeNeeded = 0.20 // how much to clip off for a given iteration minimum before we subdivide the curve
 
   var us = FBBezierCurveData(cloning: me)
   // us is self, but will become clipped down to where the intersection is (perhaps)
