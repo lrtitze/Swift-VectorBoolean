@@ -11,7 +11,7 @@
 
 import UIKit
 
-let FBOverlapThreshold = CGFloat(1e-2)
+let FBOverlapThreshold = isRunningOn64BitDevice ? 1e-2 : 1e-1
 
 class FBEdgeOverlap {
   var edge1 : FBBezierCurve

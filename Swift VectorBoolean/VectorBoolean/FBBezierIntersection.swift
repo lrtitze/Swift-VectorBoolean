@@ -11,8 +11,8 @@
 
 import UIKit
 
-let FBPointCloseThreshold = CGFloat(1e-7)
-let FBParameterCloseThreshold = CGFloat(1e-4)
+let FBPointCloseThreshold = isRunningOn64BitDevice ? 1e-7 : 1e-3
+let FBParameterCloseThreshold = isRunningOn64BitDevice ? 1e-4 : 1e-2
 
 /// FBBezierIntersection stores where two bezier curves intersect.
 ///

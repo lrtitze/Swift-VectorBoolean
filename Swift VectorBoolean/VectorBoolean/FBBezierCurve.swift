@@ -598,9 +598,9 @@ class FBBezierCurveData {
     // If the two end points are close together, then we're a point.
     // Ignore the control points.
 
+    // MARK: This value greatly affects 32-bit calculations
     // LRT - fiddle with this
-    //let FBClosenessThreshold = CGFloat(1e-5)
-    let FBClosenessThreshold = CGFloat(1e-3)
+    let FBClosenessThreshold = isRunningOn64BitDevice ? 1e-5 : 1e-1
 
     // check cached value
     if _isPoint != nil {
@@ -1238,7 +1238,7 @@ private func checkLinesForOverlap(me: FBBezierCurveData, inout usRange: FBRange,
   }
 
   // Are all 4 points in a single line?
-  let errorThreshold = CGFloat(1e-7)
+  let errorThreshold = isRunningOn64BitDevice ? 1e-7 : 1e-2
 
   let isColinear = FBAreValuesCloseWithOptions(
     CounterClockwiseTurn(us.endPoint1, point2: us.endPoint2, point3: them.endPoint1),
@@ -1279,7 +1279,7 @@ private func curvesAreEqual(me: FBBezierCurveData, other: FBBezierCurveData) -> 
     return false
   }
 
-  let endPointThreshold = CGFloat(1e-4)
+  let endPointThreshold = isRunningOn64BitDevice ? 1e-4 : 1e-2
   let controlPointThreshold = 1e-1
 
   if me.isStraightLine {
@@ -1298,8 +1298,8 @@ private func curvesAreEqual(me: FBBezierCurveData, other: FBBezierCurveData) -> 
 private func dataIsEqual(me: FBBezierCurveData, other: FBBezierCurveData) -> Bool
 {
   // LRT - fiddle with these
-  //return me.isEqualWithOptions(other, threshold: 1e-10)
-  return me.isEqualWithOptions(other, threshold: 1e-6)
+  let threshold = isRunningOn64BitDevice ? 1e-10 : 1e-2
+  return me.isEqualWithOptions(other, threshold: threshold)
 }
 
 // 931
@@ -1366,7 +1366,7 @@ private func checkCurvesForOverlapRange(
   var themSubcurveRange = FBRange(minimum: 0.0, maximum: 0.0)
   let themSubcurve = findPossibleOverlap(me, originalUs: originalThem.data, them: us, possibleRange: &themSubcurveRange)
 
-  let threshold = CGFloat(1e-4)
+  let threshold = isRunningOn64BitDevice ? 1e-4 : 1e-2
   if usSubcurve.isEqualWithOptions(themSubcurve, threshold: threshold) || usSubcurve.isEqualWithOptions(reversed(themSubcurve), threshold: threshold) {
     usRange = usSubcurveRange
     themRange = themSubcurveRange
@@ -1869,7 +1869,8 @@ internal func pfIntersectionsWithBezierCurve(
     // Compute the point from both and compare
     let intersectionPoint = originalUsData.pointAtParameter(FBRangeAverage(usRange)).point
     let checkPoint = originalThemData.pointAtParameter(FBRangeAverage(themRange)).point
-    if !FBArePointsCloseWithOptions(intersectionPoint, point2: checkPoint, threshold: 1e-3) {
+    let threshold = isRunningOn64BitDevice ? 1e-3 : 1e-1
+    if !FBArePointsCloseWithOptions(intersectionPoint, point2: checkPoint, threshold: threshold) {
       return
     }
   }
