@@ -24,6 +24,7 @@ let FBBoundsClosenessThreshold  = CGFloat(1e-9)
 //let FBTangentClosenessThreshold = CGFloat(1e-7)
 //let FBBoundsClosenessThreshold  = CGFloat(1e-5)
 
+let isRunningOn64BitDevice = sizeof(Int) == sizeof(Int64)
 
 
 func FBDistanceBetweenPoints(point1: CGPoint, point2: CGPoint) -> Double {
