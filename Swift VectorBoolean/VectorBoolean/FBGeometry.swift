@@ -16,16 +16,29 @@ import UIKit
 // MARK: Point Helpers
 // ===================================
 
-// LRT - fiddle with these
-let FBPointClosenessThreshold   = CGFloat(1e-10)
-let FBTangentClosenessThreshold = CGFloat(1e-12)
-let FBBoundsClosenessThreshold  = CGFloat(1e-9)
-//let FBPointClosenessThreshold   = CGFloat(1e-7)
-//let FBTangentClosenessThreshold = CGFloat(1e-7)
-//let FBBoundsClosenessThreshold  = CGFloat(1e-5)
-
 let isRunningOn64BitDevice = sizeof(Int) == sizeof(Int64)
 
+var FBPointClosenessThreshold: Double {
+  if isRunningOn64BitDevice {
+    return 1e-10
+  } else {
+    return 1e-2
+  }
+}
+var FBTangentClosenessThreshold: Double {
+  if isRunningOn64BitDevice {
+    return 1e-12
+  } else {
+    return 1e-2
+  }
+}
+var FBBoundsClosenessThreshold: Double {
+  if isRunningOn64BitDevice {
+    return 1e-9
+  } else {
+    return 1e-2
+  }
+}
 
 func FBDistanceBetweenPoints(point1: CGPoint, point2: CGPoint) -> Double {
 
