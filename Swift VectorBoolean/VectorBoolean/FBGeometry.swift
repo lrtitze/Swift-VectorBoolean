@@ -54,13 +54,17 @@ func FBDistancePointToLine(point: CGPoint, lineStartPoint: CGPoint, lineEndPoint
   if lineLength == 0.0 {
     return 0.0
   }
-  let num = Double((point.x - lineStartPoint.x) * (lineEndPoint.x - lineStartPoint.x) + (point.y - lineStartPoint.y) * (lineEndPoint.y - lineStartPoint.y))
 
-  let u = CGFloat(num / (lineLength * lineLength))
+  let xDelta = Double(lineEndPoint.x - lineStartPoint.x)
+  let yDelta = Double(lineEndPoint.y - lineStartPoint.y)
+
+  let num = Double(point.x - lineStartPoint.x) * xDelta + Double(point.y - lineStartPoint.y) * yDelta
+
+  let u = num / (lineLength * lineLength)
 
   let intersectionPoint = CGPoint(
-    x: lineStartPoint.x + u * (lineEndPoint.x - lineStartPoint.x),
-    y: lineStartPoint.y + u * (lineEndPoint.y - lineStartPoint.y)
+    x: lineStartPoint.x + CGFloat(u * xDelta),
+    y: lineStartPoint.y + CGFloat(u * yDelta)
   )
 
   return FBDistanceBetweenPoints(point, point2: intersectionPoint)
