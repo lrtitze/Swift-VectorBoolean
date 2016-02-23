@@ -46,7 +46,7 @@ class ShapesTableViewController: UITableViewController {
 
   func dismiss() {
     dismissViewControllerAnimated(true) {
-      primeVC?.popClosed()
+      self.primeVC?.popClosed()
     }
   }
 

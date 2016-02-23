@@ -62,7 +62,7 @@ class OptionsViewController: UIViewController {
 
   func dismiss() {
     dismissViewControllerAnimated(true) {
-      primeVC?.popClosed()
+      self.primeVC?.popClosed()
     }
   }
 
