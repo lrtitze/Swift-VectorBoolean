@@ -246,7 +246,8 @@ class FBBezierGraph {
   //- (void) unionEquivalentNonintersectingContours:(NSMutableArray *)ourNonintersectingContours withContours:(NSMutableArray *)theirNonintersectingContours results:(NSMutableArray *)results
   private func unionEquivalentNonintersectingContours(inout ourNonintersectingContours: [FBBezierContour], inout withContours theirNonintersectingContours: [FBBezierContour], inout results: [FBBezierContour]) {
 
-    for var ourIndex = 0; ourIndex < ourNonintersectingContours.count; ourIndex++ {
+    var ourIndex = 0
+    while ourIndex < ourNonintersectingContours.count {
       let ourContour = ourNonintersectingContours[ourIndex]
       for theirIndex in 0 ..< theirNonintersectingContours.count  {
         let theirContour = theirNonintersectingContours[theirIndex]
@@ -290,9 +291,10 @@ class FBBezierGraph {
         // Remove both from the inputs so they aren't processed later
         theirNonintersectingContours.removeAtIndex(theirIndex)
         ourNonintersectingContours.removeAtIndex(ourIndex)
-        ourIndex--
+        ourIndex -= 1
         break
       }
+      ourIndex += 1
     }
   }
 
@@ -367,7 +369,8 @@ class FBBezierGraph {
 
     var results: [FBBezierContour] = []
 
-    for var ourIndex = 0; ourIndex < ourNonintersectingContours.count; ourIndex++ {
+    var ourIndex = 0
+    while ourIndex < ourNonintersectingContours.count {
       let ourContour = ourNonintersectingContours[ourIndex]
       for theirIndex in 0 ..< theirNonintersectingContours.count {
         let theirContour = theirNonintersectingContours[theirIndex]
@@ -393,9 +396,10 @@ class FBBezierGraph {
         // Remove both from the inputs so they aren't processed later
         theirNonintersectingContours.removeAtIndex(theirIndex)
         ourNonintersectingContours.removeAtIndex(ourIndex)
-        ourIndex--
+        ourIndex -= 1
         break
       }
+      ourIndex += 1
     }
     return results
   }
@@ -462,7 +466,8 @@ class FBBezierGraph {
 
     var results: [FBBezierContour] = []
 
-    for var ourIndex = 0; ourIndex < ourNonintersectingContours.count; ourIndex++ {
+    var ourIndex = 0
+    while ourIndex < ourNonintersectingContours.count {
       let ourContour = ourNonintersectingContours[ourIndex]
       for theirIndex in 0 ..< theirNonintersectingContours.count {
         let theirContour = theirNonintersectingContours[theirIndex]
@@ -488,9 +493,10 @@ class FBBezierGraph {
         // Remove both from the inputs so they aren't processed later
         theirNonintersectingContours.removeAtIndex(theirIndex)
         ourNonintersectingContours.removeAtIndex(ourIndex)
-        ourIndex--
+        ourIndex -= 1
         break
       }
+      ourIndex += 1
     }
     return results
   }
@@ -1098,7 +1104,8 @@ class FBBezierGraph {
       let verticalSpacing = (testContour.bounds.height) / CGFloat(fraction)
       let yStart = CGRectGetMinY(testContour.bounds) + verticalSpacing
       let yFinir = CGRectGetMaxY(testContour.bounds)
-      for var y = yStart; y < yFinir; y += verticalSpacing {
+      var y = yStart
+      while y < yFinir {
         // Construct a line that will reach outside both ends of both the test contour and graph
         let rayStart = CGPoint(x: min(CGRectGetMinX(self.bounds), CGRectGetMinX(testContour.bounds)) - FBRayOverlap, y: y)
         let rayFinir = CGPoint(x: max(CGRectGetMaxX(self.bounds), CGRectGetMaxX(testContour.bounds)) + FBRayOverlap, y: y)
@@ -1110,6 +1117,7 @@ class FBBezierGraph {
         if eliminated {
           didEliminate = true
         }
+        y += verticalSpacing
       }
 
       // Send vertical rays through the test contour
@@ -1117,7 +1125,8 @@ class FBBezierGraph {
       let horizontalSpacing = (testContour.bounds.width) / CGFloat(fraction)
       let xStart = CGRectGetMinX(testContour.bounds) + horizontalSpacing
       let xFinir = CGRectGetMaxX(testContour.bounds)
-      for var x = xStart; x < xFinir; x += horizontalSpacing {
+      var x = xStart
+      while x < xFinir {
         // Construct a line that will reach outside both ends of both the test contour and graph
         let rayStart = CGPoint(x: x, y: min(CGRectGetMinY(self.bounds), CGRectGetMinY(testContour.bounds)) - FBRayOverlap)
         let rayFinir = CGPoint(x: x, y: max(CGRectGetMaxY(self.bounds), CGRectGetMaxY(testContour.bounds)) + FBRayOverlap)
@@ -1129,6 +1138,7 @@ class FBBezierGraph {
         if eliminated {
           didEliminate = true
         }
+        x += horizontalSpacing
       }
 
       // If we've eliminated all the contours, then nothing contains the test contour, and we're done
