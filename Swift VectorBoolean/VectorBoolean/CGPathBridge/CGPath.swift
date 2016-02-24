@@ -3,43 +3,55 @@
 //
 // Written by Zachary Waldowski
 // from: https://gist.github.com/zwaldowski/e6aa7f3f81303a688ad4
+//
+// Reworked for XCode 7 using info from Rob Mayoff found here: http://stackoverflow.com/a/26307538
 
 import QuartzCore
 
-private func demunge(@noescape fn: CGPath.Element -> Void)(ptr: UnsafePointer<CGPathElement>) {
-    let points = ptr.memory.points
-    switch ptr.memory.type {
-    case CGPathElementType.MoveToPoint:
-        fn(.Move(to: points[0]))
-    case CGPathElementType.AddLineToPoint:
-        fn(.Line(to: points[0]))
-    case CGPathElementType.AddQuadCurveToPoint:
-        fn(.QuadCurve(to: points[1], via: points[0]))
-    case CGPathElementType.AddCurveToPoint:
-        fn(.CubicCurve(to: points[2], v1: points[0], v2: points[1]))
-    case CGPathElementType.CloseSubpath:
-        fn(.Close)
-    }
-}
+typealias MyPathApplier = @convention(block) (UnsafePointer<CGPathElement>) -> Void
+// Note: You must declare MyPathApplier as @convention(block), because
+// if you don't, you get "fatal error: can't unsafeBitCast between
+// types of different sizes" at runtime, on Mac OS X at least.
 
-private func ~=(lhs: CGPathElementType, rhs: CGPathElementType) -> Bool {
-    return rhs.rawValue == lhs.rawValue
+private func myPathApply(path: CGPath!, block: MyPathApplier) {
+  let callback: @convention(c) (UnsafeMutablePointer<Void>, UnsafePointer<CGPathElement>) -> Void = { (info, element) in
+    let block = unsafeBitCast(info, MyPathApplier.self)
+    block(element)
+  }
+
+  CGPathApply(path, unsafeBitCast(block, UnsafeMutablePointer<Void>.self), unsafeBitCast(callback, CGPathApplierFunction.self))
 }
 
 public extension CGPath {
-    
-    enum Element {
-        case Move(to: CGPoint)
-        case Line(to: CGPoint)
-        case QuadCurve(to: CGPoint, via: CGPoint)
-        case CubicCurve(to: CGPoint, v1: CGPoint, v2: CGPoint)
-        case Close
+
+  enum Element {
+    case Move(to: CGPoint)
+    case Line(to: CGPoint)
+    case QuadCurve(to: CGPoint, via: CGPoint)
+    case CubicCurve(to: CGPoint, v1: CGPoint, v2: CGPoint)
+    case Close
+  }
+
+  func apply(fn: Element -> Void) {
+    myPathApply(self) { element in
+      let points = element.memory.points
+      switch (element.memory.type) {
+
+      case CGPathElementType.MoveToPoint:
+        fn(.Move(to: points[0]))
+
+      case .AddLineToPoint:
+        fn(.Line(to: points[0]))
+
+      case .AddQuadCurveToPoint:
+        fn(.QuadCurve(to: points[1], via: points[0]))
+
+      case .AddCurveToPoint:
+        fn(.CubicCurve(to: points[2], v1: points[0], v2: points[1]))
+
+      case .CloseSubpath:
+        fn(.Close)
+      }
     }
-    
-    @asmname("_CGPathApplyWithBlock") private func ApplyToPath(path: CGPath, @noescape block: @convention(block) (UnsafePointer<CGPathElement>) -> Void)
-    
-    func apply(@noescape fn: Element -> Void) {
-        ApplyToPath(self, block: demunge(fn))
-    }
-    
+  }
 }
