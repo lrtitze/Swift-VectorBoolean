@@ -38,7 +38,7 @@ class OptionsViewController: UIViewController {
       navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done",
         style: .Plain,
         target: self,
-        action:"dismiss")
+        action: #selector(OptionsViewController.dismiss))
     }
   }
 
