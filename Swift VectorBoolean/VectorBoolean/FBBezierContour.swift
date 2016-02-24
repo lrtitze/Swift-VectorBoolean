@@ -436,7 +436,9 @@ class FBBezierContour {
 
   // 347
   //- (BOOL) markCrossingsOnEdge:(FBBezierCurve *)edge startParameter:(CGFloat)startParameter stopParameter:(CGFloat)stopParameter otherContours:(NSArray *)otherContours isEntry:(BOOL)startIsEntry
-  func markCrossingsOnEdge(edge: FBBezierCurve, startParameter: Double, stopParameter: Double, otherContours: [FBBezierContour] , var startIsEntry isEntry: Bool) -> Bool {
+  func markCrossingsOnEdge(edge: FBBezierCurve, startParameter: Double, stopParameter: Double, otherContours: [FBBezierContour] , startIsEntry: Bool) -> Bool {
+
+    var isEntry = startIsEntry
 
     // Mark all the crossings on this edge
     edge.crossingsWithBlock() {

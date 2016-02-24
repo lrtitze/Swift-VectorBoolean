@@ -2336,8 +2336,9 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1570
   //- (NSPoint) pointFromRightOffset:(CGFloat)offset
-  func pointFromRightOffset(var offset: Double) -> CGPoint
+  func pointFromRightOffset(offset: Double) -> CGPoint
   {
+    var offset = offset
     let len = length()
     offset = min(offset, len)
     let time = 1.0 - (offset / len)
@@ -2346,8 +2347,9 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1578
   //- (NSPoint) pointFromLeftOffset:(CGFloat)offset
-  func pointFromLeftOffset(var offset: Double) -> CGPoint
+  func pointFromLeftOffset(offset: Double) -> CGPoint
   {
+    var offset = offset
     let len = length()
     offset = min(offset, len)
     let time = offset / len
@@ -2356,8 +2358,9 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1586
   //- (NSPoint) tangentFromRightOffset:(CGFloat)offset
-  func tangentFromRightOffset(var offset: Double) -> CGPoint
+  func tangentFromRightOffset(offset: Double) -> CGPoint
   {
+    var offset = offset
     if _data.isStraightLine && !_data.isPoint() {
       return FBSubtractPoint(_data.endPoint1, point2: _data.endPoint2)
     }
@@ -2381,8 +2384,9 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1607
   //- (NSPoint) tangentFromLeftOffset:(CGFloat)offset
-  func tangentFromLeftOffset(var offset: Double) -> CGPoint
+  func tangentFromLeftOffset(offset: Double) -> CGPoint
   {
+    var offset = offset
     if _data.isStraightLine && !_data.isPoint() {
       return FBSubtractPoint(_data.endPoint2, point2: _data.endPoint1)
     }

@@ -265,8 +265,8 @@ let Half_π = M_PI_2
 
 
 // Normalize the angle between 0 and 2 π
-func NormalizeAngle(var value: Double) -> Double {
-
+func NormalizeAngle(value: Double) -> Double {
+  var value = value
   while value < 0.0 {  value = value + Two_π }
   while value >= Two_π { value = value - Two_π }
 
