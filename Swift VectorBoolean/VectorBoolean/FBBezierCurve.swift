@@ -348,7 +348,7 @@ func FBCountBezierCrossings(bezierPoints: [CGPoint], degree: Int) -> Int {
   for i in 1 ... degree {
     sign = FBSign(bezierPoints[i].y)
     if sign != previousSign {
-      count++
+      count += 1
     }
     previousSign = sign;
   }
@@ -481,21 +481,21 @@ func FBConvexHullBuildFromPoints(inPoints: [CGPoint]) -> (hull: [CGPoint], hullL
   // Build lower hull
   for i in 0 ..< numberOfPoints {
     while filledInIx >= 2 && FBConvexHullDoPointsTurnWrongDirection(results[filledInIx - 2], point2: results[filledInIx - 1], point3: points[i]) {
-      --filledInIx
+      filledInIx -= 1
     }
     results[filledInIx] = points[i];
-    ++filledInIx;
+    filledInIx += 1;
   }
 
   // Build upper hull
   let thresholdIndex = filledInIx + 1
   for i in (0 ... numberOfPoints - 2).reverse() {
     while filledInIx >= thresholdIndex && FBConvexHullDoPointsTurnWrongDirection(results[filledInIx - 2], point2: results[filledInIx - 1], point3: points[i]) {
-      --filledInIx
+      filledInIx -= 1
     }
 
     results[filledInIx] = points[i];
-    ++filledInIx;
+    filledInIx += 1;
   }
 
   return (hull: results, hullLength: filledInIx - 1)
@@ -1782,7 +1782,7 @@ internal func pfIntersectionsWithBezierCurve(
       }
     }
 
-    iterations++
+    iterations += 1
   }
 
 
@@ -2169,7 +2169,7 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
     intersectionsWithBezierCurve(curve, overlapRange: &unusedRange) {
       (intersect: FBBezierIntersection) -> (setStop: Bool, stopValue:Bool) in
-      count++
+      count += 1
       return (setStop:true, stopValue:true) // Only need the one
     }
 

@@ -261,7 +261,7 @@ class FBBezierContour {
     var count = 0
     intersectionsWithRay(testEdge, withBlock: {
       (intersection: FBBezierIntersection)-> Void in
-      count++
+      count += 1
     })
 
     return count
@@ -476,11 +476,11 @@ class FBBezierContour {
   private func contourAndSelfIntersectingContoursContainPoint(point: CGPoint) -> Bool {
     var containerCount = 0
     if containsPoint(point) {
-      containerCount++
+      containerCount += 1
     }
     for contour in selfIntersectingContours {
       if contour.containsPoint(point) {
-        containerCount++
+        containerCount += 1
       }
     }
 

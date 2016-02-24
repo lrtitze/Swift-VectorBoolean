@@ -996,7 +996,7 @@ class FBBezierGraph {
       let testCurve = FBBezierCurve(startPoint: testPoint, endPoint: lineEndPoint)
       contour.intersectionsWithRay(testCurve, withBlock: {
         (intersection: FBBezierIntersection) -> Void in
-        intersectCount++
+        intersectCount += 1
       })
     }
 
@@ -1317,7 +1317,7 @@ class FBBezierGraph {
     for crossing in crossings {
       if let crossingEdge = crossing.edge {
         if crossingEdge.contour === contour {
-          count++
+          count += 1
         }
       }
     }
@@ -1429,7 +1429,7 @@ class FBBezierGraph {
         var count = 0
         for crossing in crossings {
           if crossing.edge?.contour === containerToTest {
-            count++
+            count += 1
           }
         }
         // If it's not an odd number of times, it doesn't contain

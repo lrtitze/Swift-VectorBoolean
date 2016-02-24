@@ -514,11 +514,11 @@ func FBTangentsCross(edge1Tangents: FBTangentPair, edge2Tangents: FBTangentPair)
   var rangeCount1 = 0
 
   if FBAngleRangeContainsAngle(range1, angle: edge2Angles.a) {
-    rangeCount1++
+    rangeCount1 += 1
   }
 
   if FBAngleRangeContainsAngle(range1, angle: edge2Angles.b) {
-    rangeCount1++
+    rangeCount1 += 1
   }
 
   // Count how many times self angles appear between the edge2 angles
@@ -526,11 +526,11 @@ func FBTangentsCross(edge1Tangents: FBTangentPair, edge2Tangents: FBTangentPair)
   var rangeCount2 = 0
 
   if FBAngleRangeContainsAngle(range2, angle: edge2Angles.a) {
-    rangeCount2++
+    rangeCount2 += 1
   }
 
   if FBAngleRangeContainsAngle(range2, angle: edge2Angles.b) {
-    rangeCount2++
+    rangeCount2 += 1
   }
 
   // If each pair of angles split the other two, then the edges cross.
