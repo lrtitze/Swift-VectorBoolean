@@ -10,7 +10,7 @@ import UIKit
 
 class LRTBezierPathWrapper {
 
-  var elements: [CGPath.Element]
+  var elements: [PathElement]
   private var _bezierPath : UIBezierPath
 
   var bezierPath : UIBezierPath {
@@ -29,7 +29,7 @@ class LRTBezierPathWrapper {
     let cgPath = _bezierPath.CGPath
 
     cgPath.apply({
-      (e : CGPath.Element) -> Void in
+      (e : PathElement) -> Void in
       self.elements.append(e)
       /* Enable this to show that it actually works
       switch e {

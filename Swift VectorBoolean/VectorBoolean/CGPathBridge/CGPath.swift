@@ -22,9 +22,17 @@ private func myPathApply(path: CGPath!, block: MyPathApplier) {
   CGPathApply(path, unsafeBitCast(block, UnsafeMutablePointer<Void>.self), unsafeBitCast(callback, CGPathApplierFunction.self))
 }
 
+public enum PathElement {
+  case Move(to: CGPoint)
+  case Line(to: CGPoint)
+  case QuadCurve(to: CGPoint, via: CGPoint)
+  case CubicCurve(to: CGPoint, v1: CGPoint, v2: CGPoint)
+  case Close
+}
+
 public extension CGPath {
 
-  func apply(fn: Element -> Void) {
+  func apply(fn: PathElement -> Void) {
     myPathApply(self) { element in
       let points = element.memory.points
       switch (element.memory.type) {
