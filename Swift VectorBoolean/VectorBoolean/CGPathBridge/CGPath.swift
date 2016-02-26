@@ -24,14 +24,6 @@ private func myPathApply(path: CGPath!, block: MyPathApplier) {
 
 public extension CGPath {
 
-  enum Element {
-    case Move(to: CGPoint)
-    case Line(to: CGPoint)
-    case QuadCurve(to: CGPoint, via: CGPoint)
-    case CubicCurve(to: CGPoint, v1: CGPoint, v2: CGPoint)
-    case Close
-  }
-
   func apply(fn: Element -> Void) {
     myPathApply(self) { element in
       let points = element.memory.points
