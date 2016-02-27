@@ -79,6 +79,7 @@ class TestShapeData {
     TestShape_Rect_w_Hole_Over_Rect_w_Hole(),     // 18
     TestShape_Curve_Overlapping_Rectangle(),      // 19
     TestShape_Debug(),
+    TestShape_DebugQuadCurve(),
     TestShape_Debug001(),
     TestShape_Debug002(),
     TestShape_Debug003(),
@@ -550,6 +551,32 @@ class TestShape_Debug : TestShape, SampleShapeMaker {
     let circle = UIBezierPath()
     addCircleAtPoint(CGPoint(x: 210, y: 110), withRadius: 20, toPath: circle)
     //        var circle = UIBezierPath(ovalInRect: CGRect(x: 210-125, y: 200-125, width: 250, height: 250))
+    return circle
+  }
+}
+
+class TestShape_DebugQuadCurve : TestShape, SampleShapeMaker {
+
+  init() {
+    super.init(label: "Quad Curve Test")
+  }
+
+  func otherShapes() -> UIBezierPath {
+
+    let quadTest = UIBezierPath()
+    quadTest.moveToPoint(CGPoint(x: 50, y: 50))
+    quadTest.addLineToPoint(CGPoint(x: 50, y: 100))
+    quadTest.addQuadCurveToPoint(CGPoint(x: 150, y: 100), controlPoint: CGPoint(x: 100, y: 150))
+    quadTest.addLineToPoint(CGPoint(x: 150, y: 50))
+    quadTest.addLineToPoint(CGPoint(x: 50, y: 50))
+    quadTest.closePath()
+
+    return quadTest
+  }
+
+  func topShape() -> UIBezierPath {
+    let circle = UIBezierPath()
+    addCircleAtPoint(CGPoint(x: 130, y: 125), withRadius: 20, toPath: circle)
     return circle
   }
 }
