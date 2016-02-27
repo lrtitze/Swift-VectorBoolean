@@ -181,7 +181,12 @@ class CanvasView: UIView {
             // Just set control point to be in the line formed by the end points
             showMe = UIBezierPath(rect: BoxFrame(v))
 
-          case .QuadCurve(_, _):
+          case .QuadCurve(let to, let cp):
+            showMe = UIBezierPath(rect: BoxFrame(to))
+            UIColor.blackColor().setStroke()
+            let cp1 = UIBezierPath(ovalInRect: BoxFrame(cp))
+            cp1.lineWidth = decorationLineWidth / 2
+            cp1.stroke()
             break
 
           case .CubicCurve(let to, let v1, let v2):
@@ -260,9 +265,13 @@ class CanvasView: UIView {
         // Just set control point to be in the line formed by the end points
         showMe = UIBezierPath(rect: BoxFrame(v))
 
-      case .QuadCurve(_, _):
+      case .QuadCurve(let to, let cp):
+        showMe = UIBezierPath(rect: BoxFrame(to))
+        UIColor.blackColor().setStroke()
+        let cp1 = UIBezierPath(ovalInRect: BoxFrame(cp))
+        cp1.lineWidth = decorationLineWidth / 2
+        cp1.stroke()
         break
-        //previousPoint = to
 
       case .CubicCurve(let to, let v1, let v2):
         showMe = UIBezierPath(rect: BoxFrame(to))
