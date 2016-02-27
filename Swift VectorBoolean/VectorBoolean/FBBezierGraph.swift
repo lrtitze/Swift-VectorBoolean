@@ -91,7 +91,27 @@ class FBBezierGraph {
         }
 
       case .QuadCurve(let toPt, let via):
-        print("We have a QuadCurve: to \(toPt) via \(via) - What's up with that?")
+
+        // GPC: skip degenerate case where all points are equal
+        let allPointsEqual = CGPointEqualToPoint(toPt, lastPoint)
+          && CGPointEqualToPoint(toPt, via)
+
+        if !allPointsEqual {
+          // Create a cubic curve representation of the quadratic curve from
+          // lastPoint to toPt with a control point at via
+
+          let ⅔ : CGFloat = 2.0 / 3.0
+
+          // lastPoint + twoThirds * (via - lastPoint)
+          let cp1 = FBAddPoint(lastPoint, point2: FBScalePoint(FBSubtractPoint(via, point2: lastPoint), scale: ⅔))
+          // toPt + twoThirds * (via - toPt)
+          let cp2 = FBAddPoint(toPt, point2: FBScalePoint(FBSubtractPoint(via, point2: toPt), scale: ⅔))
+
+          contour?.addCurve(FBBezierCurve(endPoint1: lastPoint, controlPoint1: cp1, controlPoint2: cp2, endPoint2: toPt))
+          lastPoint = toPt
+        }
+
+
 
       case .CubicCurve(let toPt, let v1, let v2):
 

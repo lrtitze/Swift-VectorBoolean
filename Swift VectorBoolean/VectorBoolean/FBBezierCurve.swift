@@ -2090,11 +2090,15 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
         bezierCurves.append(FBBezierCurve(startPoint: previousPoint, endPoint: v))
         previousPoint = v
 
-      case .QuadCurve(let to, let via):
-        // Not yet prepared to handle QuadCurves
-        // This will become a straight line
-        NSLog("Unhandled QuadCurve \(via)")
-        bezierCurves.append(FBBezierCurve(startPoint: previousPoint, endPoint: to))
+      case .QuadCurve(let to, let cp):
+        let ⅔ : CGFloat = 2.0 / 3.0
+
+        // lastPoint + twoThirds * (via - lastPoint)
+        let cp1 = FBAddPoint(previousPoint, point2: FBScalePoint(FBSubtractPoint(cp, point2: previousPoint), scale: ⅔))
+        // toPt + twoThirds * (via - toPt)
+        let cp2 = FBAddPoint(to, point2: FBScalePoint(FBSubtractPoint(cp, point2: to), scale: ⅔))
+
+        bezierCurves.append(FBBezierCurve(endPoint1: previousPoint, controlPoint1: cp1, controlPoint2: cp2, endPoint2: to))
         previousPoint = to
 
       case .CubicCurve(let to, let v1, let v2):
