@@ -3,7 +3,7 @@
 //  Swift VectorBoolean
 //
 //  Created by Leslie Titze on 2015-07-07.
-//  Copyright (c) 2015 Startside Softworks. All rights reserved.
+//  Copyright (c) 2015 Starside Softworks. All rights reserved.
 //
 
 import UIKit
