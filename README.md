@@ -1,9 +1,11 @@
 Swift VectorBoolean for iOS
 ===========================
 
-This is an iOS 8 and higher Swift 2 rewrite of the code for Andy Finnell's article [How to implement boolean operations on bezier paths](http://losingfight.com/blog/2011/07/07/how-to-implement-boolean-operations-on-bezier-paths-part-1/). It is a literal translation of his original Objective-C Mac OS X [VectorBoolean](https://bitbucket.org/andyfinnell/vectorboolean) library with a tiny bit of Swifty goodness introduced.
+### ✻ Updated for Xcode 7.3
 
-It compiles under XCode 7 and includes an iOS app which tests the bezier operations and serves as an example of using the code.
+This is an iOS 8 and higher Swift 2.2 rewrite of the code for Andy Finnell's article [How to implement boolean operations on bezier paths](http://losingfight.com/blog/2011/07/07/how-to-implement-boolean-operations-on-bezier-paths-part-1/). It is a literal translation of his original Objective-C Mac OS X [VectorBoolean](https://bitbucket.org/andyfinnell/vectorboolean) library with a tiny bit of Swifty goodness introduced.
+
+It compiles under XCode 7.3 and includes an iOS app which tests the bezier operations and serves as an example of using the code.
 
 I wrote this because I had a specific need for boolean operations on bezier paths in iOS. Rather than simply modifing the original Objective-C code to work on iOS, I bit the bullet and decided to redo it in Swift. Six months after beginning, I'm pleased to share it with you. I hope you enjoy it.
 
