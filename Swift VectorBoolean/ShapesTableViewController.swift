@@ -24,7 +24,7 @@ class ShapesTableViewController: UITableViewController {
       navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel",
         style: .Plain,
         target: self,
-        action: "dismiss") // #selector(ShapesTableViewController.dismiss))
+        action: #selector(ShapesTableViewController.dismiss))
     }
 
     // Uncomment the following line to preserve selection between presentations
