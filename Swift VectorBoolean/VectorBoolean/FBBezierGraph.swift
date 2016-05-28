@@ -619,7 +619,9 @@ class FBBezierGraph {
           path.addCurveToPoint(edge.endPoint2, controlPoint1: edge.controlPoint1, controlPoint2: edge.controlPoint2)
         }
       }
-      path.closePath()  // GPC: close each contour
+      if !path.empty {
+        path.closePath()  // GPC: close each contour
+      }
     }
 
     return path

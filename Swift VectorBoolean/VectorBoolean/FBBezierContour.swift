@@ -509,7 +509,9 @@ class FBBezierContour {
         }
       }
 
-      path.closePath()
+      if !path.empty {
+        path.closePath()
+      }
       path.usesEvenOddFillRule = true
 
       _bezPathCache = path
