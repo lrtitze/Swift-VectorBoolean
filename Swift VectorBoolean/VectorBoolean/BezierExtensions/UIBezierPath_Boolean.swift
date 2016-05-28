@@ -10,7 +10,7 @@
 
 import UIKit
 
-extension UIBezierPath {
+public extension UIBezierPath {
 
   // 15
   //- (NSBezierPath *) fb_union:(NSBezierPath *)path
