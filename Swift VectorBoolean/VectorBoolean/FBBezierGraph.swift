@@ -619,7 +619,9 @@ class FBBezierGraph {
           path.addCurveToPoint(edge.endPoint2, controlPoint1: edge.controlPoint1, controlPoint2: edge.controlPoint2)
         }
       }
-      path.closePath()  // GPC: close each contour
+      if !path.empty {
+        path.closePath()  // GPC: close each contour
+      }
     }
 
     return path
@@ -1116,6 +1118,7 @@ class FBBezierGraph {
     //  the contours, we do both horizontal and vertical rays.
 
     let count = Int(max(ceil(testContour.bounds.width), ceil(testContour.bounds.height)))
+    guard count > 0 else { return false }
     for fraction in 2 ... count * 2 {
       var didEliminate = false
 
