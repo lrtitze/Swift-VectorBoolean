@@ -13,7 +13,7 @@ import UIKit
 
 class FBContourOverlap {
 
-  private var runs : [FBEdgeOverlapRun] = []
+  fileprivate var runs : [FBEdgeOverlapRun] = []
 
   /* ======== THESE ARE PUBLIC ===========
   - (void) addOverlap:(FBBezierIntersectRange *)range forEdge1:(FBBezierCurve *)edge1 edge2:(FBBezierCurve *)edge2;
@@ -35,7 +35,7 @@ class FBContourOverlap {
 
 
   //- (void) addOverlap:(FBBezierIntersectRange *)range forEdge1:(FBBezierCurve *)edge1 edge2:(FBBezierCurve *)edge2
-  func addOverlap(range: FBBezierIntersectRange, forEdge1 edge1: FBBezierCurve, edge2: FBBezierCurve) {
+  func addOverlap(_ range: FBBezierIntersectRange, forEdge1 edge1: FBBezierCurve, edge2: FBBezierCurve) {
     let overlap = FBEdgeOverlap(range: range, edge1: edge1, edge2: edge2)
 
     var createNewRun = false
@@ -61,7 +61,7 @@ class FBContourOverlap {
   }
 
   //- (BOOL) doesContainCrossing:(FBEdgeCrossing *)crossing
-  func doesContainCrossing(crossing: FBEdgeCrossing) -> Bool {
+  func doesContainCrossing(_ crossing: FBEdgeCrossing) -> Bool {
     if runs.count == 0 {
       return false
     }
@@ -76,7 +76,7 @@ class FBContourOverlap {
   }
 
   //- (BOOL) doesContainParameter:(CGFloat)parameter onEdge:(FBBezierCurve *)edge
-  func doesContainParameter(parameter: Double, onEdge edge: FBBezierCurve) -> Bool {
+  func doesContainParameter(_ parameter: Double, onEdge edge: FBBezierCurve) -> Bool {
     if runs.count == 0 {
       return false
     }
@@ -91,14 +91,14 @@ class FBContourOverlap {
   }
 
   //- (void) runsWithBlock:(void (^)(FBEdgeOverlapRun *run, BOOL *stop))block
-  func runsWithBlock(block: (run: FBEdgeOverlapRun) -> Bool)
+  func runsWithBlock(_ block: (_ run: FBEdgeOverlapRun) -> Bool)
   {
     if runs.count == 0 {
       return
     }
 
     for run in runs {
-      let stop = block(run: run)
+      let stop = block(run)
       if stop {
         break
       }
@@ -158,7 +158,7 @@ class FBContourOverlap {
 
 
   //- (BOOL) isBetweenContour:(FBBezierContour *)contour1 andContour:(FBBezierContour *)contour2
-  func isBetweenContour(contour1: FBBezierContour, andContour contour2: FBBezierContour) -> Bool {
+  func isBetweenContour(_ contour1: FBBezierContour, andContour contour2: FBBezierContour) -> Bool {
     let myContour1 = self.contour1
     let myContour2 = self.contour2
 

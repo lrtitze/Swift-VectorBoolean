@@ -13,44 +13,44 @@ typealias MyPathApplier = @convention(block) (UnsafePointer<CGPathElement>) -> V
 // if you don't, you get "fatal error: can't unsafeBitCast between
 // types of different sizes" at runtime, on Mac OS X at least.
 
-private func myPathApply(path: CGPath!, block: MyPathApplier) {
-  let callback: @convention(c) (UnsafeMutablePointer<Void>, UnsafePointer<CGPathElement>) -> Void = { (info, element) in
-    let block = unsafeBitCast(info, MyPathApplier.self)
+private func myPathApply(_ path: CGPath!, block: MyPathApplier) {
+  let callback: @convention(c) (UnsafeMutableRawPointer, UnsafePointer<CGPathElement>) -> Void = { (info, element) in
+    let block = unsafeBitCast(info, to: MyPathApplier.self)
     block(element)
   }
 
-  CGPathApply(path, unsafeBitCast(block, UnsafeMutablePointer<Void>.self), unsafeBitCast(callback, CGPathApplierFunction.self))
+  path.apply(info: unsafeBitCast(block, to: UnsafeMutableRawPointer.self), function: unsafeBitCast(callback, to: CGPathApplierFunction.self))
 }
 
 public enum PathElement {
-  case Move(to: CGPoint)
-  case Line(to: CGPoint)
-  case QuadCurve(to: CGPoint, via: CGPoint)
-  case CubicCurve(to: CGPoint, v1: CGPoint, v2: CGPoint)
-  case Close
+  case move(to: CGPoint)
+  case line(to: CGPoint)
+  case quadCurve(to: CGPoint, via: CGPoint)
+  case cubicCurve(to: CGPoint, v1: CGPoint, v2: CGPoint)
+  case close
 }
 
 public extension CGPath {
 
-  func apply(fn: PathElement -> Void) {
+  func apply(_ fn: (PathElement) -> Void) {
     myPathApply(self) { element in
-      let points = element.memory.points
-      switch (element.memory.type) {
+      let points = element.pointee.points
+      switch (element.pointee.type) {
 
-      case CGPathElementType.MoveToPoint:
-        fn(.Move(to: points[0]))
+      case CGPathElementType.moveToPoint:
+        fn(.move(to: points[0]))
 
-      case .AddLineToPoint:
-        fn(.Line(to: points[0]))
+      case .addLineToPoint:
+        fn(.line(to: points[0]))
 
-      case .AddQuadCurveToPoint:
-        fn(.QuadCurve(to: points[1], via: points[0]))
+      case .addQuadCurveToPoint:
+        fn(.quadCurve(to: points[1], via: points[0]))
 
-      case .AddCurveToPoint:
-        fn(.CubicCurve(to: points[2], v1: points[0], v2: points[1]))
+      case .addCurveToPoint:
+        fn(.cubicCurve(to: points[2], v1: points[0], v2: points[1]))
 
-      case .CloseSubpath:
-        fn(.Close)
+      case .closeSubpath:
+        fn(.close)
       }
     }
   }

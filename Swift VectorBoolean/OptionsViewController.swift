@@ -15,7 +15,7 @@ class OptionsViewController: UIViewController {
   @IBOutlet var controlPointsSwitch: UISwitch!
   @IBOutlet var intersectionsSwitch: UISwitch!
 
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     let currentPreferredSize = self.preferredContentSize
     self.preferredContentSize = CGSize.zero
     let newSize = CGSize(width: currentPreferredSize.width, height: 300)
@@ -27,18 +27,18 @@ class OptionsViewController: UIViewController {
     //preferredContentSize = CGSize(width: 0, height: 400)
 
     if let primeVC = primeVC {
-      controlPointsSwitch.on = primeVC.showEndpoints
-      intersectionsSwitch.on = primeVC.showIntersections
+      controlPointsSwitch.isOn = primeVC.showEndpoints
+      intersectionsSwitch.isOn = primeVC.showIntersections
     }
 
     let wantDoneButtonOnPhone = true
     // NOTE: The done button makes it easier to dismiss the controls.
 
-    if wantDoneButtonOnPhone && UI_USER_INTERFACE_IDIOM() != .Pad {
+    if wantDoneButtonOnPhone && UI_USER_INTERFACE_IDIOM() != .pad {
       navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done",
-        style: .Plain,
+        style: .plain,
         target: self,
-        action: #selector(OptionsViewController.dismiss))
+        action: #selector(OptionsViewController.dismissVC))
     }
   }
 
@@ -48,20 +48,20 @@ class OptionsViewController: UIViewController {
   }
 
 
-  @IBAction func endpointsSwitchChanged(sender: UISwitch) {
+  @IBAction func endpointsSwitchChanged(_ sender: UISwitch) {
     if let primeVC = primeVC {
-      primeVC.showEndpoints = sender.on
+      primeVC.showEndpoints = sender.isOn
     }
   }
 
-  @IBAction func intersectionsSwitchChanged(sender: UISwitch) {
+  @IBAction func intersectionsSwitchChanged(_ sender: UISwitch) {
     if let primeVC = primeVC {
-      primeVC.showIntersections = sender.on
+      primeVC.showIntersections = sender.isOn
     }
   }
 
-  func dismiss() {
-    dismissViewControllerAnimated(true) {
+  func dismissVC() {
+    self.dismiss(animated: true) {
       self.primeVC?.popClosed()
     }
   }

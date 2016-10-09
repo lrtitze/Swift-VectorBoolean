@@ -9,16 +9,16 @@
 import UIKit
 
 enum DisplayMode {
-  case Original
-  case Union
-  case Intersect
-  case Subtract
-  case Join
+  case original
+  case union
+  case intersect
+  case subtract
+  case join
 }
 
 class PathItem {
-  private var path: UIBezierPath
-  private var color: UIColor
+  fileprivate var path: UIBezierPath
+  fileprivate var color: UIColor
 
   init(path:UIBezierPath,color:UIColor) {
     self.path = path
@@ -28,15 +28,15 @@ class PathItem {
 
 class CanvasView: UIView {
 
-  private var paths: [PathItem] = []
+  fileprivate var paths: [PathItem] = []
   var boundsOfPaths: CGRect = CGRect.zero
 
-  private var _unionPath: UIBezierPath?
-  private var _intersectPath: UIBezierPath?
-  private var _differencePath: UIBezierPath?
-  private var _xorPath: UIBezierPath?
+  fileprivate var _unionPath: UIBezierPath?
+  fileprivate var _intersectPath: UIBezierPath?
+  fileprivate var _differencePath: UIBezierPath?
+  fileprivate var _xorPath: UIBezierPath?
 
-  var displayMode: DisplayMode = .Original {
+  var displayMode: DisplayMode = .original {
     didSet(previousMode) {
       if displayMode != previousMode {
         setNeedsDisplay()
@@ -58,7 +58,7 @@ class CanvasView: UIView {
     _xorPath = nil
   }
 
-  func addPath(path: UIBezierPath, withColor color: UIColor) {
+  func addPath(_ path: UIBezierPath, withColor color: UIColor) {
     paths.append(PathItem(path: path, color: color))
     // we clear these because they're no longer valid
     _unionPath = nil
@@ -67,13 +67,13 @@ class CanvasView: UIView {
     _xorPath = nil
   }
 
-  private var viewScale = 1.0
+  fileprivate var viewScale = 1.0
 
-  private var decorationLineWidth: CGFloat {
+  fileprivate var decorationLineWidth: CGFloat {
     return CGFloat(1.5 / viewScale)
   }
 
-  func BoxFrame(point: CGPoint) -> CGRect
+  func BoxFrame(_ point: CGPoint) -> CGRect
   {
     let visualWidth = CGFloat(9 / viewScale)
     let offset = visualWidth / 2
@@ -84,10 +84,10 @@ class CanvasView: UIView {
     return CGRect(x: left, y: bottom, width: visualWidth, height: visualWidth)
   }
 
-  override func drawRect(rect: CGRect) {
+  override func draw(_ rect: CGRect) {
     // fill with white before going further
     let background = UIBezierPath(rect: rect)
-    UIColor.whiteColor().setFill()
+    UIColor.white.setFill()
     background.fill()
 
     // When running my Xcode tests for geometry I want to
@@ -100,7 +100,7 @@ class CanvasView: UIView {
     // calculate a useful scale and offset for drawing these paths
     // as large as possible in the middle of the display
     // expand size by 20 to provide a margin
-    let expandedPathBounds = CGRectInset(boundsOfPaths, -10, -10)
+    let expandedPathBounds = boundsOfPaths.insetBy(dx: -10, dy: -10)
     let pSz = expandedPathBounds.size
     let pOr = expandedPathBounds.origin
     let vSz = self.bounds.size
@@ -114,45 +114,45 @@ class CanvasView: UIView {
     // obtain context
     let ctx = UIGraphicsGetCurrentContext()
 
-    CGContextSaveGState(ctx);
+    ctx?.saveGState();
 
     if scale == scaleX {
       let xTranslate = -(pOr.x * scale)
       let yTranslate = vSz.height - ((vSz.height-pSz.height*scale)/2.0) + (pOr.y*scale)
-      CGContextTranslateCTM(ctx, xTranslate, yTranslate)
-      CGContextScaleCTM(ctx, scale, -scale);
+      ctx?.translateBy(x: xTranslate, y: yTranslate)
+      ctx?.scaleBy(x: scale, y: -scale);
     } else {
       let xTranslate = ((vSz.width - pSz.width*scale)/2.0) - (pOr.x*scale)
       let yTranslate = vSz.height + (pOr.y * scale)
-      CGContextTranslateCTM(ctx, xTranslate, yTranslate)
-      CGContextScaleCTM(ctx, scale, -scale);
+      ctx?.translateBy(x: xTranslate, y: yTranslate)
+      ctx?.scaleBy(x: scale, y: -scale);
     }
 
     // Draw shapes now
 
     switch displayMode {
 
-    case .Original:
+    case .original:
       drawOriginal()
 
-    case .Union:
+    case .union:
       drawUnion()
 
-    case .Intersect:
+    case .intersect:
       drawIntersect()
 
-    case .Subtract:
+    case .subtract:
       drawSubtract()
 
-    case .Join:
+    case .join:
       drawJoin()
     }
 
     // All done
-    CGContextRestoreGState(ctx)
+    ctx?.restoreGState()
   }
 
-  private func drawOriginal() {
+  fileprivate func drawOriginal() {
     // Draw shapes now
 
     for pathItem in paths {
@@ -173,37 +173,37 @@ class CanvasView: UIView {
 
           switch item {
 
-          case let .Move(v):
+          case let .move(v):
             showMe = UIBezierPath(rect: BoxFrame(v))
 
-          case let .Line(v):
+          case let .line(v):
             // Convert lines to bezier curves as well.
             // Just set control point to be in the line formed by the end points
             showMe = UIBezierPath(rect: BoxFrame(v))
 
-          case .QuadCurve(let to, let cp):
+          case .quadCurve(let to, let cp):
             showMe = UIBezierPath(rect: BoxFrame(to))
-            UIColor.blackColor().setStroke()
-            let cp1 = UIBezierPath(ovalInRect: BoxFrame(cp))
+            UIColor.black.setStroke()
+            let cp1 = UIBezierPath(ovalIn: BoxFrame(cp))
             cp1.lineWidth = decorationLineWidth / 2
             cp1.stroke()
             break
 
-          case .CubicCurve(let to, let v1, let v2):
+          case .cubicCurve(let to, let v1, let v2):
             showMe = UIBezierPath(rect: BoxFrame(to))
-            UIColor.blackColor().setStroke()
-            let cp1 = UIBezierPath(ovalInRect: BoxFrame(v1))
+            UIColor.black.setStroke()
+            let cp1 = UIBezierPath(ovalIn: BoxFrame(v1))
             cp1.lineWidth = decorationLineWidth / 2
             cp1.stroke()
-            let cp2 = UIBezierPath(ovalInRect: BoxFrame(v2))
+            let cp2 = UIBezierPath(ovalIn: BoxFrame(v2))
             cp2.lineWidth = decorationLineWidth / 2
             cp2.stroke()
 
-          case .Close:
+          case .close:
             break
           }
 
-          UIColor.redColor().setStroke()
+          UIColor.red.setStroke()
           showMe?.lineWidth = decorationLineWidth
           showMe?.stroke()
         }
@@ -230,12 +230,12 @@ class CanvasView: UIView {
             (intersection: FBBezierIntersection) -> (setStop: Bool, stopValue:Bool) in
 
             if intersection.isTangent {
-              UIColor.purpleColor().setStroke()
+              UIColor.purple.setStroke()
             } else {
-              UIColor.greenColor().setStroke()
+              UIColor.green.setStroke()
             }
             
-            let inter = UIBezierPath(ovalInRect: self.BoxFrame(intersection.location))
+            let inter = UIBezierPath(ovalIn: self.BoxFrame(intersection.location))
             inter.lineWidth = self.decorationLineWidth
             inter.stroke()
             
@@ -246,7 +246,7 @@ class CanvasView: UIView {
     }
   }
 
-  func drawEndPointsForPath(path: UIBezierPath) {
+  func drawEndPointsForPath(_ path: UIBezierPath) {
     let bezier = LRTBezierPathWrapper(path)
 
     //var previousPoint = CGPointZero
@@ -257,43 +257,43 @@ class CanvasView: UIView {
 
       switch item {
 
-      case let .Move(v):
+      case let .move(v):
         showMe = UIBezierPath(rect: BoxFrame(v))
 
-      case let .Line(v):
+      case let .line(v):
         // Convert lines to bezier curves as well.
         // Just set control point to be in the line formed by the end points
         showMe = UIBezierPath(rect: BoxFrame(v))
 
-      case .QuadCurve(let to, let cp):
+      case .quadCurve(let to, let cp):
         showMe = UIBezierPath(rect: BoxFrame(to))
-        UIColor.blackColor().setStroke()
-        let cp1 = UIBezierPath(ovalInRect: BoxFrame(cp))
+        UIColor.black.setStroke()
+        let cp1 = UIBezierPath(ovalIn: BoxFrame(cp))
         cp1.lineWidth = decorationLineWidth / 2
         cp1.stroke()
         break
 
-      case .CubicCurve(let to, let v1, let v2):
+      case .cubicCurve(let to, let v1, let v2):
         showMe = UIBezierPath(rect: BoxFrame(to))
-        UIColor.blackColor().setStroke()
-        let cp1 = UIBezierPath(ovalInRect: BoxFrame(v1))
+        UIColor.black.setStroke()
+        let cp1 = UIBezierPath(ovalIn: BoxFrame(v1))
         cp1.lineWidth = decorationLineWidth / 2
         cp1.stroke()
-        let cp2 = UIBezierPath(ovalInRect: BoxFrame(v2))
+        let cp2 = UIBezierPath(ovalIn: BoxFrame(v2))
         cp2.lineWidth = decorationLineWidth / 2
         cp2.stroke()
 
-      case .Close:
+      case .close:
         break
         //previousPoint = CGPointZero
       }
-      UIColor.redColor().setStroke()
+      UIColor.red.setStroke()
       showMe?.lineWidth = decorationLineWidth
       showMe?.stroke()
     }
   }
 
-  private func drawUnion() {
+  fileprivate func drawUnion() {
     if _unionPath == nil {
       if paths.count == 2 {
         _unionPath = paths[0].path.fb_union(paths[1].path)
@@ -311,7 +311,7 @@ class CanvasView: UIView {
     }
   }
 
-  private func drawIntersect() {
+  fileprivate func drawIntersect() {
     if _intersectPath == nil {
       if paths.count == 2 {
         _intersectPath = paths[0].path.fb_intersect(paths[1].path)
@@ -329,7 +329,7 @@ class CanvasView: UIView {
     }
   }
 
-  private func drawSubtract() {
+  fileprivate func drawSubtract() {
     if _differencePath == nil {
       if paths.count == 2 {
         _differencePath = paths[0].path.fb_difference(paths[1].path)
@@ -347,7 +347,7 @@ class CanvasView: UIView {
     }
   }
 
-  private func drawJoin() {
+  fileprivate func drawJoin() {
     if _xorPath == nil {
       if paths.count == 2 {
         _xorPath = paths[0].path.fb_xor(paths[1].path)

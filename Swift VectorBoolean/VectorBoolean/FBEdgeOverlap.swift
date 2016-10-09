@@ -16,7 +16,7 @@ let FBOverlapThreshold = isRunningOn64BitDevice ? 1e-2 : 1e-1
 class FBEdgeOverlap {
   var edge1 : FBBezierCurve
   var edge2 : FBBezierCurve
-  private var _range : FBBezierIntersectRange
+  fileprivate var _range : FBBezierIntersectRange
 
   var range : FBBezierIntersectRange {
     return _range
@@ -29,7 +29,7 @@ class FBEdgeOverlap {
   }
 
   //- (BOOL) fitsBefore:(FBEdgeOverlap *)nextOverlap
-  func fitsBefore(nextOverlap: FBEdgeOverlap) -> Bool {
+  func fitsBefore(_ nextOverlap: FBEdgeOverlap) -> Bool {
     if FBAreValuesCloseWithOptions(range.parameterRange1.maximum, value2: 1.0, threshold: FBOverlapThreshold) {
       // nextOverlap should start at 0 of the next edge
       let nextEdge = edge1.next
@@ -41,7 +41,7 @@ class FBEdgeOverlap {
   }
 
   //- (BOOL) fitsAfter:(FBEdgeOverlap *)previousOverlap
-  func fitsAfter(previousOverlap: FBEdgeOverlap) -> Bool {
+  func fitsAfter(_ previousOverlap: FBEdgeOverlap) -> Bool {
     if FBAreValuesCloseWithOptions(range.parameterRange1.minimum, value2: 0.0, threshold: FBOverlapThreshold) {
       // previousOverlap should end at 1 of the previous edge
       let previousEdge = edge1.previous
@@ -72,7 +72,7 @@ class FBEdgeOverlap {
   }
 
   //- (BOOL) doesContainParameter:(CGFloat)parameter onEdge:(FBBezierCurve *)edge startExtends:(BOOL)extendsBeforeStart endExtends:(BOOL)extendsAfterEnd
-  func doesContainParameter(parameter: Double, onEdge edge:FBBezierCurve, startExtends extendsBeforeStart: Bool, endExtends extendsAfterEnd: Bool) -> Bool {
+  func doesContainParameter(_ parameter: Double, onEdge edge:FBBezierCurve, startExtends extendsBeforeStart: Bool, endExtends extendsAfterEnd: Bool) -> Bool {
 
     // By the time this is called, we know the crossing is on one of our edges.
     if extendsBeforeStart && extendsAfterEnd {
