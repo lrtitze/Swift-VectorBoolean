@@ -45,7 +45,7 @@ class FBBezierGraph {
   init(path: UIBezierPath) {
     _contours = []
     _bounds = CGRect.null
-    initWithBezierPath(path)
+    _ = initWithBezierPath(path)
   }
 
   class func bezierGraphWithBezierPath(_ path: UIBezierPath!) -> AnyObject {
