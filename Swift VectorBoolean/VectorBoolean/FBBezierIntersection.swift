@@ -22,18 +22,18 @@ let FBParameterCloseThreshold = isRunningOn64BitDevice ? 1e-4 : 1e-2
 /// the left and right parts of the curves relative to
 /// the intersection point, and whether the intersection is tangent.
 class FBBezierIntersection {
-  private var _location : CGPoint?
-  private var _curve1: FBBezierCurve
-  private var _parameter1: Double
-  private var _curve1LeftBezier: FBBezierCurve?
-  private var _curve1RightBezier: FBBezierCurve?
-  private var _curve2: FBBezierCurve
-  private var _parameter2: Double
-  private var _curve2LeftBezier: FBBezierCurve?
-  private var _curve2RightBezier: FBBezierCurve?
-  private var _tangent: Bool = false
-  private var needToComputeCurve1 = true
-  private var needToComputeCurve2 = true
+  fileprivate var _location : CGPoint?
+  fileprivate var _curve1: FBBezierCurve
+  fileprivate var _parameter1: Double
+  fileprivate var _curve1LeftBezier: FBBezierCurve?
+  fileprivate var _curve1RightBezier: FBBezierCurve?
+  fileprivate var _curve2: FBBezierCurve
+  fileprivate var _parameter2: Double
+  fileprivate var _curve2LeftBezier: FBBezierCurve?
+  fileprivate var _curve2RightBezier: FBBezierCurve?
+  fileprivate var _tangent: Bool = false
+  fileprivate var needToComputeCurve1 = true
+  fileprivate var needToComputeCurve2 = true
 
   var location : CGPoint {
     computeCurve1()
@@ -154,7 +154,7 @@ class FBBezierIntersection {
 
 
   //- (void) computeCurve1
-  private func computeCurve1()
+  fileprivate func computeCurve1()
   {
     if needToComputeCurve1 {
       let pap = _curve1.pointAtParameter(_parameter1)
@@ -167,7 +167,7 @@ class FBBezierIntersection {
   }
 
   //- (void) computeCurve2
-  private func computeCurve2()
+  fileprivate func computeCurve2()
   {
     if needToComputeCurve2 {
       let pap = _curve2.pointAtParameter(_parameter2)

@@ -29,7 +29,7 @@ extension UIBezierPath {
 
   // 57
   //- (void) fb_copyAttributesFrom:(NSBezierPath *)path
-  func fb_copyAttributesFrom(path: UIBezierPath) {
+  func fb_copyAttributesFrom(_ path: UIBezierPath) {
     self.lineWidth = path.lineWidth
     self.lineCapStyle = path.lineCapStyle
     self.lineJoinStyle = path.lineJoinStyle
@@ -39,7 +39,7 @@ extension UIBezierPath {
 
   // 103
   //+ (NSBezierPath *) circleAtPoint:(NSPoint)point
-  static func circleAtPoint(point: CGPoint) -> UIBezierPath {
+  static func circleAtPoint(_ point: CGPoint) -> UIBezierPath {
 
     let rect = CGRect(
       x: point.x - FBDebugPointSize * 0.5,
@@ -47,12 +47,12 @@ extension UIBezierPath {
       width: FBDebugPointSize,
       height: FBDebugPointSize);
 
-    return UIBezierPath(ovalInRect: rect)
+    return UIBezierPath(ovalIn: rect)
   }
 
   // 110
   //+ (NSBezierPath *) rectAtPoint:(NSPoint)point
-  static func rectAtPoint(point: CGPoint) -> UIBezierPath {
+  static func rectAtPoint(_ point: CGPoint) -> UIBezierPath {
 
     let rect = CGRect(
       x: point.x - FBDebugPointSize * 0.5,
@@ -64,7 +64,7 @@ extension UIBezierPath {
   }
 
   // 117
-  static func smallCircleAtPoint(point: CGPoint) -> UIBezierPath {
+  static func smallCircleAtPoint(_ point: CGPoint) -> UIBezierPath {
 
     let rect = CGRect(
       x: point.x - FBDebugSmallPointSize * 0.5,
@@ -72,12 +72,12 @@ extension UIBezierPath {
       width: FBDebugSmallPointSize,
       height: FBDebugSmallPointSize);
 
-    return UIBezierPath(ovalInRect: rect)
+    return UIBezierPath(ovalIn: rect)
   }
 
   // 124
   //+ (NSBezierPath *) smallRectAtPoint:(NSPoint)point
-  static func smallRectAtPoint(point: CGPoint) -> UIBezierPath {
+  static func smallRectAtPoint(_ point: CGPoint) -> UIBezierPath {
 
     let rect = CGRect(
       x: point.x - FBDebugSmallPointSize * 0.5,
@@ -90,7 +90,7 @@ extension UIBezierPath {
 
   // 131
   //+ (NSBezierPath *) triangleAtPoint:(NSPoint)point direction:(NSPoint)tangent
-  static func triangleAtPoint(point: CGPoint, direction tangent: CGPoint) -> UIBezierPath {
+  static func triangleAtPoint(_ point: CGPoint, direction tangent: CGPoint) -> UIBezierPath {
 
     let endPoint = FBAddPoint(point, point2: FBScalePoint(tangent, scale: FBDebugPointSize * 1.5))
     let normal1 = FBLineNormal(point, lineEnd: endPoint)
@@ -98,11 +98,11 @@ extension UIBezierPath {
     let basePoint1 = FBAddPoint(point, point2: FBScalePoint(normal1, scale: FBDebugPointSize * 0.5))
     let basePoint2 = FBAddPoint(point, point2: FBScalePoint(normal2, scale: FBDebugPointSize * 0.5))
     let path = UIBezierPath()
-    path.moveToPoint(basePoint1)
-    path.addLineToPoint(endPoint)
-    path.addLineToPoint(basePoint2)
-    path.addLineToPoint(basePoint1)
-    path.closePath()
+    path.move(to: basePoint1)
+    path.addLine(to: endPoint)
+    path.addLine(to: basePoint2)
+    path.addLine(to: basePoint1)
+    path.close()
 
     return path
   }

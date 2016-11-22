@@ -16,7 +16,7 @@ import UIKit
 // MARK: Point Helpers
 // ===================================
 
-let isRunningOn64BitDevice = sizeof(Int) == sizeof(Int64)
+let isRunningOn64BitDevice = MemoryLayout<Int>.size == MemoryLayout<Int64>.size
 
 var FBPointClosenessThreshold: Double {
   if isRunningOn64BitDevice {
@@ -40,7 +40,7 @@ var FBBoundsClosenessThreshold: Double {
   }
 }
 
-func FBDistanceBetweenPoints(point1: CGPoint, point2: CGPoint) -> Double {
+func FBDistanceBetweenPoints(_ point1: CGPoint, point2: CGPoint) -> Double {
 
   let xDelta = Double(point2.x - point1.x)
   let yDelta = Double(point2.y - point1.y)
@@ -48,7 +48,7 @@ func FBDistanceBetweenPoints(point1: CGPoint, point2: CGPoint) -> Double {
   return sqrt(xDelta * xDelta + yDelta * yDelta);
 }
 
-func FBDistancePointToLine(point: CGPoint, lineStartPoint: CGPoint, lineEndPoint: CGPoint) -> Double {
+func FBDistancePointToLine(_ point: CGPoint, lineStartPoint: CGPoint, lineEndPoint: CGPoint) -> Double {
 
   let lineLength = FBDistanceBetweenPoints(lineStartPoint, point2: lineEndPoint)
   if lineLength == 0.0 {
@@ -70,14 +70,14 @@ func FBDistancePointToLine(point: CGPoint, lineStartPoint: CGPoint, lineEndPoint
   return FBDistanceBetweenPoints(point, point2: intersectionPoint)
 }
 
-func FBAddPoint(point1: CGPoint, point2: CGPoint) -> CGPoint {
+func FBAddPoint(_ point1: CGPoint, point2: CGPoint) -> CGPoint {
 
   return CGPoint(
     x: point1.x + point2.x,
     y: point1.y + point2.y)
 }
 
-func FBUnitScalePoint(point: CGPoint, scale: Double) -> CGPoint {
+func FBUnitScalePoint(_ point: CGPoint, scale: Double) -> CGPoint {
 
   var result = point
   let length = FBPointLength(point)
@@ -88,40 +88,40 @@ func FBUnitScalePoint(point: CGPoint, scale: Double) -> CGPoint {
   return result
 }
 
-func FBScalePoint(point: CGPoint, scale: CGFloat) -> CGPoint {
+func FBScalePoint(_ point: CGPoint, scale: CGFloat) -> CGPoint {
 
   return CGPoint(
     x: point.x * scale,
     y: point.y * scale)
 }
 
-func FBDotMultiplyPoint(point1: CGPoint, point2: CGPoint) -> Double {
+func FBDotMultiplyPoint(_ point1: CGPoint, point2: CGPoint) -> Double {
 
   let dotX = Double(point1.x) * Double(point2.x)
   let dotY = Double(point1.y) * Double(point2.y)
   return dotX + dotY
 }
 
-func FBSubtractPoint(point1: CGPoint, point2: CGPoint) -> CGPoint {
+func FBSubtractPoint(_ point1: CGPoint, point2: CGPoint) -> CGPoint {
 
   return CGPoint(
     x: point1.x - point2.x,
     y: point1.y - point2.y)
 }
 
-func FBPointLength(point: CGPoint) -> Double {
+func FBPointLength(_ point: CGPoint) -> Double {
   let xSq = Double(point.x) * Double(point.x)
   let ySq = Double(point.y) * Double(point.y)
   return sqrt(xSq + ySq)
 }
 
-func FBPointSquaredLength(point: CGPoint) -> Double {
+func FBPointSquaredLength(_ point: CGPoint) -> Double {
   let xSq = Double(point.x) * Double(point.x)
   let ySq = Double(point.y) * Double(point.y)
   return xSq + ySq
 }
 
-func FBNormalizePoint(point: CGPoint) -> CGPoint {
+func FBNormalizePoint(_ point: CGPoint) -> CGPoint {
 
   var result = point
   let length = FBPointLength(point)
@@ -132,63 +132,63 @@ func FBNormalizePoint(point: CGPoint) -> CGPoint {
   return result
 }
 
-func FBNegatePoint(point: CGPoint) -> CGPoint {
+func FBNegatePoint(_ point: CGPoint) -> CGPoint {
 
   return CGPoint(
     x: -point.x,
     y: -point.y)
 }
 
-func FBRoundPoint(point: CGPoint) -> CGPoint {
+func FBRoundPoint(_ point: CGPoint) -> CGPoint {
 
   return CGPoint(
     x: round(point.x),
     y: round(point.y))
 }
 
-func FBLineNormal(lineStart: CGPoint, lineEnd: CGPoint) -> CGPoint {
+func FBLineNormal(_ lineStart: CGPoint, lineEnd: CGPoint) -> CGPoint {
 
   return FBNormalizePoint(CGPoint(
     x: -(lineEnd.y - lineStart.y),
     y: lineEnd.x - lineStart.x))
 }
 
-func FBLineMidpoint(lineStart: CGPoint, lineEnd: CGPoint) -> CGPoint {
+func FBLineMidpoint(_ lineStart: CGPoint, lineEnd: CGPoint) -> CGPoint {
 
   let distance = FBDistanceBetweenPoints(lineStart, point2: lineEnd)
   let tangent = FBNormalizePoint(FBSubtractPoint(lineEnd, point2: lineStart))
   return FBAddPoint(lineStart, point2: FBUnitScalePoint(tangent, scale: distance / 2.0))
 }
 
-func FBRectGetTopLeft(rect : CGRect) -> CGPoint {
+func FBRectGetTopLeft(_ rect : CGRect) -> CGPoint {
 
   return CGPoint(
-    x: CGRectGetMinX(rect),
-    y: CGRectGetMinY(rect))
+    x: rect.minX,
+    y: rect.minY)
 }
 
-func FBRectGetTopRight(rect : CGRect) -> CGPoint {
+func FBRectGetTopRight(_ rect : CGRect) -> CGPoint {
 
   return CGPoint(
-    x: CGRectGetMaxX(rect),
-    y: CGRectGetMinY(rect))
+    x: rect.maxX,
+    y: rect.minY)
 }
 
-func FBRectGetBottomLeft(rect : CGRect) -> CGPoint {
+func FBRectGetBottomLeft(_ rect : CGRect) -> CGPoint {
 
   return CGPoint(
-    x: CGRectGetMinX(rect),
-    y: CGRectGetMaxY(rect))
+    x: rect.minX,
+    y: rect.maxY)
 }
 
-func FBRectGetBottomRight(rect : CGRect) -> CGPoint {
+func FBRectGetBottomRight(_ rect : CGRect) -> CGPoint {
 
   return CGPoint(
-    x: CGRectGetMaxX(rect),
-    y: CGRectGetMaxY(rect))
+    x: rect.maxX,
+    y: rect.maxY)
 }
 
-func FBExpandBoundsByPoint(inout topLeft: CGPoint, inout bottomRight: CGPoint, point: CGPoint) {
+func FBExpandBoundsByPoint(_ topLeft: inout CGPoint, bottomRight: inout CGPoint, point: CGPoint) {
 
   if point.x < topLeft.x     { topLeft.x = point.x }
 
@@ -199,7 +199,7 @@ func FBExpandBoundsByPoint(inout topLeft: CGPoint, inout bottomRight: CGPoint, p
   if point.y > bottomRight.y { bottomRight.y = point.y }
 }
 
-func FBUnionRect(rect1: CGRect, rect2: CGRect) -> CGRect {
+func FBUnionRect(_ rect1: CGRect, rect2: CGRect) -> CGRect {
 
   var topLeft = FBRectGetTopLeft(rect1)
   var bottomRight = FBRectGetBottomRight(rect1)
@@ -221,27 +221,27 @@ func FBUnionRect(rect1: CGRect, rect2: CGRect) -> CGRect {
 // ===================================
 
 
-func FBArePointsClose(point1: CGPoint, point2: CGPoint) -> Bool {
+func FBArePointsClose(_ point1: CGPoint, point2: CGPoint) -> Bool {
 
   return FBArePointsCloseWithOptions(point1, point2: point2, threshold: FBPointClosenessThreshold)
 }
 
-func FBArePointsCloseWithOptions(point1: CGPoint, point2: CGPoint, threshold: Double) -> Bool {
+func FBArePointsCloseWithOptions(_ point1: CGPoint, point2: CGPoint, threshold: Double) -> Bool {
 
   return FBAreValuesCloseWithOptions(Double(point1.x), value2: Double(point2.x), threshold: threshold) && FBAreValuesCloseWithOptions(Double(point1.y), value2: Double(point2.y), threshold: threshold);
 }
 
-func FBAreValuesClose(value1: CGFloat, value2: CGFloat) -> Bool {
+func FBAreValuesClose(_ value1: CGFloat, value2: CGFloat) -> Bool {
 
   return FBAreValuesCloseWithOptions(Double(value1), value2: Double(value2), threshold: FBPointClosenessThreshold)
 }
 
-func FBAreValuesClose(value1: Double, value2: Double) -> Bool {
+func FBAreValuesClose(_ value1: Double, value2: Double) -> Bool {
 
   return FBAreValuesCloseWithOptions(value1, value2: value2, threshold: Double(FBPointClosenessThreshold))
 }
 
-func FBAreValuesCloseWithOptions(value1: Double, value2: Double, threshold: Double) -> Bool {
+func FBAreValuesCloseWithOptions(_ value1: Double, value2: Double, threshold: Double) -> Bool {
 
   let delta = value1 - value2
   return (delta <= threshold) && (delta >= -threshold)
@@ -265,7 +265,7 @@ let Half_π = M_PI_2
 
 
 // Normalize the angle between 0 and 2 π
-func NormalizeAngle(value: Double) -> Double {
+func NormalizeAngle(_ value: Double) -> Double {
   var value = value
   while value < 0.0 {  value = value + Two_π }
   while value >= Two_π { value = value - Two_π }
@@ -274,7 +274,7 @@ func NormalizeAngle(value: Double) -> Double {
 }
 
 // Compute the polar angle from the cartesian point
-func PolarAngle(point: CGPoint) -> Double {
+func PolarAngle(_ point: CGPoint) -> Double {
 
   var value = 0.0
   let dpx = Double(point.x)
@@ -338,12 +338,12 @@ struct FBAngleRange {
 //  return value > minimum
 //}
 //
-func FBIsValueGreaterThan(value: CGFloat, minimum: CGFloat) -> Bool {
+func FBIsValueGreaterThan(_ value: CGFloat, minimum: CGFloat) -> Bool {
 
   return FBIsValueGreaterThanWithOptions(Double(value), minimum: Double(minimum), threshold: FBTangentClosenessThreshold)
 }
 
-func FBIsValueGreaterThanWithOptions(value: Double, minimum: Double, threshold: Double) -> Bool {
+func FBIsValueGreaterThanWithOptions(_ value: Double, minimum: Double, threshold: Double) -> Bool {
 
   if FBAreValuesCloseWithOptions(value, value2: minimum, threshold: threshold) {
     return false
@@ -352,12 +352,12 @@ func FBIsValueGreaterThanWithOptions(value: Double, minimum: Double, threshold: 
   return value > minimum
 }
 
-func FBIsValueGreaterThan(value: Double, minimum: Double) -> Bool {
+func FBIsValueGreaterThan(_ value: Double, minimum: Double) -> Bool {
 
   return FBIsValueGreaterThanWithOptions(value, minimum: minimum, threshold: Double(FBTangentClosenessThreshold))
 }
 
-func FBIsValueLessThan(value: CGFloat, maximum: CGFloat) -> Bool {
+func FBIsValueLessThan(_ value: CGFloat, maximum: CGFloat) -> Bool {
 
   if FBAreValuesCloseWithOptions(Double(value), value2: Double(maximum), threshold: FBTangentClosenessThreshold) {
     return false
@@ -366,7 +366,7 @@ func FBIsValueLessThan(value: CGFloat, maximum: CGFloat) -> Bool {
   return value < maximum
 }
 
-func FBIsValueLessThan(value: Double, maximum: Double) -> Bool {
+func FBIsValueLessThan(_ value: Double, maximum: Double) -> Bool {
 
   if FBAreValuesCloseWithOptions(value, value2: maximum, threshold: Double(FBTangentClosenessThreshold)) {
     return false
@@ -375,7 +375,7 @@ func FBIsValueLessThan(value: Double, maximum: Double) -> Bool {
   return value < maximum
 }
 
-func FBIsValueGreaterThanEqual(value: CGFloat, minimum: CGFloat) -> Bool {
+func FBIsValueGreaterThanEqual(_ value: CGFloat, minimum: CGFloat) -> Bool {
 
   if FBAreValuesCloseWithOptions(Double(value), value2: Double(minimum), threshold: FBTangentClosenessThreshold) {
     return true
@@ -384,7 +384,7 @@ func FBIsValueGreaterThanEqual(value: CGFloat, minimum: CGFloat) -> Bool {
   return value >= minimum
 }
 
-func FBIsValueGreaterThanEqual(value: Double, minimum: Double) -> Bool {
+func FBIsValueGreaterThanEqual(_ value: Double, minimum: Double) -> Bool {
 
   if FBAreValuesCloseWithOptions(value, value2: minimum, threshold: Double(FBTangentClosenessThreshold)) {
     return true
@@ -402,7 +402,7 @@ func FBIsValueGreaterThanEqual(value: Double, minimum: Double) -> Bool {
 //  return value <= maximum
 //}
 
-func FBIsValueLessThanEqualWithOptions(value: Double, maximum: Double, threshold: Double) -> Bool {
+func FBIsValueLessThanEqualWithOptions(_ value: Double, maximum: Double, threshold: Double) -> Bool {
 
   if FBAreValuesCloseWithOptions(value, value2: maximum, threshold: threshold) {
     return true
@@ -411,18 +411,18 @@ func FBIsValueLessThanEqualWithOptions(value: Double, maximum: Double, threshold
   return value <= maximum
 }
 
-func FBIsValueLessThanEqual(value: CGFloat, maximum: CGFloat) -> Bool {
+func FBIsValueLessThanEqual(_ value: CGFloat, maximum: CGFloat) -> Bool {
 
   return FBIsValueLessThanEqualWithOptions(Double(value), maximum: Double(maximum), threshold: FBTangentClosenessThreshold)
 }
 
-func FBIsValueLessThanEqual(value: Double, maximum: Double) -> Bool {
+func FBIsValueLessThanEqual(_ value: Double, maximum: Double) -> Bool {
 
   return FBIsValueLessThanEqualWithOptions(value, maximum: maximum, threshold: FBTangentClosenessThreshold)
 }
 
 
-func FBAngleRangeContainsAngle(range: FBAngleRange, angle: Double) -> Bool {
+func FBAngleRangeContainsAngle(_ range: FBAngleRange, angle: Double) -> Bool {
 
   if range.minimum <= range.maximum {
     return FBIsValueGreaterThan(angle, minimum: range.minimum) && FBIsValueLessThan(angle, maximum: range.maximum)
@@ -448,29 +448,29 @@ struct FBRange {
   var maximum : Double
 }
 
-func FBRangeHasConverged(range: FBRange, decimalPlaces: Int) -> Bool {
+func FBRangeHasConverged(_ range: FBRange, decimalPlaces: Int) -> Bool {
   let factor = pow(10.0, Double(decimalPlaces))
   let minimum = Int(range.minimum * factor)
   let maxiumum = Int(range.maximum * factor)
   return minimum == maxiumum
 }
 
-func FBRangeGetSize(range: FBRange) -> Double {
+func FBRangeGetSize(_ range: FBRange) -> Double {
 
   return range.maximum - range.minimum
 }
 
-func FBRangeAverage(range: FBRange) -> Double {
+func FBRangeAverage(_ range: FBRange) -> Double {
 
   return (range.minimum + range.maximum) / 2.0
 }
 
-func FBRangeScaleNormalizedValue(range: FBRange, value: Double) -> Double {
+func FBRangeScaleNormalizedValue(_ range: FBRange, value: Double) -> Double {
 
   return (range.maximum - range.minimum) * value + range.minimum
 }
 
-func FBRangeUnion(range1: FBRange, range2: FBRange) -> FBRange {
+func FBRangeUnion(_ range1: FBRange, range2: FBRange) -> FBRange {
 
   return FBRange(minimum: min(range1.minimum, range2.minimum), maximum: max(range1.maximum, range2.maximum))
 }
@@ -486,7 +486,7 @@ struct FBTangentPair {
   var right: CGPoint
 }
 
-func FBAreTangentsAmbigious(edge1Tangents: FBTangentPair, edge2Tangents: FBTangentPair) -> Bool {
+func FBAreTangentsAmbigious(_ edge1Tangents: FBTangentPair, edge2Tangents: FBTangentPair) -> Bool {
 
   let normalEdge1 = FBTangentPair(left: FBNormalizePoint(edge1Tangents.left), right: FBNormalizePoint(edge1Tangents.right))
   let normalEdge2 = FBTangentPair(left: FBNormalizePoint(edge2Tangents.left), right: FBNormalizePoint(edge2Tangents.right))
@@ -503,7 +503,7 @@ struct FBAnglePair {
   var b: Double
 }
 
-func FBTangentsCross(edge1Tangents: FBTangentPair, edge2Tangents: FBTangentPair) -> Bool {
+func FBTangentsCross(_ edge1Tangents: FBTangentPair, edge2Tangents: FBTangentPair) -> Bool {
 
   // Calculate angles for the tangents
   let edge1Angles = FBAnglePair(a: PolarAngle(edge1Tangents.left), b: PolarAngle(edge1Tangents.right))
@@ -538,16 +538,16 @@ func FBTangentsCross(edge1Tangents: FBTangentPair, edge2Tangents: FBTangentPair)
 }
 
 
-func FBLineBoundsMightOverlap(bounds1: CGRect, bounds2: CGRect) -> Bool
+func FBLineBoundsMightOverlap(_ bounds1: CGRect, bounds2: CGRect) -> Bool
 {
-  let left = Double(max(CGRectGetMinX(bounds1), CGRectGetMinX(bounds2)))
-  let right = Double(min(CGRectGetMaxX(bounds1), CGRectGetMaxX(bounds2)))
+  let left = Double(max(bounds1.minX, bounds2.minX))
+  let right = Double(min(bounds1.maxX, bounds2.maxX))
 
   if FBIsValueGreaterThanWithOptions(left, minimum: right, threshold: FBBoundsClosenessThreshold) {
     return false    // no horizontal overlap
   }
 
-  let top = Double(max(CGRectGetMinY(bounds1), CGRectGetMinY(bounds2)))
-  let bottom = Double(min(CGRectGetMaxY(bounds1), CGRectGetMaxY(bounds2)))
+  let top = Double(max(bounds1.minY, bounds2.minY))
+  let bottom = Double(min(bounds1.maxY, bounds2.maxY))
   return FBIsValueLessThanEqualWithOptions(top, maximum: bottom, threshold: FBBoundsClosenessThreshold)
 }

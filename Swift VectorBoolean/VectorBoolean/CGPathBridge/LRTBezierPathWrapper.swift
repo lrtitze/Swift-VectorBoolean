@@ -11,7 +11,7 @@ import UIKit
 class LRTBezierPathWrapper {
 
   var elements: [PathElement]
-  private var _bezierPath : UIBezierPath
+  fileprivate var _bezierPath : UIBezierPath
 
   var bezierPath : UIBezierPath {
     get {
@@ -26,7 +26,7 @@ class LRTBezierPathWrapper {
   }
 
   func createElementsFromCGPath() {
-    let cgPath = _bezierPath.CGPath
+    let cgPath = _bezierPath.cgPath
 
     cgPath.apply({
       (e : PathElement) -> Void in

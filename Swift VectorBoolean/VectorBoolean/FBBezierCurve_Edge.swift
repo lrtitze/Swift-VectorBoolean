@@ -13,7 +13,7 @@ import UIKit
 
 // 18
 //static void FBFindEdge1TangentCurves(FBBezierCurve *edge, FBBezierIntersection *intersection, FBBezierCurve** leftCurve, FBBezierCurve **rightCurve)
-private func FBFindEdge1TangentCurves(edge: FBBezierCurve, intersection: FBBezierIntersection) -> (leftCurve: FBBezierCurve, rightCurve: FBBezierCurve) {
+private func FBFindEdge1TangentCurves(_ edge: FBBezierCurve, intersection: FBBezierIntersection) -> (leftCurve: FBBezierCurve, rightCurve: FBBezierCurve) {
 
   var leftCurve: FBBezierCurve, rightCurve: FBBezierCurve
 
@@ -33,7 +33,7 @@ private func FBFindEdge1TangentCurves(edge: FBBezierCurve, intersection: FBBezie
 
 // 32
 //static void FBFindEdge2TangentCurves(FBBezierCurve *edge, FBBezierIntersection *intersection, FBBezierCurve** leftCurve, FBBezierCurve **rightCurve)
-private func FBFindEdge2TangentCurves(edge: FBBezierCurve, intersection: FBBezierIntersection) -> (leftCurve: FBBezierCurve, rightCurve: FBBezierCurve) {
+private func FBFindEdge2TangentCurves(_ edge: FBBezierCurve, intersection: FBBezierIntersection) -> (leftCurve: FBBezierCurve, rightCurve: FBBezierCurve) {
 
   var leftCurve: FBBezierCurve, rightCurve: FBBezierCurve
 
@@ -53,13 +53,13 @@ private func FBFindEdge2TangentCurves(edge: FBBezierCurve, intersection: FBBezie
 
 // 46
 //static void FBComputeEdgeTangents(FBBezierCurve* leftCurve, FBBezierCurve *rightCurve, CGFloat offset, NSPoint edgeTangents[2])
-private func FBComputeEdgeTangents(leftCurve: FBBezierCurve, rightCurve: FBBezierCurve, offset: Double, inout edgeTangents: FBTangentPair) {
+private func FBComputeEdgeTangents(_ leftCurve: FBBezierCurve, rightCurve: FBBezierCurve, offset: Double, edgeTangents: inout FBTangentPair) {
   edgeTangents.left = leftCurve.tangentFromRightOffset(offset)
   edgeTangents.right = rightCurve.tangentFromLeftOffset(offset)
 }
 
 // 53
-private func FBComputeEdge1RangeTangentCurves(edge: FBBezierCurve, intersectRange: FBBezierIntersectRange) -> (leftCurve: FBBezierCurve, rightCurve: FBBezierCurve) {
+private func FBComputeEdge1RangeTangentCurves(_ edge: FBBezierCurve, intersectRange: FBBezierIntersectRange) -> (leftCurve: FBBezierCurve, rightCurve: FBBezierCurve) {
 
   var leftCurve: FBBezierCurve, rightCurve: FBBezierCurve
 
@@ -80,7 +80,7 @@ private func FBComputeEdge1RangeTangentCurves(edge: FBBezierCurve, intersectRang
 }
 
 // 66
-private func FBComputeEdge2RangeTangentCurves(edge: FBBezierCurve, intersectRange: FBBezierIntersectRange) -> (leftCurve: FBBezierCurve, rightCurve: FBBezierCurve) {
+private func FBComputeEdge2RangeTangentCurves(_ edge: FBBezierCurve, intersectRange: FBBezierIntersectRange) -> (leftCurve: FBBezierCurve, rightCurve: FBBezierCurve) {
 
   var leftCurve: FBBezierCurve, rightCurve: FBBezierCurve
 
@@ -106,7 +106,7 @@ extension FBBezierCurve {
 
   // 119
   //- (void) addCrossing:(FBEdgeCrossing *)crossing
-  func addCrossing(crossing: FBEdgeCrossing) {
+  func addCrossing(_ crossing: FBEdgeCrossing) {
     // Make sure the crossing can make it back to us,
     // and keep all the crossings sorted
     crossing.edge = self
@@ -116,16 +116,16 @@ extension FBBezierCurve {
 
   // 127
   //- (void) removeCrossing:(FBEdgeCrossing *)crossing
-  func removeCrossing(crossing: FBEdgeCrossing) {
+  func removeCrossing(_ crossing: FBEdgeCrossing) {
     // Keep the crossings sorted
     //crossing.edge = nil   // cannot nil a non-optional
 
     //[_crossings removeObject:crossing];
-    for (index, element) in crossings.enumerate()
+    for (index, element) in crossings.enumerated()
     {
       if element === crossing
       {
-        crossings.removeAtIndex(index)
+        crossings.remove(at: index)
         break
       }
     }
@@ -205,9 +205,9 @@ extension FBBezierCurve {
 
   // 183
   //- (void) crossingsWithBlock:(void (^)(FBEdgeCrossing *crossing, BOOL *stop))block
-  func crossingsWithBlock(block: (crossing: FBEdgeCrossing) -> (setStop: Bool, stopValue:Bool)) {
+  func crossingsWithBlock(_ block: (_ crossing: FBEdgeCrossing) -> (setStop: Bool, stopValue:Bool)) {
     for crossing in crossings {
-      let (set, val) = block(crossing: crossing)
+      let (set, val) = block(crossing)
       if set && val {
         break
       }
@@ -217,10 +217,10 @@ extension FBBezierCurve {
   // 196
   //- (void) crossingsCopyWithBlock:(void (^)(FBEdgeCrossing *crossing, BOOL *stop))block
   // TODO: Check that this behaves the same as the original
-  func crossingsCopyWithBlock(block: (crossing: FBEdgeCrossing) -> (setStop: Bool, stopValue:Bool)) {
+  func crossingsCopyWithBlock(_ block: (_ crossing: FBEdgeCrossing) -> (setStop: Bool, stopValue:Bool)) {
     let crossingsCopy = crossings
     for crossing in crossingsCopy {
-      let (set, val) = block(crossing: crossing)
+      let (set, val) = block(crossing)
       if set && val {
         break
       }
@@ -229,7 +229,7 @@ extension FBBezierCurve {
 
   // 210
   //- (FBEdgeCrossing *) nextCrossing:(FBEdgeCrossing *)crossing
-  func nextCrossing(crossing: FBEdgeCrossing) -> FBEdgeCrossing? {
+  func nextCrossing(_ crossing: FBEdgeCrossing) -> FBEdgeCrossing? {
     if crossing.index < crossings.count - 1 {
       return crossings[crossing.index + 1]
     } else {
@@ -240,7 +240,7 @@ extension FBBezierCurve {
 
   // 218
   //- (FBEdgeCrossing *) previousCrossing:(FBEdgeCrossing *)crossing
-  func previousCrossing(crossing: FBEdgeCrossing) -> FBEdgeCrossing? {
+  func previousCrossing(_ crossing: FBEdgeCrossing) -> FBEdgeCrossing? {
     if crossing.index > 0 {
       return crossings[crossing.index - 1]
     } else {
@@ -250,7 +250,7 @@ extension FBBezierCurve {
 
   // 226
   //- (void) intersectingEdgesWithBlock:(void (^)(FBBezierCurve *intersectingEdge))block
-  func intersectingEdgesWithBlock(block: (intersectingEdge: FBBezierCurve) -> Void) {
+  func intersectingEdgesWithBlock(_ block: (_ intersectingEdge: FBBezierCurve) -> Void) {
 
     crossingsWithBlock() {
       (crossing: FBEdgeCrossing) -> (setStop: Bool, stopValue:Bool) in
@@ -258,7 +258,7 @@ extension FBBezierCurve {
       // Right now skip over self intersecting crossings
       if !crossing.isSelfCrossing {
         if let crossingCounterpartEdge = crossing.counterpart?.edge {
-          block(intersectingEdge: crossingCounterpartEdge)
+          block(crossingCounterpartEdge)
         }
       }
       return (false, false)
@@ -268,14 +268,14 @@ extension FBBezierCurve {
 
   // 236
   //- (void) selfIntersectingEdgesWithBlock:(void (^)(FBBezierCurve *intersectingEdge))block
-  func selfIntersectingEdgesWithBlock(block: (intersectingEdge: FBBezierCurve) -> Void) {
+  func selfIntersectingEdgesWithBlock(_ block: (_ intersectingEdge: FBBezierCurve) -> Void) {
     crossingsWithBlock() {
       (crossing: FBEdgeCrossing) -> (setStop: Bool, stopValue:Bool) in
 
       // Only want the self intersecting crossings
       if crossing.isSelfCrossing {
         if let crossingCounterpartEdge = crossing.counterpart?.edge {
-          block(intersectingEdge: crossingCounterpartEdge)
+          block(crossingCounterpartEdge)
         }
       }
       return (false, false)
@@ -329,7 +329,7 @@ extension FBBezierCurve {
 
   // 288
   //- (BOOL) crossesEdge:(FBBezierCurve *)edge2 atIntersection:(FBBezierIntersection *)intersection
-  func crossesEdge(edge2: FBBezierCurve, atIntersection intersection: FBBezierIntersection) -> Bool {
+  func crossesEdge(_ edge2: FBBezierCurve, atIntersection intersection: FBBezierIntersection) -> Bool {
     // If it's tangent, then it doesn't cross
     if intersection.isTangent {
       return false
@@ -379,7 +379,7 @@ extension FBBezierCurve {
 
   // 332
   //- (BOOL) crossesEdge:(FBBezierCurve *)edge2 atIntersectRange:(FBBezierIntersectRange *)intersectRange
-  func crossesEdge(edge2: FBBezierCurve, atIntersectRange intersectRange: FBBezierIntersectRange) -> Bool {
+  func crossesEdge(_ edge2: FBBezierCurve, atIntersectRange intersectRange: FBBezierIntersectRange) -> Bool {
     // Calculate the four tangents:
     // The two tangents moving away from the intersection point on self, and
     // the two tangents moving away from the intersection point on edge2.
@@ -414,13 +414,13 @@ extension FBBezierCurve {
 
   // 374
   //- (void) sortCrossings
-  private func sortCrossings() {
+  fileprivate func sortCrossings() {
 
     // Sort by the "order" of the crossing and then
     // assign indices so next and previous work correctly.
-    crossings.sortInPlace({ $0.order < $1.order })
+    crossings.sort(by: { $0.order < $1.order })
 
-    for (index, crossing) in crossings.enumerate() {
+    for (index, crossing) in crossings.enumerated() {
       crossing.index = index
     }
   }
