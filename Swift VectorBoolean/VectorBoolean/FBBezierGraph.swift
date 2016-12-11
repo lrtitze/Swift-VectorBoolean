@@ -28,8 +28,8 @@ import UIKit
 
 class FBBezierGraph {
 
-  private var _bounds : CGRect
-  private var _contours : [FBBezierContour]
+  fileprivate var _bounds : CGRect
+  fileprivate var _contours : [FBBezierContour]
 
   var contours : [FBBezierContour] {
     get {
@@ -39,25 +39,25 @@ class FBBezierGraph {
 
   init() {
     _contours = []
-    _bounds = CGRectNull
+    _bounds = CGRect.null
   }
 
   init(path: UIBezierPath) {
     _contours = []
-    _bounds = CGRectNull
-    initWithBezierPath(path)
+    _bounds = CGRect.null
+    _ = initWithBezierPath(path)
   }
 
-  class func bezierGraphWithBezierPath(path: UIBezierPath!) -> AnyObject {
+  class func bezierGraphWithBezierPath(_ path: UIBezierPath!) -> AnyObject {
     return FBBezierGraph().initWithBezierPath(path)
   }
 
   //- (id) initWithBezierPath:(NSBezierPath *)path
-  func initWithBezierPath(path: UIBezierPath!) -> FBBezierGraph {
+  func initWithBezierPath(_ path: UIBezierPath!) -> FBBezierGraph {
     // A bezier graph is made up of contours, which are closed paths of curves. Anytime we
     //  see a move to in the UIBezierPath, that's a new contour.
 
-    var lastPoint : CGPoint = CGPointZero
+    var lastPoint : CGPoint = CGPoint.zero
     var wasClosed = false
 
     var contour : FBBezierContour?
@@ -65,10 +65,10 @@ class FBBezierGraph {
 
     // This is done in a completely different way than was used for NSBezierPath
 
-    for (_, elem) in bezier.elements.enumerate() {
+    for (_, elem) in bezier.elements.enumerated() {
       switch elem {
 
-      case let .Move(toPt):
+      case let .move(toPt):
         // if previous contour wasn't closed, close it
         if !wasClosed && contour != nil {
           contour?.close()
@@ -78,9 +78,9 @@ class FBBezierGraph {
         addContour(contour!)
         lastPoint = toPt
 
-      case .Line(let toPt):
+      case .line(let toPt):
 
-        if !CGPointEqualToPoint(toPt, lastPoint) {
+        if !toPt.equalTo(lastPoint) {
           // Convert lines to bezier curves as well.
           // Just set control point to be in the line formed by the end points
           if let contour = contour {
@@ -90,11 +90,11 @@ class FBBezierGraph {
           lastPoint = toPt
         }
 
-      case .QuadCurve(let toPt, let via):
+      case .quadCurve(let toPt, let via):
 
         // GPC: skip degenerate case where all points are equal
-        let allPointsEqual = CGPointEqualToPoint(toPt, lastPoint)
-          && CGPointEqualToPoint(toPt, via)
+        let allPointsEqual = toPt.equalTo(lastPoint)
+          && toPt.equalTo(via)
 
         if !allPointsEqual {
           // Create a cubic curve representation of the quadratic curve from
@@ -113,19 +113,19 @@ class FBBezierGraph {
 
 
 
-      case .CubicCurve(let toPt, let v1, let v2):
+      case .cubicCurve(let toPt, let v1, let v2):
 
         // GPC: skip degenerate case where all points are equal
-        let allPointsEqual = CGPointEqualToPoint(toPt, lastPoint)
-          && CGPointEqualToPoint(toPt, v1)
-          && CGPointEqualToPoint(toPt, v2)
+        let allPointsEqual = toPt.equalTo(lastPoint)
+          && toPt.equalTo(v1)
+          && toPt.equalTo(v2)
 
         if !allPointsEqual {
           contour?.addCurve(FBBezierCurve(endPoint1: lastPoint, controlPoint1: v1, controlPoint2: v2, endPoint2: toPt))
           lastPoint = toPt
         }
 
-      case .Close:
+      case .close:
 
         // [MO] attempt to close the bezier contour by
         // mapping closepaths to equivalent lineto operations,
@@ -140,7 +140,7 @@ class FBBezierGraph {
             let firstPoint = firstEdge.endPoint1
 
             // Skip degenerate line segments
-            if !CGPointEqualToPoint(lastPoint, firstPoint) {
+            if !lastPoint.equalTo(firstPoint) {
               contour.addCurve(FBBezierCurve.bezierCurveWithLineStartPoint(lastPoint, endPoint:firstPoint))
               wasClosed = true
             }
@@ -179,7 +179,7 @@ class FBBezierGraph {
 
   // 218
   //- (FBBezierGraph *) unionWithBezierGraph:(FBBezierGraph *)graph
-  func unionWithBezierGraph(graph: FBBezierGraph) -> FBBezierGraph! {
+  func unionWithBezierGraph(_ graph: FBBezierGraph) -> FBBezierGraph! {
     // First insert FBEdgeCrossings into both graphs where the graphs
     //  cross.
     insertCrossingsWithBezierGraph(graph)
@@ -210,7 +210,7 @@ class FBBezierGraph {
 
   // 248
   //- (void) unionNonintersectingPartsIntoGraph:(FBBezierGraph *)result withGraph:(FBBezierGraph *)graph
-  private func unionNonintersectingPartsIntoGraph(inout result: FBBezierGraph, withGraph graph: FBBezierGraph) {
+  fileprivate func unionNonintersectingPartsIntoGraph(_ result: inout FBBezierGraph, withGraph graph: FBBezierGraph) {
 
     // Finally, process the contours that don't cross anything else. They're either
     //  completely contained in another contour, or disjoint.
@@ -229,11 +229,11 @@ class FBBezierGraph {
       let clipContainsSubject = graph.containsContour(ourContour)
       if clipContainsSubject {
         // [finalNonintersectingContours removeObject:ourContour];
-        for (index, element) in finalNonintersectingContours.enumerate()
+        for (index, element) in finalNonintersectingContours.enumerated()
         {
           if element === ourContour
           {
-            finalNonintersectingContours.removeAtIndex(index)
+            finalNonintersectingContours.remove(at: index)
             break
           }
         }
@@ -245,11 +245,11 @@ class FBBezierGraph {
       let subjectContainsClip = self.containsContour(theirContour)
       if subjectContainsClip {
         //[finalNonintersectingContours removeObject:theirContour];
-        for (index, element) in finalNonintersectingContours.enumerate()
+        for (index, element) in finalNonintersectingContours.enumerated()
         {
           if element === theirContour
           {
-            finalNonintersectingContours.removeAtIndex(index)
+            finalNonintersectingContours.remove(at: index)
             break
           }
         }
@@ -264,7 +264,7 @@ class FBBezierGraph {
 
   // 278
   //- (void) unionEquivalentNonintersectingContours:(NSMutableArray *)ourNonintersectingContours withContours:(NSMutableArray *)theirNonintersectingContours results:(NSMutableArray *)results
-  private func unionEquivalentNonintersectingContours(inout ourNonintersectingContours: [FBBezierContour], inout withContours theirNonintersectingContours: [FBBezierContour], inout results: [FBBezierContour]) {
+  fileprivate func unionEquivalentNonintersectingContours(_ ourNonintersectingContours: inout [FBBezierContour], withContours theirNonintersectingContours: inout [FBBezierContour], results: inout [FBBezierContour]) {
 
     var ourIndex = 0
     while ourIndex < ourNonintersectingContours.count {
@@ -279,38 +279,38 @@ class FBBezierGraph {
         if ourContour.inside == theirContour.inside  {
           // Redundant, so just remove one of them from the results
           // [results removeObject:theirContour];
-          for (index, element) in results.enumerate()
+          for (index, element) in results.enumerated()
           {
             if element === theirContour
             {
-              results.removeAtIndex(index)
+              results.remove(at: index)
               break
             }
           }
         } else {
           // One is a hole, one is a fill, so they cancel each other out. Remove both from the results
           //[results removeObject:theirContour];
-          for (index, element) in results.enumerate()
+          for (index, element) in results.enumerated()
           {
             if element === theirContour
             {
-              results.removeAtIndex(index)
+              results.remove(at: index)
               break
             }
           }
-          for (index, element) in results.enumerate()
+          for (index, element) in results.enumerated()
           {
             if element === ourContour
             {
-              results.removeAtIndex(index)
+              results.remove(at: index)
               break
             }
           }
         }
 
         // Remove both from the inputs so they aren't processed later
-        theirNonintersectingContours.removeAtIndex(theirIndex)
-        ourNonintersectingContours.removeAtIndex(ourIndex)
+        theirNonintersectingContours.remove(at: theirIndex)
+        ourNonintersectingContours.remove(at: ourIndex)
         ourIndex -= 1
         break
       }
@@ -320,7 +320,7 @@ class FBBezierGraph {
 
   // 306
   //- (FBBezierGraph *) intersectWithBezierGraph:(FBBezierGraph *)graph
-  func intersectWithBezierGraph(graph: FBBezierGraph) -> FBBezierGraph {
+  func intersectWithBezierGraph(_ graph: FBBezierGraph) -> FBBezierGraph {
 
     // First insert FBEdgeCrossings into both graphs where the graphs cross.
     insertCrossingsWithBezierGraph(graph)
@@ -351,7 +351,7 @@ class FBBezierGraph {
 
   // 335
   //- (void) intersectNonintersectingPartsIntoGraph:(FBBezierGraph *)result withGraph:(FBBezierGraph *)graph
-  private func intersectNonintersectingPartsIntoGraph(inout result: FBBezierGraph, withGraph graph: FBBezierGraph) {
+  fileprivate func intersectNonintersectingPartsIntoGraph(_ result: inout FBBezierGraph, withGraph graph: FBBezierGraph) {
     // Finally, process the contours that don't cross anything else. They're either
     //  completely contained in another contour, or disjoint.
     var ourNonintersectingContours = self.nonintersectingContours
@@ -385,7 +385,7 @@ class FBBezierGraph {
 
   // 365
   //- (void) intersectEquivalentNonintersectingContours:(NSMutableArray *)ourNonintersectingContours withContours:(NSMutableArray *)theirNonintersectingContours results:(NSMutableArray *)results
-  private func intersectEquivalentNonintersectingContours(inout ourNonintersectingContours: [FBBezierContour], inout withContours theirNonintersectingContours: [FBBezierContour]) -> [FBBezierContour] {
+  fileprivate func intersectEquivalentNonintersectingContours(_ ourNonintersectingContours: inout [FBBezierContour], withContours theirNonintersectingContours: inout [FBBezierContour]) -> [FBBezierContour] {
 
     var results: [FBBezierContour] = []
 
@@ -404,7 +404,7 @@ class FBBezierGraph {
           results.append(ourContour)
         } else {
           // One is a hole, one is a fill, so the hole cancels the fill. Add the hole to the results
-          if theirContour.inside == .Hole {
+          if theirContour.inside == .hole {
             // theirContour is the hole, so add it
             results.append(theirContour)
           } else {
@@ -414,8 +414,8 @@ class FBBezierGraph {
         }
 
         // Remove both from the inputs so they aren't processed later
-        theirNonintersectingContours.removeAtIndex(theirIndex)
-        ourNonintersectingContours.removeAtIndex(ourIndex)
+        theirNonintersectingContours.remove(at: theirIndex)
+        ourNonintersectingContours.remove(at: ourIndex)
         ourIndex -= 1
         break
       }
@@ -426,7 +426,7 @@ class FBBezierGraph {
 
   // 398
   //- (FBBezierGraph *) differenceWithBezierGraph:(FBBezierGraph *)graph
-  func differenceWithBezierGraph(graph: FBBezierGraph) -> FBBezierGraph {
+  func differenceWithBezierGraph(_ graph: FBBezierGraph) -> FBBezierGraph {
 
     // First insert FBEdgeCrossings into both graphs where the graphs cross.
     insertCrossingsWithBezierGraph(graph)
@@ -482,7 +482,7 @@ class FBBezierGraph {
 
   // 450
   //- (void) differenceEquivalentNonintersectingContours:(NSMutableArray *)ourNonintersectingContours withContours:(NSMutableArray *)theirNonintersectingContours results:(NSMutableArray *)results
-  private func differenceEquivalentNonintersectingContours(inout ourNonintersectingContours: [FBBezierContour], inout withContours theirNonintersectingContours: [FBBezierContour]) -> [FBBezierContour] {
+  fileprivate func differenceEquivalentNonintersectingContours(_ ourNonintersectingContours: inout [FBBezierContour], withContours theirNonintersectingContours: inout [FBBezierContour]) -> [FBBezierContour] {
 
     var results: [FBBezierContour] = []
 
@@ -500,7 +500,7 @@ class FBBezierGraph {
           // Trying to subtract a hole from a fill or vice versa does nothing,
           // so add the original to the results
           results.append(ourContour)
-        } else if ourContour.inside == .Hole && theirContour.inside == .Hole {
+        } else if ourContour.inside == .hole && theirContour.inside == .hole {
           // Subtracting a hole from a hole is redundant,
           // so just add one of them to the results
           results.append(ourContour)
@@ -511,8 +511,8 @@ class FBBezierGraph {
         }
 
         // Remove both from the inputs so they aren't processed later
-        theirNonintersectingContours.removeAtIndex(theirIndex)
-        ourNonintersectingContours.removeAtIndex(ourIndex)
+        theirNonintersectingContours.remove(at: theirIndex)
+        ourNonintersectingContours.remove(at: ourIndex)
         ourIndex -= 1
         break
       }
@@ -523,7 +523,7 @@ class FBBezierGraph {
 
   // 480
   //- (void) markCrossingsAsEntryOrExitWithBezierGraph:(FBBezierGraph *)otherGraph markInside:(BOOL)markInside
-  internal func markCrossingsAsEntryOrExitWithBezierGraph(otherGraph: FBBezierGraph, markInside: Bool) {
+  internal func markCrossingsAsEntryOrExitWithBezierGraph(_ otherGraph: FBBezierGraph, markInside: Bool) {
     // Walk each contour in ourself and mark the crossings with each intersecting contour as entering
     //  or exiting the final contour.
     for contour in contours {
@@ -536,7 +536,7 @@ class FBBezierGraph {
 
         //let adjustedMarkInside : Bool = (otherContour.inside == .Hole) != markInside
 
-        if otherContour.inside == .Hole {
+        if otherContour.inside == .hole {
           contour.markCrossingsAsEntryOrExitWithContour(otherContour, markInside: !markInside)
         } else {
           contour.markCrossingsAsEntryOrExitWithContour(otherContour, markInside: markInside)
@@ -548,7 +548,7 @@ class FBBezierGraph {
 
   // 499
   //- (FBBezierGraph *) xorWithBezierGraph:(FBBezierGraph *)graph
-  func xorWithBezierGraph(graph: FBBezierGraph) -> FBBezierGraph {
+  func xorWithBezierGraph(_ graph: FBBezierGraph) -> FBBezierGraph {
     // XOR is done by combing union (OR), intersect (AND) and difference.
     //
     // Specifically we compute the union of the two graphs and the intersect of them,
@@ -609,18 +609,18 @@ class FBBezierGraph {
       var firstPoint = true
       for edge in contour.edges {
         if firstPoint {
-          path.moveToPoint(edge.endPoint1)
+          path.move(to: edge.endPoint1)
           firstPoint = false
         }
 
         if edge.isStraightLine {
-          path.addLineToPoint(edge.endPoint2)
+          path.addLine(to: edge.endPoint2)
         } else {
-          path.addCurveToPoint(edge.endPoint2, controlPoint1: edge.controlPoint1, controlPoint2: edge.controlPoint2)
+          path.addCurve(to: edge.endPoint2, controlPoint1: edge.controlPoint1, controlPoint2: edge.controlPoint2)
         }
       }
-      if !path.empty {
-        path.closePath()  // GPC: close each contour
+      if !path.isEmpty {
+        path.close()  // GPC: close each contour
       }
     }
 
@@ -629,7 +629,7 @@ class FBBezierGraph {
 
   // 575
   //- (void) insertCrossingsWithBezierGraph:(FBBezierGraph *)other
-  internal func insertCrossingsWithBezierGraph(other: FBBezierGraph) {
+  internal func insertCrossingsWithBezierGraph(_ other: FBBezierGraph) {
 
     // Find all intersections and, if they cross the other graph,
     // create crossings for them, and insert them into each graph's edges.
@@ -712,7 +712,7 @@ class FBBezierGraph {
 
   // 639
   //- (void) cleanupCrossingsWithBezierGraph:(FBBezierGraph *)other
-  func cleanupCrossingsWithBezierGraph(other: FBBezierGraph) {
+  func cleanupCrossingsWithBezierGraph(_ other: FBBezierGraph) {
     // Remove duplicate crossings that can happen at end points of edges
     removeDuplicateCrossings()
     other.removeDuplicateCrossings()
@@ -750,7 +750,7 @@ class FBBezierGraph {
 
   // 667
   //- (void) removeDuplicateCrossings
-  private func removeDuplicateCrossings() {
+  fileprivate func removeDuplicateCrossings() {
     // Find any duplicate crossings. These will happen at the endpoints of edges.
     for ourContour in contours {
       for ourEdge in ourContour.edges {
@@ -758,7 +758,7 @@ class FBBezierGraph {
         ourEdge.crossingsCopyWithBlock() {
           (crossing: FBEdgeCrossing) -> (setStop: Bool, stopValue:Bool) in
 
-          if let crossingEdge = crossing.edge, lastCrossing = crossingEdge.previous.lastCrossing {
+          if let crossingEdge = crossing.edge, let lastCrossing = crossingEdge.previous.lastCrossing {
             if crossing.isAtStart && lastCrossing.isAtEnd {
               // Found a duplicate. Remove this crossing and its counterpart
               let counterpart = crossing.counterpart
@@ -769,7 +769,7 @@ class FBBezierGraph {
             }
           }
 
-          if let crossingEdge = crossing.edge, firstCrossing = crossingEdge.next.firstCrossing {
+          if let crossingEdge = crossing.edge, let firstCrossing = crossingEdge.next.firstCrossing {
             if crossing.isAtEnd && firstCrossing.isAtStart {
               // Found a duplicate. Remove this crossing and its counterpart
               let counterpart = firstCrossing.counterpart
@@ -875,16 +875,16 @@ class FBBezierGraph {
 
     // Compute the bounds of the graph by unioning together
     // the bounds of the individual contours
-    if !CGRectEqualToRect(_bounds, CGRectNull) {
+    if !_bounds.equalTo(CGRect.null) {
       return _bounds
     }
 
     if _contours.count == 0 {
-      return CGRectZero
+      return CGRect.zero
     }
 
     for contour in _contours {
-      _bounds = CGRectUnion(_bounds, contour.bounds)
+      _bounds = _bounds.union(contour.bounds)
     }
 
     return _bounds
@@ -893,7 +893,7 @@ class FBBezierGraph {
 
   // 765
   //- (FBContourInside) contourInsides:(FBBezierContour *)testContour
-  private func contourInsides(testContour: FBBezierContour) -> FBContourInside {
+  fileprivate func contourInsides(_ testContour: FBBezierContour) -> FBContourInside {
 
     // Determine if this contour, which should reside in this graph, is a filled region or
     //  a hole. Determine this by casting a ray from one edge of the contour to the outside of
@@ -912,7 +912,7 @@ class FBBezierGraph {
     let testPoint = testContour.testPointForContainment
 
     // Move us just outside the bounds of the graph
-    let beyondX = testPoint.x > CGRectGetMinX(self.bounds) ? CGRectGetMinX(self.bounds) - 10 : CGRectGetMaxX(self.bounds) + 10
+    let beyondX = testPoint.x > self.bounds.minX ? self.bounds.minX - 10 : self.bounds.maxX + 10
     let lineEndPoint = CGPoint(x: beyondX, y: testPoint.y)
     let testCurve = FBBezierCurve(startPoint: testPoint, endPoint: lineEndPoint)
 
@@ -933,15 +933,15 @@ class FBBezierGraph {
 
     // return (intersectCount & 1) == 1 ? .Hole : .Filled
     if intersectCount.isOdd {
-      return .Hole
+      return .hole
     } else {
-      return .Filled
+      return .filled
     }
   }
 
   // 791
   //- (FBCurveLocation *) closestLocationToPoint:(NSPoint)point
-  func closestLocationToPoint(point: CGPoint) -> FBCurveLocation? {
+  func closestLocationToPoint(_ point: CGPoint) -> FBCurveLocation? {
     var closestLocation : FBCurveLocation? = nil
 
     for contour in _contours {
@@ -962,13 +962,13 @@ class FBBezierGraph {
 
   // 809
   //- (NSBezierPath *) debugPathForContainmentOfContour:(FBBezierContour *)testContour
-  func debugPathForContainmentOfContour(testContour: FBBezierContour) -> UIBezierPath {
-    return debugPathForContainmentOfContour(testContour, transform: CGAffineTransformIdentity)
+  func debugPathForContainmentOfContour(_ testContour: FBBezierContour) -> UIBezierPath {
+    return debugPathForContainmentOfContour(testContour, transform: CGAffineTransform.identity)
   }
 
   // 814
   //- (NSBezierPath *) debugPathForContainmentOfContour:(FBBezierContour *)testContour transform:(NSAffineTransform *)transform
-  func debugPathForContainmentOfContour(testContour: FBBezierContour, transform: CGAffineTransform) -> UIBezierPath {
+  func debugPathForContainmentOfContour(_ testContour: FBBezierContour, transform: CGAffineTransform) -> UIBezierPath {
     let path = UIBezierPath()
 
     var intersectCount = 0
@@ -1019,7 +1019,7 @@ class FBBezierGraph {
       let testPoint = testContour.testPointForContainment
 
       // Move us just outside the bounds of the graph
-      let beyondX = testPoint.x > CGRectGetMinX(self.bounds) ? CGRectGetMinX(self.bounds) - 10 : CGRectGetMaxX(self.bounds) + 10
+      let beyondX = testPoint.x > self.bounds.minX ? self.bounds.minX - 10 : self.bounds.maxX + 10
       let lineEndPoint = CGPoint(x: beyondX, y: testPoint.y)
       let testCurve = FBBezierCurve(startPoint: testPoint, endPoint: lineEndPoint)
       contour.intersectionsWithRay(testCurve, withBlock: {
@@ -1034,13 +1034,13 @@ class FBBezierGraph {
     let testPoint = testContour.testPointForContainment
 
     // Move us just outside the bounds of the graph
-    let beyondX = testPoint.x > CGRectGetMinX(self.bounds) ? CGRectGetMinX(self.bounds) - 10 : CGRectGetMaxX(self.bounds) + 10
+    let beyondX = testPoint.x > self.bounds.minX ? self.bounds.minX - 10 : self.bounds.maxX + 10
     let lineEndPoint = CGPoint(x: beyondX, y: testPoint.y);
     let testCurve = FBBezierCurve(startPoint: testPoint, endPoint: lineEndPoint)
 
     let curvePath = testCurve.bezierPath
-    curvePath.applyTransform(transform)
-    path.appendPath(curvePath)
+    curvePath.apply(transform)
+    path.append(curvePath)
 
     // if this countour is flagged as "inside", the debug path is shown dashed, otherwise solid
 //    if (intersectCount & 1) == 1 {
@@ -1055,20 +1055,20 @@ class FBBezierGraph {
 
   // 882
   //- (NSBezierPath *) debugPathForJointsOfContour:(FBBezierContour *)testContour
-  func debugPathForJointsOfContour(testContour: FBBezierContour) -> UIBezierPath {
+  func debugPathForJointsOfContour(_ testContour: FBBezierContour) -> UIBezierPath {
     let path = UIBezierPath()
 
     for edge in testContour.edges {
       if !edge.isStraightLine {
-        path.moveToPoint(edge.endPoint1)
-        path.addLineToPoint(edge.controlPoint1)
-        path.appendPath(UIBezierPath.smallCircleAtPoint(edge.controlPoint1))
+        path.move(to: edge.endPoint1)
+        path.addLine(to: edge.controlPoint1)
+        path.append(UIBezierPath.smallCircleAtPoint(edge.controlPoint1))
 
-        path.moveToPoint(edge.endPoint2)
-        path.addLineToPoint(edge.controlPoint2)
-        path.appendPath(UIBezierPath.smallCircleAtPoint(edge.controlPoint2))
+        path.move(to: edge.endPoint2)
+        path.addLine(to: edge.controlPoint2)
+        path.append(UIBezierPath.smallCircleAtPoint(edge.controlPoint2))
       }
-      path.appendPath(UIBezierPath.smallRectAtPoint(edge.endPoint2))
+      path.append(UIBezierPath.smallRectAtPoint(edge.endPoint2))
     }
     
     return path
@@ -1077,7 +1077,7 @@ class FBBezierGraph {
 
   // 901
   //- (BOOL) containsContour:(FBBezierContour *)testContour
-  private func containsContour(testContour: FBBezierContour) -> Bool {
+  fileprivate func containsContour(_ testContour: FBBezierContour) -> Bool {
 
     // Determine the container, if any, for the test contour.
     // We do this by casting a ray from one end of the graph to the other,
@@ -1125,13 +1125,13 @@ class FBBezierGraph {
       // Send horizontal rays through the test contour
       //  and (possibly) through parts of the graph
       let verticalSpacing = (testContour.bounds.height) / CGFloat(fraction)
-      let yStart = CGRectGetMinY(testContour.bounds) + verticalSpacing
-      let yFinir = CGRectGetMaxY(testContour.bounds)
+      let yStart = testContour.bounds.minY + verticalSpacing
+      let yFinir = testContour.bounds.maxY
       var y = yStart
       while y < yFinir {
         // Construct a line that will reach outside both ends of both the test contour and graph
-        let rayStart = CGPoint(x: min(CGRectGetMinX(self.bounds), CGRectGetMinX(testContour.bounds)) - FBRayOverlap, y: y)
-        let rayFinir = CGPoint(x: max(CGRectGetMaxX(self.bounds), CGRectGetMaxX(testContour.bounds)) + FBRayOverlap, y: y)
+        let rayStart = CGPoint(x: min(self.bounds.minX, testContour.bounds.minX) - FBRayOverlap, y: y)
+        let rayFinir = CGPoint(x: max(self.bounds.maxX, testContour.bounds.maxX) + FBRayOverlap, y: y)
         let ray = FBBezierCurve(startPoint: rayStart, endPoint: rayFinir)
 
         // Eliminate any contours that aren't containers.
@@ -1146,13 +1146,13 @@ class FBBezierGraph {
       // Send vertical rays through the test contour
       //  and (possibly) through parts of the graph
       let horizontalSpacing = (testContour.bounds.width) / CGFloat(fraction)
-      let xStart = CGRectGetMinX(testContour.bounds) + horizontalSpacing
-      let xFinir = CGRectGetMaxX(testContour.bounds)
+      let xStart = testContour.bounds.minX + horizontalSpacing
+      let xFinir = testContour.bounds.maxX
       var x = xStart
       while x < xFinir {
         // Construct a line that will reach outside both ends of both the test contour and graph
-        let rayStart = CGPoint(x: x, y: min(CGRectGetMinY(self.bounds), CGRectGetMinY(testContour.bounds)) - FBRayOverlap)
-        let rayFinir = CGPoint(x: x, y: max(CGRectGetMaxY(self.bounds), CGRectGetMaxY(testContour.bounds)) + FBRayOverlap)
+        let rayStart = CGPoint(x: x, y: min(self.bounds.minY, testContour.bounds.minY) - FBRayOverlap)
+        let rayFinir = CGPoint(x: x, y: max(self.bounds.maxY, testContour.bounds.maxY) + FBRayOverlap)
         let ray = FBBezierCurve(startPoint: rayStart, endPoint: rayFinir)
 
         // Eliminate any contours that aren't containers.
@@ -1190,7 +1190,7 @@ class FBBezierGraph {
 
   // 967
   //- (BOOL) findBoundsOfContour:(FBBezierContour *)testContour onRay:(FBBezierCurve *)ray minimum:(NSPoint *)testMinimum maximum:(NSPoint *)testMaximum
-  private func findBoundsOfContour(testContour: FBBezierContour, onRay ray: FBBezierCurve, inout minimum testMinimum: CGPoint, inout maximum testMaximum: CGPoint) -> Bool {
+  fileprivate func findBoundsOfContour(_ testContour: FBBezierContour, onRay ray: FBBezierCurve, minimum testMinimum: inout CGPoint, maximum testMaximum: inout CGPoint) -> Bool {
 
     // Find the bounds of test contour that lie on ray.
     // Simply intersect the ray with test contour.
@@ -1244,7 +1244,7 @@ class FBBezierGraph {
 
   // 1004
   //- (BOOL) findCrossingsOnContainers:(NSArray *)containers onRay:(FBBezierCurve *)ray beforeMinimum:(NSPoint)testMinimum afterMaximum:(NSPoint)testMaximum crossingsBefore:(NSMutableArray *)crossingsBeforeMinimum crossingsAfter:(NSMutableArray *)crossingsAfterMaximum
-  private func findCrossingsOnContainers(containers: [FBBezierContour], onRay ray: FBBezierCurve, beforeMinimum testMinimum: CGPoint, afterMaximum testMaximum: CGPoint, inout crossingsBefore crossingsBeforeMinimum: [FBEdgeCrossing], inout crossingsAfter crossingsAfterMaximum: [FBEdgeCrossing]) -> Bool {
+  fileprivate func findCrossingsOnContainers(_ containers: [FBBezierContour], onRay ray: FBBezierCurve, beforeMinimum testMinimum: CGPoint, afterMaximum testMaximum: CGPoint, crossingsBefore crossingsBeforeMinimum: inout [FBEdgeCrossing], crossingsAfter crossingsAfterMaximum: inout [FBEdgeCrossing]) -> Bool {
 
     // Find intersections where the ray intersects the possible containers
     // before the minimum point, or after the maximum point.
@@ -1293,7 +1293,7 @@ class FBBezierGraph {
           // In that case it could fall on either side, and we'll need to do some special
           // processing on it later.
           // For now, remember it, and move on to the next intersection.
-          if CGPointEqualToPoint(testMaximum, testMinimum) && CGPointEqualToPoint(testMaximum, intersection.location) {
+          if testMaximum.equalTo(testMinimum) && testMaximum.equalTo(intersection.location) {
             ambiguousCrossings.append(crossing)
             return (false, false)
           }
@@ -1325,7 +1325,7 @@ class FBBezierGraph {
       // See how many times the given contour crosses on each side.
       // Add the ambigious crossing to the side that has less,
       // in hopes of balancing it out.
-      if let ambigEdge = ambiguousCrossing.edge, edgeContour = ambigEdge.contour {
+      if let ambigEdge = ambiguousCrossing.edge, let edgeContour = ambigEdge.contour {
         let numberOfTimesContourAppearsBefore = numberOfTimesContour(edgeContour, appearsInCrossings: crossingsBeforeMinimum)
         let numberOfTimesContourAppearsAfter = numberOfTimesContour(edgeContour, appearsInCrossings:crossingsAfterMaximum)
         if numberOfTimesContourAppearsBefore < numberOfTimesContourAppearsAfter {
@@ -1344,7 +1344,7 @@ class FBBezierGraph {
 
   // 1078
   //- (NSUInteger) numberOfTimesContour:(FBBezierContour *)contour appearsInCrossings:(NSArray *)crossings
-  private func numberOfTimesContour(contour: FBBezierContour, appearsInCrossings crossings: [FBEdgeCrossing]) -> Int {
+  fileprivate func numberOfTimesContour(_ contour: FBBezierContour, appearsInCrossings crossings: [FBEdgeCrossing]) -> Int {
     // Count how many times a contour appears in a crossings array
     var count = 0
     for crossing in crossings {
@@ -1360,7 +1360,7 @@ class FBBezierGraph {
 
   // 1089
   //- (BOOL) eliminateContainers:(NSMutableArray *)containers thatDontContainContour:(FBBezierContour *)testContour usingRay:(FBBezierCurve *)ray
-  private func eliminateContainers(inout containers: [FBBezierContour], thatDontContainContour testContour: FBBezierContour, usingRay ray: FBBezierCurve) -> Bool {
+  fileprivate func eliminateContainers(_ containers: inout [FBBezierContour], thatDontContainContour testContour: FBBezierContour, usingRay ray: FBBezierCurve) -> Bool {
 
     // This method attempts to eliminate all or all but one of the containers
     // that might contain the test contour, using the ray specified.
@@ -1402,7 +1402,7 @@ class FBBezierGraph {
 
   // 1123
   //- (NSArray *) contoursFromCrossings:(NSArray *)crossings
-  private func contoursFromCrossings(crossings: [FBEdgeCrossing]) -> [FBBezierContour] {
+  fileprivate func contoursFromCrossings(_ crossings: [FBEdgeCrossing]) -> [FBBezierContour] {
 
     // Determine all the unique contours in the array of crossings
     var contours : [FBBezierContour] = []
@@ -1422,7 +1422,7 @@ class FBBezierGraph {
 
   // 1134
   //- (void) removeContourCrossings:(NSMutableArray *)crossings1 thatDontAppearIn:(NSMutableArray *)crossings2
-  private func removeContourCrossings(inout crossings1: [FBEdgeCrossing], thatDontAppearIn crossings2: [FBEdgeCrossing]) {
+  fileprivate func removeContourCrossings(_ crossings1: inout [FBEdgeCrossing], thatDontAppearIn crossings2: [FBEdgeCrossing]) {
 
     // If a contour appears in crossings1, but not crossings2, remove all the associated crossings from
     //  crossings1.
@@ -1450,7 +1450,7 @@ class FBBezierGraph {
 
   // 1157
   //- (void) removeContoursThatDontContain:(NSMutableArray *)crossings
-  private func removeContoursThatDontContain(inout crossings: [FBEdgeCrossing]) {
+  fileprivate func removeContoursThatDontContain(_ crossings: inout [FBEdgeCrossing]) {
 
     // Remove contours that cross the ray an even number of times.
     // By the even/odd rule this means they can't contain the test contour.
@@ -1479,7 +1479,7 @@ class FBBezierGraph {
 
   // 1177
   //- (void) removeCrossings:(NSMutableArray *)crossings forContours:(NSArray *)containersToRemove
-  private func removeCrossings(inout crossings: [FBEdgeCrossing], forContours containersToRemove: [FBBezierContour]) {
+  fileprivate func removeCrossings(_ crossings: inout [FBEdgeCrossing], forContours containersToRemove: [FBBezierContour]) {
 
     // A helper method that goes through and removes all the
     // crossings that appear on the specified contours.
@@ -1497,11 +1497,11 @@ class FBBezierGraph {
     // Now walk through and remove the crossings
     for crossing in crossingsToRemove {
       //[crossings removeObject:crossing];
-      for (index, element) in crossings.enumerate()
+      for (index, element) in crossings.enumerated()
       {
         if element === crossing
         {
-          crossings.removeAtIndex(index)
+          crossings.remove(at: index)
           break
         }
       }
@@ -1511,7 +1511,7 @@ class FBBezierGraph {
 
   // 1195
   //- (void) markAllCrossingsAsUnprocessed
-  private func markAllCrossingsAsUnprocessed() {
+  fileprivate func markAllCrossingsAsUnprocessed() {
     for contour in _contours {
       for edge in contour.edges {
 
@@ -1528,7 +1528,7 @@ class FBBezierGraph {
 
   // 1205
   //- (FBEdgeCrossing *) firstUnprocessedCrossing
-  private var firstUnprocessedCrossing : FBEdgeCrossing? {
+  fileprivate var firstUnprocessedCrossing : FBEdgeCrossing? {
 
     // Find the first crossing in our graph that has yet to be processed
     // by the bezierGraphFromIntersections method.
@@ -1560,7 +1560,7 @@ class FBBezierGraph {
 
   // 1228
   //- (FBBezierGraph *) bezierGraphFromIntersections
-  private var bezierGraphFromIntersections : FBBezierGraph {
+  fileprivate var bezierGraphFromIntersections : FBBezierGraph {
 
     // This method walks the current graph, starting at the crossings,
     // and outputs the final contours of the parts of the graph that
@@ -1657,7 +1657,7 @@ class FBBezierGraph {
 
   // 1298
   //- (void) removeCrossings
-  private func removeCrossings() {
+  fileprivate func removeCrossings() {
     // Crossings only make sense for the intersection between two specific graphs.
     // In order for this graph to be usable in the future, remove all the crossings
     for contour in _contours {
@@ -1670,7 +1670,7 @@ class FBBezierGraph {
 
   // 1307
   //- (void) removeOverlaps
-  private func removeOverlaps() {
+  fileprivate func removeOverlaps() {
     for contour in _contours {
       contour.removeAllOverlaps()
     }
@@ -1678,15 +1678,15 @@ class FBBezierGraph {
 
   // 1313
   //- (void) addContour:(FBBezierContour *)contour
-  private func addContour(contour: FBBezierContour) {
+  fileprivate func addContour(_ contour: FBBezierContour) {
     // Add a contour to ouselves, and force the bounds to be recalculated
     _contours.append(contour)
-    _bounds = CGRectNull
+    _bounds = CGRect.null
   }
 
   // 1320
   //- (NSArray *) nonintersectingContours
-  private var nonintersectingContours : [FBBezierContour] {
+  fileprivate var nonintersectingContours : [FBBezierContour] {
     // Find all the contours that have no crossings on them.
     var contours : [FBBezierContour] = []
     for contour in self.contours {
@@ -1699,25 +1699,25 @@ class FBBezierGraph {
 
   // 1331
   //- (void) debuggingInsertCrossingsForUnionWithBezierGraph:(FBBezierGraph *)otherGraph
-  func debuggingInsertCrossingsForUnionWithBezierGraph(inout otherGraph: FBBezierGraph) {
+  func debuggingInsertCrossingsForUnionWithBezierGraph(_ otherGraph: inout FBBezierGraph) {
     debuggingInsertCrossingsWithBezierGraph(&otherGraph, markInside: false, markOtherInside: false)
   }
 
   // 1336
   //- (void) debuggingInsertCrossingsForIntersectWithBezierGraph:(FBBezierGraph *)otherGraph
-  func debuggingInsertCrossingsForIntersectWithBezierGraph(inout otherGraph: FBBezierGraph) {
+  func debuggingInsertCrossingsForIntersectWithBezierGraph(_ otherGraph: inout FBBezierGraph) {
     debuggingInsertCrossingsWithBezierGraph(&otherGraph, markInside: true, markOtherInside: true)
   }
 
   // 1341
   //- (void) debuggingInsertCrossingsForDifferenceWithBezierGraph:(FBBezierGraph *)otherGraph
-  func debuggingInsertCrossingsForDifferenceWithBezierGraph(inout otherGraph: FBBezierGraph) {
+  func debuggingInsertCrossingsForDifferenceWithBezierGraph(_ otherGraph: inout FBBezierGraph) {
     debuggingInsertCrossingsWithBezierGraph(&otherGraph, markInside: false, markOtherInside: true)
   }
 
   // 1346
   //- (void) debuggingInsertCrossingsWithBezierGraph:(FBBezierGraph *)otherGraph markInside:(BOOL)markInside markOtherInside:(BOOL)markOtherInside
-  private func debuggingInsertCrossingsWithBezierGraph(inout otherGraph: FBBezierGraph, markInside: Bool, markOtherInside: Bool) {
+  fileprivate func debuggingInsertCrossingsWithBezierGraph(_ otherGraph: inout FBBezierGraph, markInside: Bool, markOtherInside: Bool) {
 
     // Clean up crossings so the graphs can be reused, e.g. XOR will reuse graphs.
     self.removeCrossings()
@@ -1738,7 +1738,7 @@ class FBBezierGraph {
 
   // 1365
   //- (void) debuggingInsertIntersectionsWithBezierGraph:(FBBezierGraph *)otherGraph
-  private func debuggingInsertIntersectionsWithBezierGraph(inout otherGraph: FBBezierGraph) {
+  fileprivate func debuggingInsertIntersectionsWithBezierGraph(_ otherGraph: inout FBBezierGraph) {
 
     // Clean up crossings so the graphs can be reused, e.g. XOR will reuse graphs.
     self.removeCrossings()

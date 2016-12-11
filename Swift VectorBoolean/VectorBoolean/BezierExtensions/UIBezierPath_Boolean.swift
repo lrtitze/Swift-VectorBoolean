@@ -14,10 +14,10 @@ public extension UIBezierPath {
 
   // 15
   //- (NSBezierPath *) fb_union:(NSBezierPath *)path
-  func fb_union(path: UIBezierPath) -> UIBezierPath {
+  func fb_union(_ path: UIBezierPath) -> UIBezierPath {
     let thisGraph = FBBezierGraph(path: self)
     let otherGraph = FBBezierGraph(path: path)
-    let resultGraph = thisGraph.unionWithBezierGraph(otherGraph)
+    let resultGraph = thisGraph.unionWithBezierGraph(otherGraph)!
     let result = resultGraph.bezierPath
     result.fb_copyAttributesFrom(self)
     return result
@@ -25,7 +25,7 @@ public extension UIBezierPath {
 
   // 24
   //- (NSBezierPath *) fb_intersect:(NSBezierPath *)path
-  func fb_intersect(path: UIBezierPath) -> UIBezierPath {
+  func fb_intersect(_ path: UIBezierPath) -> UIBezierPath {
     let thisGraph = FBBezierGraph(path: self)
     let otherGraph = FBBezierGraph(path: path)
     let result = thisGraph.intersectWithBezierGraph(otherGraph).bezierPath
@@ -35,7 +35,7 @@ public extension UIBezierPath {
 
   // 33
   //- (NSBezierPath *) fb_difference:(NSBezierPath *)path
-  func fb_difference(path: UIBezierPath) -> UIBezierPath {
+  func fb_difference(_ path: UIBezierPath) -> UIBezierPath {
     let thisGraph = FBBezierGraph(path: self)
     let otherGraph = FBBezierGraph(path: path)
     let result = thisGraph.differenceWithBezierGraph(otherGraph).bezierPath
@@ -45,7 +45,7 @@ public extension UIBezierPath {
 
   // 42
   //- (NSBezierPath *) fb_xor:(NSBezierPath *)path
-  func fb_xor(path: UIBezierPath) -> UIBezierPath {
+  func fb_xor(_ path: UIBezierPath) -> UIBezierPath {
     let thisGraph = FBBezierGraph(path: self)
     let otherGraph = FBBezierGraph(path: path)
     let result = thisGraph.xorWithBezierGraph(otherGraph).bezierPath

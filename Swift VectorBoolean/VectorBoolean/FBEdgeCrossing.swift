@@ -18,7 +18,7 @@ import UIKit
 /// crossing's counterpart in the other FBBezierGraph
 class FBEdgeCrossing {
 
-  private var _intersection: FBBezierIntersection
+  fileprivate var _intersection: FBBezierIntersection
 
   var edge: FBBezierCurve?
   var counterpart: FBEdgeCrossing?

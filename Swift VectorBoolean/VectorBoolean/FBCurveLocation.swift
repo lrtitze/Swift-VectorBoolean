@@ -15,9 +15,9 @@ class FBCurveLocation {
 
   var graph : FBBezierGraph?
   var contour : FBBezierContour?
-  private var _edge : FBBezierCurve
-  private var _parameter : Double
-  private var _distance : Double
+  fileprivate var _edge : FBBezierCurve
+  fileprivate var _parameter : Double
+  fileprivate var _distance : Double
 
   init(edge: FBBezierCurve, parameter: Double, distance: Double) {
     _edge = edge

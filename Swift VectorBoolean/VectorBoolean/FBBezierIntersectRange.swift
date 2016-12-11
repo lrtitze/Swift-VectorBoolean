@@ -11,7 +11,7 @@
 
 import UIKit
 
-class FBBezierIntersectRange {
+public class FBBezierIntersectRange {
   var _curve1: FBBezierCurve
   var _parameterRange1: FBRange
   var _curve1LeftBezier: FBBezierCurve?
@@ -129,7 +129,7 @@ class FBBezierIntersectRange {
     )
   }
 
-  func merge(other: FBBezierIntersectRange) {
+  func merge(_ other: FBBezierIntersectRange) {
 
     // We assume the caller already knows we're talking about the same curves
     _parameterRange1 = FBRangeUnion(_parameterRange1, range2: other._parameterRange1);
@@ -138,7 +138,7 @@ class FBBezierIntersectRange {
     clearCache()
   }
 
-  private func clearCache() {
+  fileprivate func clearCache() {
     needToComputeCurve1 = true
     needToComputeCurve2 = true
 
@@ -151,7 +151,7 @@ class FBBezierIntersectRange {
   }
 
   //- (void) computeCurve1
-  private func computeCurve1()
+  fileprivate func computeCurve1()
   {
     if needToComputeCurve1 {
 
@@ -166,7 +166,7 @@ class FBBezierIntersectRange {
 
   // 114
   //- (void) computeCurve2
-  private func computeCurve2()
+  fileprivate func computeCurve2()
   {
     if needToComputeCurve2 {
 

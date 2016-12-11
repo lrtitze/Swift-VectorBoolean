@@ -2,7 +2,7 @@
 //  VectorBoolean.h
 //  VectorBoolean
 //
-//  Created by Ling Wang on 5/28/16.
+//  Created by Ling Wang on 11/23/16.
 //  Copyright © 2016 Startside Softworks. All rights reserved.
 //
 

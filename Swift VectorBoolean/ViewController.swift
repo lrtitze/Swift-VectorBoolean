@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIPickerViewDelegate {
+class ViewController: UIViewController, UIPickerViewDelegate, UIAdaptivePresentationControllerDelegate {
 
   @IBOutlet var canvasView: CanvasView!
   @IBOutlet var operationLabel: UILabel!
@@ -37,7 +37,7 @@ class ViewController: UIViewController, UIPickerViewDelegate {
       }
     }
   }
-  private var shapeData = TestShapeData()
+  fileprivate var shapeData = TestShapeData()
   var currentShapesetIndex : Int = 0
 
 
@@ -46,7 +46,7 @@ class ViewController: UIViewController, UIPickerViewDelegate {
 
     // CREDIT: This concept comes from Matt Neuburg's
     // Stack Overflow answer: http://stackoverflow.com/a/24344459
-    let envDict = NSProcessInfo.processInfo().environment
+    let envDict = ProcessInfo.processInfo.environment
     if envDict["TESTING"] != nil {
       self.blankDisplay = true
     }
@@ -67,34 +67,34 @@ class ViewController: UIViewController, UIPickerViewDelegate {
   func updateCanvas() {
     canvasView.clear()
     operationLabel.text = "Original"
-    canvasView.displayMode = .Original
+    canvasView.displayMode = .original
     segmentedControl.selectedSegmentIndex = 0
     loadCanvas()
     canvasView.setNeedsDisplay()
   }
 
   func popClosed() {
-    shapesButton.enabled = true
-    optionsButton.enabled = true
+    shapesButton.isEnabled = true
+    optionsButton.isEnabled = true
   }
 
-  @IBAction func modeSelect(sender: UISegmentedControl) {
+  @IBAction func modeSelect(_ sender: UISegmentedControl) {
     switch segmentedControl.selectedSegmentIndex {
     case 0:
       self.operationLabel.text = "Original"
-      canvasView.displayMode = .Original
+      canvasView.displayMode = .original
     case 1:
       self.operationLabel.text = "Union"
-      canvasView.displayMode = .Union
+      canvasView.displayMode = .union
     case 2:
       self.operationLabel.text = "Intersect"
-      canvasView.displayMode = .Intersect
+      canvasView.displayMode = .intersect
     case 3:
       self.operationLabel.text = "Subtract"
-      canvasView.displayMode = .Subtract
+      canvasView.displayMode = .subtract
     case 4:
       self.operationLabel.text = "Join"
-      canvasView.displayMode = .Join
+      canvasView.displayMode = .join
     default:
       self.operationLabel.text = "Unknown"
     }
@@ -134,7 +134,7 @@ class ViewController: UIViewController, UIPickerViewDelegate {
     canvasView.boundsOfPaths = current.boundsOfPaths
   }
 
-  override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+  override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
     if identifier == "showShapeSelector" {
       return true
     } else if identifier == "showOptions" {
@@ -143,13 +143,13 @@ class ViewController: UIViewController, UIPickerViewDelegate {
     return true
   }
 
-  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "showShapeSelector" {
-      if let destNav = segue.destinationViewController as? UINavigationController {
+      if let destNav = segue.destination as? UINavigationController {
         if let popPC = destNav.popoverPresentationController {
           popPC.passthroughViews = nil
           popPC.delegate = self
-          optionsButton.enabled = false
+          optionsButton.isEnabled = false
         }
         if let vc = destNav.topViewController as? ShapesTableViewController {
           vc.shapeData = self.shapeData
@@ -158,11 +158,11 @@ class ViewController: UIViewController, UIPickerViewDelegate {
         }
       }
     } else if segue.identifier == "showOptions" {
-      if let destNav = segue.destinationViewController as? UINavigationController {
+      if let destNav = segue.destination as? UINavigationController {
         if let popPC = destNav.popoverPresentationController {
           popPC.passthroughViews = nil
           popPC.delegate = self
-          shapesButton.enabled = false
+          shapesButton.isEnabled = false
         }
         if let vc = destNav.topViewController as? OptionsViewController {
           vc.primeVC = self
@@ -171,20 +171,21 @@ class ViewController: UIViewController, UIPickerViewDelegate {
     }
   }
 
-  func adaptivePresentationStyleForPresentationController(controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+	
+  func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
     // Give the popover a PresentationStyle.None for iPhone
-    return UIModalPresentationStyle.None
+    return .none
   }
 
 }
 
 extension ViewController: UIPopoverPresentationControllerDelegate {
 
-  func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
+  func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
     popClosed()
   }
 
-  func presentationController(controller: UIPresentationController, viewControllerForAdaptivePresentationStyle style: UIModalPresentationStyle) -> UIViewController? {
+  func presentationController(_ controller: UIPresentationController, viewControllerForAdaptivePresentationStyle style: UIModalPresentationStyle) -> UIViewController? {
 
     let nav = UINavigationController(rootViewController: controller.presentedViewController)
     return nav

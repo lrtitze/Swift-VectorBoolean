@@ -20,11 +20,11 @@ class ShapesTableViewController: UITableViewController {
     let wantCancelButtonOnPhone = true
     // NOTE: The cancel button makes it easier to dismiss the list.
 
-    if wantCancelButtonOnPhone && UI_USER_INTERFACE_IDIOM() != .Pad {
+    if wantCancelButtonOnPhone && UI_USER_INTERFACE_IDIOM() != .pad {
       navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel",
-        style: .Plain,
+        style: .plain,
         target: self,
-        action: #selector(ShapesTableViewController.dismiss))
+        action: #selector(ShapesTableViewController.dismissVC))
     }
 
     // Uncomment the following line to preserve selection between presentations
@@ -34,8 +34,8 @@ class ShapesTableViewController: UITableViewController {
     // self.navigationItem.rightBarButtonItem = self.editButtonItem()
   }
 
-  override func viewWillAppear(animated: Bool) {
-    tableView.selectRowAtIndexPath(NSIndexPath(forItem: currentSelection, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.Middle)
+  override func viewWillAppear(_ animated: Bool) {
+    tableView.selectRow(at: IndexPath(item: currentSelection, section: 0), animated: true, scrollPosition: UITableViewScrollPosition.middle)
   }
 
   override func didReceiveMemoryWarning() {
@@ -44,32 +44,32 @@ class ShapesTableViewController: UITableViewController {
   }
 
 
-  func dismiss() {
-    dismissViewControllerAnimated(true) {
+  func dismissVC() {
+    self.dismiss(animated: true) {
       self.primeVC?.popClosed()
     }
   }
 
   // MARK: - Table view data source
 
-  override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+  override func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
 
-  override func tableView(_tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+  override func tableView(_ _tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
     return nil
   }
 
-  override func tableView(_tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  override func tableView(_ _tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     if let shapeData = shapeData {
       return shapeData.count
     }
     return 19
   }
 
-  override func tableView (_tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  override func tableView (_ _tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-    let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "testShapeCell")
+    let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "testShapeCell")
     if let shapeData = shapeData {
       let testShape = shapeData.shapes[indexPath.row]
       cell.textLabel!.text = testShape.label
@@ -77,21 +77,21 @@ class ShapesTableViewController: UITableViewController {
       cell.textLabel!.text = "Broken \(indexPath.row)"
     }
     if indexPath.row == currentSelection {
-      cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+      cell.accessoryType = UITableViewCellAccessoryType.checkmark
     }
     return cell
   }
 
   // MARK: Table View Selection
 
-  override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
     if let primeVC = primeVC {
       primeVC.currentShapesetIndex = indexPath.row
       primeVC.updateCanvas()
     }
 
-    dismiss()
+    dismissVC()
   }
 
 }

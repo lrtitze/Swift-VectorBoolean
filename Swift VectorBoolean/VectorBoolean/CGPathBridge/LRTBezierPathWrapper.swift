@@ -8,10 +8,10 @@
 
 import UIKit
 
-class LRTBezierPathWrapper {
+public class LRTBezierPathWrapper {
 
-  var elements: [PathElement]
-  private var _bezierPath : UIBezierPath
+    private(set) public var elements: [PathElement]
+  fileprivate var _bezierPath : UIBezierPath
 
   var bezierPath : UIBezierPath {
     get {
@@ -19,14 +19,14 @@ class LRTBezierPathWrapper {
     }
   }
 
-  init(_ bezierPath:UIBezierPath) {
+  public init(_ bezierPath:UIBezierPath) {
     elements = []
     _bezierPath = bezierPath
     createElementsFromCGPath()
   }
 
   func createElementsFromCGPath() {
-    let cgPath = _bezierPath.CGPath
+    let cgPath = _bezierPath.cgPath
 
     cgPath.apply({
       (e : PathElement) -> Void in
