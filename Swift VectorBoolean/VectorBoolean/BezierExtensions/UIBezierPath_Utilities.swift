@@ -12,7 +12,7 @@
 import Foundation
 import UIKit
 
-struct UIBezierElement {
+public struct UIBezierElement {
   var kind : CGPathElementType
   var point : CGPoint
   var controlPoints : [CGPoint]
@@ -24,7 +24,7 @@ let FBDebugPointSize = CGFloat(10.0)
 let FBDebugSmallPointSize = CGFloat(3.0)
 
 
-extension UIBezierPath {
+public extension UIBezierPath {
 
 
   // 57
