@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.license          = "MIT"
   s.author           = { "lrtitze" => "" }
   s.platform         = :ios
-  s.source           = { :git => "https://github.com/avishic/Swift-VectorBoolean.git", :tag => "#{s.version}" }
+  s.source           = { :git => "https://github.com/lrtitze/Swift-VectorBoolean.git", :tag => "#{s.version}" }
   s.source_files     = "Swift VectorBoolean/VectorBoolean/**/*.{swift}"
   s.requires_arc     = true
 end
