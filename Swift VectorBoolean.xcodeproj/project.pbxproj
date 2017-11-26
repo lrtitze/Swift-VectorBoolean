@@ -337,7 +337,7 @@
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0800;
-				ORGANIZATIONNAME = "Startside Softworks";
+				ORGANIZATIONNAME = "Starside Softworks";
 				TargetAttributes = {
 					6356E1771B4CD83A00420351 = {
 						CreatedOnToolsVersion = 6.4;
