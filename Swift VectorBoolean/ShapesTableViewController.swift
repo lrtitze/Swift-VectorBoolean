@@ -71,12 +71,12 @@ class ShapesTableViewController: UITableViewController {
 
     let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "testShapeCell")
     if let shapeData = shapeData {
-      let testShape = shapeData.shapes[(indexPath as NSIndexPath).row]
+      let testShape = shapeData.shapes[indexPath.row]
       cell.textLabel!.text = testShape.label
     } else {
-      cell.textLabel!.text = "Broken \((indexPath as NSIndexPath).row)"
+      cell.textLabel!.text = "Broken \(indexPath.row)"
     }
-    if (indexPath as NSIndexPath).row == currentSelection {
+    if indexPath.row == currentSelection {
       cell.accessoryType = UITableViewCellAccessoryType.checkmark
     }
     return cell
@@ -87,7 +87,7 @@ class ShapesTableViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
     if let primeVC = primeVC {
-      primeVC.currentShapesetIndex = (indexPath as NSIndexPath).row
+      primeVC.currentShapesetIndex = indexPath.row
       primeVC.updateCanvas()
     }
 

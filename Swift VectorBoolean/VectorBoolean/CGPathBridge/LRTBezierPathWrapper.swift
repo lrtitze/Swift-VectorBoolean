@@ -8,9 +8,9 @@
 
 import UIKit
 
-class LRTBezierPathWrapper {
+public class LRTBezierPathWrapper {
 
-  var elements: [PathElement]
+    private(set) public var elements: [PathElement]
   fileprivate var _bezierPath : UIBezierPath
 
   var bezierPath : UIBezierPath {
@@ -19,7 +19,7 @@ class LRTBezierPathWrapper {
     }
   }
 
-  init(_ bezierPath:UIBezierPath) {
+  public init(_ bezierPath:UIBezierPath) {
     elements = []
     _bezierPath = bezierPath
     createElementsFromCGPath()

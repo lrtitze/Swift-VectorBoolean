@@ -1909,11 +1909,11 @@ internal func pfIntersectionsWithBezierCurve(
 //  http://cagd.cs.byu.edu/~tom/papers/bezclip.pdf
 //
 
-func ==(lhs: FBBezierCurve, rhs: FBBezierCurve) -> Bool {
+public func ==(lhs: FBBezierCurve, rhs: FBBezierCurve) -> Bool {
   return dataIsEqual(lhs.data, other: rhs.data)
 }
 
-class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equatable {
+public class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equatable {
 
   // MARK: edge extensions
 
@@ -2068,7 +2068,7 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
   }
 
   // 1336
-  class func bezierCurvesFromBezierPath(_ path: UIBezierPath!) -> [FBBezierCurve] {
+  public class func bezierCurvesFromBezierPath(_ path: UIBezierPath!) -> [FBBezierCurve] {
     // Helper method to easily convert a bezier path into an array of FBBezierCurves.
     // Very straight-forward, only lines are a special case.
 
@@ -2185,7 +2185,7 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
   // 1457
   //- (void) intersectionsWithBezierCurve:(FBBezierCurve *)curve overlapRange:(FBBezierIntersectRange **)intersectRange withBlock:(FBCurveIntersectionBlock)block
-  func intersectionsWithBezierCurve(_ curve: FBBezierCurve, overlapRange: inout FBBezierIntersectRange?,
+  public func intersectionsWithBezierCurve(_ curve: FBBezierCurve, overlapRange: inout FBBezierIntersectRange?,
     withBlock block : (_ intersect: FBBezierIntersection) -> (setStop: Bool, stopValue:Bool))
   {
     // For performance reasons, do a quick bounds check to see if these even might intersect
@@ -2434,9 +2434,9 @@ class FBBezierCurve : CustomDebugStringConvertible, CustomStringConvertible, Equ
 
 
   // For debug and printing
-  var description : String {return "<\(_data.endPoint1.x), \(_data.endPoint1.y), \(_data.controlPoint1.x), \(_data.controlPoint1.y), \(_data.controlPoint2.x), \(_data.controlPoint2.y), \(_data.endPoint2.x), \(_data.endPoint2.y)>"}
+  public var description : String {return "<\(_data.endPoint1.x), \(_data.endPoint1.y), \(_data.controlPoint1.x), \(_data.controlPoint1.y), \(_data.controlPoint2.x), \(_data.controlPoint2.y), \(_data.endPoint2.x), \(_data.endPoint2.y)>"}
 
-  var debugDescription : String { return String(format: "<FBBezierCurve (%.18f, %.18f)-[%.18f, %.18f] curve to [%.18f, %.18f]-(%.18f, %.18f)>",
+  public var debugDescription : String { return String(format: "<FBBezierCurve (%.18f, %.18f)-[%.18f, %.18f] curve to [%.18f, %.18f]-(%.18f, %.18f)>",
     _data.endPoint1.x, _data.endPoint1.y, _data.controlPoint1.x, _data.controlPoint1.y,
     _data.controlPoint2.x, _data.controlPoint2.y, _data.endPoint2.x, _data.endPoint2.y)
   }

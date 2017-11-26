@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import VectorBoolean
 
 enum DisplayMode {
   case original

@@ -21,7 +21,7 @@ let FBParameterCloseThreshold = isRunningOn64BitDevice ? 1e-4 : 1e-2
 /// It can lazily compute the 2D point where they intersect,
 /// the left and right parts of the curves relative to
 /// the intersection point, and whether the intersection is tangent.
-class FBBezierIntersection {
+public class FBBezierIntersection {
   fileprivate var _location : CGPoint?
   fileprivate var _curve1: FBBezierCurve
   fileprivate var _parameter1: Double
@@ -35,7 +35,7 @@ class FBBezierIntersection {
   fileprivate var needToComputeCurve1 = true
   fileprivate var needToComputeCurve2 = true
 
-  var location : CGPoint {
+  public var location : CGPoint {
     computeCurve1()
     return _location!
   }
@@ -67,7 +67,7 @@ class FBBezierIntersection {
   }
 
   //- (BOOL) isTangent
-  var isTangent : Bool {
+  public var isTangent : Bool {
     // If we're at the end of a curve, it's not tangent,
     // so skip all the calculations
     if isAtEndPointOfCurve {

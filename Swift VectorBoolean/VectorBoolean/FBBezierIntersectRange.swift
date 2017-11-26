@@ -11,7 +11,7 @@
 
 import UIKit
 
-class FBBezierIntersectRange {
+public class FBBezierIntersectRange {
   var _curve1: FBBezierCurve
   var _parameterRange1: FBRange
   var _curve1LeftBezier: FBBezierCurve?
