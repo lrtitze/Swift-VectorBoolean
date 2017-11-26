@@ -259,9 +259,9 @@ func FBAreValuesCloseWithOptions(_ value1: Double, value2: Double, threshold: Do
 // Helper methods for angles
 //
 
-let Two_π = 2.0 * M_PI
-let π = M_PI
-let Half_π = M_PI_2
+let Two_π = 2.0 * Double.pi
+let π = Double.pi
+let Half_π = Double.pi / 2
 
 
 // Normalize the angle between 0 and 2 π
