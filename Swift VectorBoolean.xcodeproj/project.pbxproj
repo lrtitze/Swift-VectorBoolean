@@ -341,13 +341,13 @@
 				TargetAttributes = {
 					6356E1771B4CD83A00420351 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 579VCLF427;
+						DevelopmentTeam = ZBQGXUCEGE;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 					6356E18C1B4CD83A00420351 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 579VCLF427;
+						DevelopmentTeam = ZBQGXUCEGE;
 						LastSwiftMigration = 0800;
 						TestTargetID = 6356E1771B4CD83A00420351;
 					};
@@ -601,7 +601,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 579VCLF427;
+				DEVELOPMENT_TEAM = ZBQGXUCEGE;
 				INFOPLIST_FILE = "Swift VectorBoolean/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.starside.$(PRODUCT_NAME:rfc1034identifier)";
@@ -617,7 +617,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 579VCLF427;
+				DEVELOPMENT_TEAM = ZBQGXUCEGE;
 				INFOPLIST_FILE = "Swift VectorBoolean/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.starside.$(PRODUCT_NAME:rfc1034identifier)";
@@ -629,7 +629,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 579VCLF427;
+				DEVELOPMENT_TEAM = ZBQGXUCEGE;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -647,7 +647,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 579VCLF427;
+				DEVELOPMENT_TEAM = ZBQGXUCEGE;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Swift VectorBooleanTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
