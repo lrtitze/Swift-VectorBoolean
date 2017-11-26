@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "VectorBoolean"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "VectorBoolean bezier path tools"
   s.description      = <<-DESC
                        A Swift iOS rewrite of Andy Finnell's VectorBoolean bezier path tools
