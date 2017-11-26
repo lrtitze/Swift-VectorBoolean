@@ -3,12 +3,12 @@ Swift VectorBoolean for iOS
 
 ### ✻ Updated for Xcode 9 and Swift 3.2
 
-Now contains a *framework* target thanks to [Lin Wang](https://github.com/an0).
-Beginning to include CocoaPods support thanks to [Avishay Cohen](https://github.com/avishic).
-Many thanks to [Louis D'hauwe](https://github.com/LouisDhauwe) for his work translating this entire project to Swift 3 for Xcode 8
-
-The old version for Xcode 8 Swift 3 is available in the "Xcode_8_Swift_3" branch.
-The old version for Xcode 7 Swift 2 is available in the "Xcode_7_Swift_2" branch.
+### Notes
+ - Now contains a *framework* target thanks to [Lin Wang](https://github.com/an0).
+ - Beginning to include CocoaPods support thanks to [Avishay Cohen](https://github.com/avishic).
+ - Many thanks to [Louis D'hauwe](https://github.com/LouisDhauwe) for his work translating this entire project to Swift 3 for Xcode 8
+ - The old version for Xcode 8 Swift 3 is available in the "Xcode_8_Swift_3" branch.
+ - The old version for Xcode 7 Swift 2 is available in the "Xcode_7_Swift_2" branch.
 
 ## About VectorBoolean
 This is an iOS rewrite of the code for Andy Finnell's article [How to implement boolean operations on bezier paths](http://losingfight.com/blog/2011/07/07/how-to-implement-boolean-operations-on-bezier-paths-part-1/). It is a literal translation of his original Objective-C Mac OS X [VectorBoolean](https://bitbucket.org/andyfinnell/vectorboolean) library with a tiny bit of Swifty goodness introduced.
